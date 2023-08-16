@@ -1,10 +1,6 @@
 package com.example.Final_Project_9team.entity;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +10,17 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class File {
+public class LikesBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String path;
-    private String name;
-    private Boolean isDeleted;
-    private Long size;
+    private Boolean isLike;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Board board;
-    private Profile profile;
-    private Item item;
 }

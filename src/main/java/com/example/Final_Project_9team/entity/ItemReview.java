@@ -1,9 +1,6 @@
 package com.example.Final_Project_9team.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,12 +10,18 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ItemReview {
+public class ItemReview extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Item item;
     private String content;
-    private Integer rating;
+    private Rating rating;
 }

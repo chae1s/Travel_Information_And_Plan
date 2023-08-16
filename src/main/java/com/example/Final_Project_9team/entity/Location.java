@@ -9,6 +9,6 @@ public class Location {
     private String upmyundong;
     private String latitude;
     private String longitude;
-    private String full_address;
+    private String fullAddress;
 
 }

@@ -1,13 +1,14 @@
 package com.example.Final_Project_9team.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +26,20 @@ public class Board extends BaseTimeEntity {
     private Category category;
 
     private Boolean isLike;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "board")
+    private List<Attachments> attachments = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "board")
+    private List<LikesBoard> likesBoards = new ArrayList<>();
 }

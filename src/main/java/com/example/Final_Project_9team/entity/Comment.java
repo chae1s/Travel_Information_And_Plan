@@ -12,18 +12,20 @@ import java.time.LocalDateTime;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String content;
-    private LocalDateTime cratedAt;
-    private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
-    private Long pid;
+    // 대댓글의 부모댓글
+    private Long pId;
+    private Boolean isDeleted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private User user;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Board board;
 }

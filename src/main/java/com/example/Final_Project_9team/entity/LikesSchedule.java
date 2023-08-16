@@ -1,9 +1,6 @@
 package com.example.Final_Project_9team.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +14,14 @@ public class LikesSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private User user;
-    private Schedule schedule;
     private Boolean isLike;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Schedule schedule;
+
 }
