@@ -1,0 +1,64 @@
+package com.example.Final_Project_9team.entity;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@SuperBuilder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User extends BaseTimeEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String email;
+    private String password;
+    private String nickname;
+    private Role role;
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
+    private Boolean isDeleted;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<ItemReview> itemReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Mates> mates = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<LikesSchedule> likesSchedules = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<LikesItem> likesItems = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<LikesBoard> likesBoards = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "userFrom")
+    private List<LikesUser> fromUsers = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "userTo")
+    private List<LikesUser> toUsers = new ArrayList<>();
+
+}
