@@ -20,7 +20,7 @@ public class ItemPath extends BaseTimeEntity {
     private Long id;
     private Integer turn;
     private Integer distance;
-    private Duration duration;
+    private Integer duration;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn

@@ -24,7 +24,7 @@ public class Schedule {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer sumDistance;
-    private Integer sumMoveDuration;
+    private Integer sumDuration;
     private Boolean display;
 
     @Builder.Default
