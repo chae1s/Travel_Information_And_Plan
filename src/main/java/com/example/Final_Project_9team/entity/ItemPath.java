@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemPath {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer turn;
     private Integer distance;
@@ -29,8 +29,8 @@ public class ItemPath {
     @OneToOne
     @JoinColumn
     private ScheduleItem departureScheduleItem;
+
     @OneToOne
     @JoinColumn
     private ScheduleItem arrivalScheduleItem;
-
 }

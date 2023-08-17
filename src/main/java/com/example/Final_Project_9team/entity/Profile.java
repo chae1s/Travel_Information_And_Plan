@@ -17,6 +17,7 @@ public class Profile {
     private String content;
     private String profileImage;
     private String location;
+
     @OneToOne
     @JoinColumn
     private User user;

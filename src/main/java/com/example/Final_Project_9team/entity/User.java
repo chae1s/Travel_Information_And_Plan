@@ -1,5 +1,7 @@
 package com.example.Final_Project_9team.entity;
 
+import com.example.Final_Project_9team.entity.base.BaseTimeEntity;
+import com.example.Final_Project_9team.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseTimeEntity{
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +40,7 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<ItemReview> itemReviews = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Mates> mates = new ArrayList<>();
 

@@ -1,5 +1,10 @@
-package com.example.Final_Project_9team.entity;
+package com.example.Final_Project_9team.entity.item;
 
+import com.example.Final_Project_9team.entity.Attachments;
+import com.example.Final_Project_9team.entity.ItemReview;
+import com.example.Final_Project_9team.entity.LikesItem;
+import com.example.Final_Project_9team.entity.ScheduleItem;
+import com.example.Final_Project_9team.entity.embeded.Location;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,6 +27,7 @@ public class Item {
     private Long id;
     private String name;
     private String openTime;
+
     @Embedded
     private Location location;
 
