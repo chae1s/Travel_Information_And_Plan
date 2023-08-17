@@ -1,10 +1,9 @@
 package com.example.Final_Project_9team.entity;
 
+import com.example.Final_Project_9team.entity.base.BaseTimeEntity;
+import com.example.Final_Project_9team.entity.enums.Category;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -24,8 +23,6 @@ public class Board extends BaseTimeEntity {
     private Integer viewCnt;
     private Boolean isDeleted;
     private Category category;
-
-    private Boolean isLike;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn

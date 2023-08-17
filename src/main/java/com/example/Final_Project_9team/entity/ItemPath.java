@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.entity;
 
+import com.example.Final_Project_9team.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,14 +14,13 @@ import java.time.LocalDateTime;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ItemPath {
+public class ItemPath extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer turn;
     private Integer distance;
-    private Duration duration;
-    private LocalDateTime modifiedAt;
+    private Integer duration;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
@@ -29,8 +29,8 @@ public class ItemPath {
     @OneToOne
     @JoinColumn
     private ScheduleItem departureScheduleItem;
+
     @OneToOne
     @JoinColumn
     private ScheduleItem arrivalScheduleItem;
-
 }

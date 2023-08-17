@@ -1,8 +1,10 @@
 package com.example.Final_Project_9team.entity;
 
 
+import com.example.Final_Project_9team.entity.item.Item;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
