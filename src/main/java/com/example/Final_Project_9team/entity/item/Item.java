@@ -6,10 +6,7 @@ import com.example.Final_Project_9team.entity.LikesItem;
 import com.example.Final_Project_9team.entity.ScheduleItem;
 import com.example.Final_Project_9team.entity.embeded.Location;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
