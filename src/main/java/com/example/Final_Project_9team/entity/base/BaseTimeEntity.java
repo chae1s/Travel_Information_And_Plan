@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-public class BaseTimeEntity {
+public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
