@@ -24,9 +24,10 @@ public class User extends BaseTimeEntity {
     private String password;
     private String nickname;
     private Role role;
+    private Boolean isDeleted;
+
     @OneToOne(mappedBy = "user")
     private Profile profile;
-    private Boolean isDeleted;
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

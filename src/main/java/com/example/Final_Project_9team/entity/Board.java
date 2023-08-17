@@ -24,8 +24,6 @@ public class Board extends BaseTimeEntity {
     private Boolean isDeleted;
     private Category category;
 
-    private Boolean isLike;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
