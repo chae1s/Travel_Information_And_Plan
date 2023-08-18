@@ -1,9 +1,12 @@
 package com.example.Final_Project_9team.dto;
 
+import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class ScheduleResponseDto {
@@ -15,8 +18,9 @@ public class ScheduleResponseDto {
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
+    private List<Mates> mates = new ArrayList<>();
 
-    public ScheduleResponseDto(Schedule schedule) {
+    public ScheduleResponseDto(Schedule schedule, Mates mates) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.description = schedule.getDescription();
@@ -25,5 +29,6 @@ public class ScheduleResponseDto {
         this.sumDistance = schedule.getSumDistance();
         this.sumDuration = schedule.getSumDuration();
         this.display = schedule.getDisplay();
+        this.mates.add(mates);
     }
 }
