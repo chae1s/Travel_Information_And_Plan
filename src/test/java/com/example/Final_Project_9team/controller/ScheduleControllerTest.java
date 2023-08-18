@@ -56,10 +56,8 @@ class ScheduleControllerTest {
         // given
         String url = "/schedules";
         ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        doReturn(new ScheduleResponseDto(schedule())).when(scheduleService).createSchedule(any(ScheduleRequestDto.class));
 
         // when
-        System.out.println(new GsonUtils().toJson(schedule()));
         ResultActions actions = mockMvc.perform(
                 MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
