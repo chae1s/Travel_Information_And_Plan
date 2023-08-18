@@ -1,9 +1,13 @@
 package com.example.Final_Project_9team.controller;
 
+import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.dto.ScheduleRequestDto;
 import com.example.Final_Project_9team.dto.ScheduleResponseDto;
+import com.example.Final_Project_9team.exception.SuccessCode;
 import com.example.Final_Project_9team.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +21,10 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ScheduleResponseDto create(@RequestBody ScheduleRequestDto requestDto, Authentication authentication) {
+    public ResponseEntity<ResponseDto> create(@RequestBody ScheduleRequestDto requestDto) {
 
-        return scheduleService.createSchedule(requestDto, authentication);
+        scheduleService.createSchedule(requestDto);
+        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
 
 }
