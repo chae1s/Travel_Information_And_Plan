@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.service;
 
+import com.example.Final_Project_9team.dto.MatesResponseDto;
 import com.example.Final_Project_9team.dto.ScheduleRequestDto;
 import com.example.Final_Project_9team.dto.ScheduleResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
@@ -15,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -38,12 +42,26 @@ public class ScheduleService {
                 .nickname("nickname")
                 .role(Role.ROLE_USER)
                 .build();
-
+        user = userRepository.save(user);
         log.info("User Email : {}", user.getEmail());
         // 일정의 작성자 등록
         Mates mates = createScheduleWriter(user, schedule);
 
-        return new ScheduleResponseDto(schedule, mates);
+        return new ScheduleResponseDto(schedule);
+    }
+
+    public ScheduleResponseDto readSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        List<Mates> mates = matesRepository.findAllBySchedule(schedule);
+        List<MatesResponseDto> matesResponseDtos = new ArrayList<>();
+        for (Mates mate : mates) {
+            if (mate.getIsAccepted()) {
+                matesResponseDtos.add(new MatesResponseDto(mate));
+            }
+        }
+
+        return new ScheduleResponseDto(schedule, matesResponseDtos);
+
     }
 
 

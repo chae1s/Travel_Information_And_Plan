@@ -6,13 +6,9 @@ import com.example.Final_Project_9team.dto.ScheduleResponseDto;
 import com.example.Final_Project_9team.exception.SuccessCode;
 import com.example.Final_Project_9team.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("schedules")
@@ -25,6 +21,12 @@ public class ScheduleController {
 
         scheduleService.createSchedule(requestDto);
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
+    }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId) {
+
+        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId));
     }
 
 }
