@@ -25,7 +25,7 @@ public class ScheduleRequestDto {
                 .startDate(startDate)
                 .endDate(endDate)
                 .sumDistance(0)
-                .sumDistance(0)
+                .sumDuration(0)
                 .display(false)
                 .build();
     }

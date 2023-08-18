@@ -18,9 +18,9 @@ public class ScheduleResponseDto {
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
-    private List<Mates> mates = new ArrayList<>();
+    private List<MatesResponseDto> mates;
 
-    public ScheduleResponseDto(Schedule schedule, Mates mates) {
+    public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.description = schedule.getDescription();
@@ -29,6 +29,17 @@ public class ScheduleResponseDto {
         this.sumDistance = schedule.getSumDistance();
         this.sumDuration = schedule.getSumDuration();
         this.display = schedule.getDisplay();
-        this.mates.add(mates);
+    }
+
+    public ScheduleResponseDto(Schedule schedule, List<MatesResponseDto> mates) {
+        this.id = schedule.getId();
+        this.title = schedule.getTitle();
+        this.description = schedule.getDescription();
+        this.startDate = schedule.getStartDate();
+        this.endDate = schedule.getEndDate();
+        this.sumDistance = schedule.getSumDistance();
+        this.sumDuration = schedule.getSumDuration();
+        this.display = schedule.getDisplay();
+        this.mates = mates;
     }
 }
