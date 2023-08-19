@@ -5,6 +5,7 @@ import com.example.Final_Project_9team.entity.Schedule;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,8 @@ public class ScheduleResponseDto {
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
-    private List<MatesResponseDto> mates;
+    private Integer period;
+    private List<MatesResponseDto> matesResponses;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -31,7 +33,7 @@ public class ScheduleResponseDto {
         this.display = schedule.getDisplay();
     }
 
-    public ScheduleResponseDto(Schedule schedule, List<MatesResponseDto> mates) {
+    public ScheduleResponseDto(Schedule schedule, List<MatesResponseDto> matesResponses) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.description = schedule.getDescription();
@@ -40,6 +42,7 @@ public class ScheduleResponseDto {
         this.sumDistance = schedule.getSumDistance();
         this.sumDuration = schedule.getSumDuration();
         this.display = schedule.getDisplay();
-        this.mates = mates;
+        this.period = Period.between(schedule.getStartDate().toLocalDate(), schedule.getEndDate().toLocalDate()).getDays() + 1;
+        this.matesResponses = matesResponses;
     }
 }
