@@ -1,13 +1,15 @@
 package com.example.Final_Project_9team.service;
 
+import com.example.Final_Project_9team.dto.ScheduleItemRequestDto;
+import com.example.Final_Project_9team.dto.ScheduleItemResponseDto;
 import com.example.Final_Project_9team.dto.ScheduleRequestDto;
 import com.example.Final_Project_9team.dto.ScheduleResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
+import com.example.Final_Project_9team.entity.ScheduleItem;
 import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.repository.MatesRepository;
-import com.example.Final_Project_9team.repository.ScheduleRepository;
-import com.example.Final_Project_9team.repository.UserRepository;
+import com.example.Final_Project_9team.entity.item.Item;
+import com.example.Final_Project_9team.repository.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;;
@@ -34,6 +38,10 @@ class ScheduleServiceTest {
     private ScheduleRepository scheduleRepository;
     @Mock
     private MatesRepository matesRepository;
+    @Mock
+    private ItemRepository itemRepository;
+    @Mock
+    private ScheduleItemRepository scheduleItemRepository;
     @InjectMocks
     private ScheduleService scheduleService;
 
@@ -51,16 +59,34 @@ class ScheduleServiceTest {
         // 여행 일정 작성자 등록
         doReturn(mates()).when(matesRepository).save(any(Mates.class));
         // when
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
+        ScheduleRequestDto scheduleRequest = new ScheduleRequestDto();
         Authentication authentication = new UsernamePasswordAuthenticationToken(user().getEmail(), "password");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ScheduleResponseDto responseDto = scheduleService.createSchedule(requestDto, authentication);
+        ScheduleResponseDto scheduleResponse = scheduleService.createSchedule(scheduleRequest);
 
         // then
-        assertThat(responseDto.getId()).isNotNull();
-        assertThat(responseDto.getStartDate()).isEqualTo(startDate);
-        assertThat(responseDto.getMates().get(0).getUser().getEmail()).isEqualTo("test@gmail.com");
+        assertThat(scheduleResponse.getId()).isNotNull();
+        assertThat(scheduleResponse.getStartDate()).isEqualTo(startDate);
+    }
+
+    @Test
+    @DisplayName("여행 계획 등록하기")
+    public void createScheduleItem() {
+        // given
+        List<ScheduleItemRequestDto> scheduleItemRequests = new ArrayList<>();
+        scheduleItemRequests.add(scheduleItemRequestDto());
+        scheduleItemRequests.add(scheduleItemRequestDto());
+        scheduleItemRequests.add(scheduleItemRequestDto());
+
+        doReturn(Optional.of(schedule())).when(scheduleRepository).findById(any(Long.class));
+        doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
+        doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
+        // when
+        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItem(schedule().getId(), scheduleItemRequests);
+
+        // then
+        assertThat(scheduleItemResponses.size()).isEqualTo(6);
     }
 
     private Mates mates() {
@@ -92,4 +118,28 @@ class ScheduleServiceTest {
                 .build();
     }
 
+    private Item item() {
+        return Item.builder()
+                .id(1L)
+                .name("안목해변")
+                .build();
+    }
+
+    private ScheduleItem scheduleItem() {
+        return ScheduleItem.builder()
+                .id(1L)
+                .turn(1)
+                .item(item())
+                .build();
+    }
+
+    private ScheduleItemRequestDto scheduleItemRequestDto() {
+        List<Long> itemIds = new ArrayList<>();
+        itemIds.add(1L);
+        itemIds.add(2L);
+        ScheduleItemRequestDto scheduleItemRequest = new ScheduleItemRequestDto();
+        scheduleItemRequest.setItemIds(itemIds);
+
+        return scheduleItemRequest;
+    }
 }

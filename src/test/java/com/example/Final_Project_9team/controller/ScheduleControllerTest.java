@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.controller;
 
+import com.example.Final_Project_9team.dto.ScheduleItemRequestDto;
 import com.example.Final_Project_9team.dto.ScheduleRequestDto;
 import com.example.Final_Project_9team.dto.ScheduleResponseDto;
 import com.example.Final_Project_9team.entity.Schedule;
@@ -20,6 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,6 +70,24 @@ class ScheduleControllerTest {
         actions.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @DisplayName("여행계획 등록하기")
+    public void createScheduleItem() throws Exception {
+        // given
+        String url = "/schedules/1";
+
+        List<ScheduleItemRequestDto> requestDtos = new ArrayList<>();
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new GsonUtils().toJson(requestDtos))
+        );
+
+        // then
+        actions.andExpect(MockMvcResultMatchers.status().isOk());
+    }
     private Schedule schedule() {
 
         return Schedule.builder()
