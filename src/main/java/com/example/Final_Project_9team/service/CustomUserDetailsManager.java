@@ -2,6 +2,9 @@ package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.entity.User;
 import com.example.Final_Project_9team.dto.CustomUserDetails;
+import com.example.Final_Project_9team.exception.CustomException;
+import com.example.Final_Project_9team.exception.ErrorCode;
+import com.example.Final_Project_9team.repository.ProfileRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +20,16 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 
     private final UserRepository userRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자입니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return CustomUserDetails.fromEntity(user);
     }
 
     @Override
     public void createUser(UserDetails user) {
-        log.info("\"{}\" 회원정보 생성");
-        userRepository.save(((CustomUserDetails) user).toEntity());
+//        log.info("회원정보 생성");
+//        userRepository.save(((CustomUserDetails) user).toEntity());
     }
 
     @Override
@@ -36,7 +38,7 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    public void deleteUser(String username) {
+    public void deleteUser(String email) {
 
     }
 
@@ -47,6 +49,9 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 
     @Override
     public boolean userExists(String email) {
-        return userRepository.existsByEmail(email);
+//        return userRepository.existsByEmail(email);
+        return false;
     }
+
+
 }
