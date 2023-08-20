@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.config;
 
+import com.example.Final_Project_9team.global.jwt.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig {
+    private final JwtTokenFilter jwtTokenFilter;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -40,6 +42,8 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .addFilterBefore(jwtTokenFilter, AuthorizationFilter.class)
+
         ;
         return http.build();
     }

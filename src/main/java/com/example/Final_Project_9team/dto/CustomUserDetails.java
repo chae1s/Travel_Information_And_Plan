@@ -6,9 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -22,7 +25,9 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.toString()));
+        return authorities;
     }
 
     @Override
@@ -30,10 +35,10 @@ public class CustomUserDetails implements UserDetails {
         return this.password;
     }
 
-    // 사용자 인증주체 정보는 email
+    // 사용자 인증주체 정보를 nickname으로 설정함
     @Override
     public String getUsername() {
-        return this.email;
+        return this.nickname;
     }
 
     // 사용하지 않는 기능으로, 전부 true 반환
