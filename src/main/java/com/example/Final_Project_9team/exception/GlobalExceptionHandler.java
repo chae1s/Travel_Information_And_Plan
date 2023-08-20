@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     // Valid 예외 메시지 출력
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(
+    protected Map<String, String> handleValidationException(
             MethodArgumentNotValidException exception
     ) {
         Map<String, String> errors = new HashMap<>();
