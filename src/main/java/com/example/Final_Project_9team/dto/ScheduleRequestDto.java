@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.dto;
 
 import com.example.Final_Project_9team.entity.Schedule;
+import com.example.Final_Project_9team.entity.User;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,10 +19,11 @@ public class ScheduleRequestDto {
     private Integer sumDuration;
     private Boolean display;
 
-    public Schedule toEntity() {
+    public Schedule toEntity(User user) {
         return Schedule.builder()
                 .title(title)
                 .description(description)
+                .user(user)
                 .startDate(startDate)
                 .endDate(endDate)
                 .sumDistance(0)

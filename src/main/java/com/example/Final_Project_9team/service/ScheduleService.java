@@ -29,9 +29,6 @@ public class ScheduleService {
     private final ScheduleItemRepository scheduleItemRepository;
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
-        Schedule schedule = dto.toEntity();
-        // 일정 등록
-        schedule = scheduleRepository.save(schedule);
         // 로그인한 유저 정보 가져오기
 //        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         User user = User.builder()
@@ -42,6 +39,10 @@ public class ScheduleService {
                 .role(Role.ROLE_USER)
                 .build();
         user = userRepository.save(user);
+
+        Schedule schedule = dto.toEntity(user);
+        // 일정 등록
+        schedule = scheduleRepository.save(schedule);
         log.info("User Email : {}", user.getEmail());
         // 일정의 작성자 등록
         Mates mates = createScheduleWriter(user, schedule);

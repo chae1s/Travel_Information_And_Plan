@@ -27,6 +27,10 @@ public class Schedule {
     private Integer sumDuration;
     private Boolean display;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
     @Builder.Default
     @OneToMany(mappedBy = "schedule")
     private List<ScheduleItem> scheduleItems = new ArrayList<>();
