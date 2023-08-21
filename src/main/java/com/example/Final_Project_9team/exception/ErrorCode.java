@@ -35,6 +35,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 댓글입니다."),
     POST_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 게시글입니다."),
     INVALID_PASSWORD(404, "ERR_NOT_FOUND", "패스워드가 일치하지 않습니다."),
+    SCHEDULE_NOT_FOUND(404, "ERR_NOT_FOUNT", "존재하지 않는 일정입니다."),
 
     // 500 내부 서버 에러
     INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다.");
