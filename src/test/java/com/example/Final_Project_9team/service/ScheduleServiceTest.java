@@ -1,9 +1,6 @@
 package com.example.Final_Project_9team.service;
 
-import com.example.Final_Project_9team.dto.ScheduleItemRequestDto;
-import com.example.Final_Project_9team.dto.ScheduleItemResponseDto;
-import com.example.Final_Project_9team.dto.ScheduleRequestDto;
-import com.example.Final_Project_9team.dto.ScheduleResponseDto;
+import com.example.Final_Project_9team.dto.*;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.ScheduleItem;
@@ -89,6 +86,24 @@ class ScheduleServiceTest {
         assertThat(scheduleItemResponses.size()).isEqualTo(6);
     }
 
+    @Test
+    @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
+    public void readPreviousScheduleListToday() {
+        // given
+        doReturn(Optional.of(user())).when(userRepository).findById(any(Long.class));
+        List<Schedule> schedules = new ArrayList<>();
+        schedules.add(schedule());
+        schedules.add(schedule());
+
+        doReturn(schedules).when(scheduleRepository).findByUserAndEndDateGreaterThanEqual(any(User.class), any(LocalDateTime.class));
+
+        // when
+        List<ScheduleListResponseDto> scheduleListResponseDs = scheduleService.readPreviousScheduleListToday();
+
+        // then
+        assertThat(scheduleListResponseDs.size()).isEqualTo(2);
+    }
+
     private Mates mates() {
         return Mates.builder()
                 .id(1L)
@@ -113,6 +128,7 @@ class ScheduleServiceTest {
                 .id(1L)
                 .title(title)
                 .description("제주도")
+                .user(user())
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
