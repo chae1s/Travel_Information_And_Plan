@@ -1,10 +1,7 @@
 package com.example.Final_Project_9team.controller;
 
-import com.example.Final_Project_9team.dto.JwtDto;
-import com.example.Final_Project_9team.dto.LoginDto;
-import com.example.Final_Project_9team.dto.ProfileRequestDto;
+import com.example.Final_Project_9team.dto.*;
 import com.example.Final_Project_9team.global.ResponseDto;
-import com.example.Final_Project_9team.dto.UserSignupDto;
 import com.example.Final_Project_9team.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -14,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -34,6 +30,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.login(dto, response));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> readUser(Authentication auth) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.readUser(auth.getName()));
+    }
+
     // test
     @GetMapping("/auth")
     public ResponseEntity<ResponseDto> test(Authentication auth){
@@ -41,5 +42,4 @@ public class UserController {
         log.info(user + "로그인");
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.getMessage(user + " 로그인 확인"));
     }
-
 }

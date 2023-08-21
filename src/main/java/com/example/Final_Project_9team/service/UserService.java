@@ -1,30 +1,19 @@
 package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.dto.*;
-import com.example.Final_Project_9team.entity.Profile;
 import com.example.Final_Project_9team.entity.User;
 import com.example.Final_Project_9team.entity.enums.Role;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
 import com.example.Final_Project_9team.global.jwt.JwtTokenUtils;
-import com.example.Final_Project_9team.global.util.FileHandler;
-import com.example.Final_Project_9team.repository.ProfileRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -78,5 +67,16 @@ public class UserService {
         return JwtDto.builder().token(jwtToken).build();
     }
 
+    public UserResponseDto readUser(String nickname) {
+        log.info("유저 \"{}\" 정보 조회", nickname);
+        User user = userRepository.findByNickname(nickname).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return UserResponseDto.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .role(user.getRole().name())
+                .build();
+    }
 
 }
