@@ -1,6 +1,5 @@
 package com.example.Final_Project_9team.dto;
 
-import com.example.Final_Project_9team.entity.Items;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ItemsDto {
+public class ItemResponseDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contentId;

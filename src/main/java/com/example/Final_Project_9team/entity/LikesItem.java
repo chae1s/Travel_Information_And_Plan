@@ -25,4 +25,9 @@ public class LikesItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    public LikesItem updateLikesItem(Boolean isLike) {
+        this.isLike = isLike;
+        return this;
+    }
+
 }

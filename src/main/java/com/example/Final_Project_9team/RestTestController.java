@@ -5,7 +5,6 @@ import com.example.Final_Project_9team.entity.item.Attraction;
 import com.example.Final_Project_9team.entity.item.Restaurant;
 import com.example.Final_Project_9team.repository.AccommodationRepository;
 import com.example.Final_Project_9team.repository.AttractionRepository;
-import com.example.Final_Project_9team.repository.ItemsRepository;
 import com.example.Final_Project_9team.repository.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -26,14 +25,12 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @RestController
 public class RestTestController {
-    private final ItemsRepository itemsRepository;
     private final AttractionRepository attractionRepository;
     private final AccommodationRepository accommodationRepository;
     private final RestaurantRepository restaurantRepository;
 
     @Autowired
-    public RestTestController(ItemsRepository itemsRepository, AttractionRepository attractionRepository, AccommodationRepository accommodationRepository, RestaurantRepository restaurantRepository) {
-        this.itemsRepository = itemsRepository;
+    public RestTestController(AttractionRepository attractionRepository, AccommodationRepository accommodationRepository, RestaurantRepository restaurantRepository) {
         this.attractionRepository = attractionRepository;
         this.accommodationRepository = accommodationRepository;
         this.restaurantRepository = restaurantRepository;
