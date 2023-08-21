@@ -88,7 +88,7 @@ class ScheduleServiceTest {
 
     @Test
     @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
-    public void readPreviousScheduleListToday() {
+    public void readSchedulesAfterToday() {
         // given
         doReturn(Optional.of(user())).when(userRepository).findById(any(Long.class));
         List<Schedule> schedules = new ArrayList<>();
@@ -98,7 +98,7 @@ class ScheduleServiceTest {
         doReturn(schedules).when(scheduleRepository).findByUserAndEndDateGreaterThanEqual(any(User.class), any(LocalDateTime.class));
 
         // when
-        List<ScheduleListResponseDto> scheduleListResponseDs = scheduleService.readPreviousScheduleListToday();
+        List<ScheduleListResponseDto> scheduleListResponseDs = scheduleService.readSchedulesAfterToday();
 
         // then
         assertThat(scheduleListResponseDs.size()).isEqualTo(2);

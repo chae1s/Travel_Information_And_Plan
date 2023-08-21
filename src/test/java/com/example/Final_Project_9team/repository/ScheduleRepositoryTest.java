@@ -55,7 +55,7 @@ class ScheduleRepositoryTest {
 
     @Test
     @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
-    public void readPreviousScheduleListToday() {
+    public void readSchedulesAfterToday() {
         String title = "즐거운 여행";
         LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2023, 8, 22, 0, 0, 0);
