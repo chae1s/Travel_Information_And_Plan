@@ -29,7 +29,7 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.readSchedule(scheduleId));
     }
 
-    @PostMapping("/{scheduleId}")
+    @PostMapping("/{scheduleId}/schedule-items")
     public List<ScheduleItemResponseDto> createScheduleItem(@PathVariable("scheduleId") Long scheduleId, @RequestBody List<ScheduleItemRequestDto> scheduleItemRequests) {
 
         List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItem(scheduleId, scheduleItemRequests);
