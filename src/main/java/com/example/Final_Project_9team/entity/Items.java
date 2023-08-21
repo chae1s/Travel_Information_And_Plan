@@ -30,9 +30,10 @@ public class Items {
     private String tel;
 
     private String homePage;
-    private String bookTour;
+    private String bookTour;//교과서 속 여행지 여부
     private String firstImage;
     private String firstImage2;
+    //저작권 유형 -> Type1:제1유형(출처표시-권장) Type3:제3유형(제1유형 + 변경금지)
     private String cpyrgtDivCd;
     //1:서울, 2:인천, 3:대전, 4:대구, 5:광주, 6:부산, 7:울산, 8:세종특별자치시, 31:경기도, 32:강원특별자치도
     //33:충정북도, 34:충청남도 35:경상북도, 36:경상남도, 37:전라북도, 38:전라남도, 39:제주도
