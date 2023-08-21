@@ -90,11 +90,7 @@ public class ScheduleService {
     private void createScheduleItemEach(Schedule schedule, List<ScheduleItemResponseDto> scheduleItemResponses, ScheduleItemRequestDto scheduleItemRequest) {
         int turn = 1;
         for (Long itemId : scheduleItemRequest.getItemIds()) {
-//            Item item = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-            Item item = Item.builder()
-                    .id(1L)
-                    .build();
-            item = itemRepository.save(item);
+            Item item = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
             ScheduleItem scheduleItem = scheduleItemRequest.toEntity(turn, schedule, item);
             scheduleItem = scheduleItemRepository.save(scheduleItem);
             scheduleItemResponses.add(new ScheduleItemResponseDto(scheduleItem));
