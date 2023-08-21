@@ -17,12 +17,17 @@ public class LikesItem {
     private Long id;
     private Boolean isLike;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "item_id")
     private Item item;
+
+    public LikesItem updateLikesItem(Boolean isLike) {
+        this.isLike = isLike;
+        return this;
+    }
 
 }
