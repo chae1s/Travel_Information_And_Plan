@@ -30,9 +30,9 @@ public class ScheduleController {
     }
 
     @PostMapping("/{scheduleId}/schedule-items")
-    public List<ScheduleItemResponseDto> createScheduleItem(@PathVariable("scheduleId") Long scheduleId, @RequestBody List<ScheduleItemRequestDto> scheduleItemRequests) {
+    public List<ScheduleItemResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId, @RequestBody List<ScheduleItemRequestDto> scheduleItemRequests) {
 
-        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItem(scheduleId, scheduleItemRequests);
+        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItems(scheduleId, scheduleItemRequests);
 
         return scheduleItemResponses;
     }

@@ -79,7 +79,7 @@ public class ScheduleService {
         return scheduleListResponses;
     }
 
-    public List<ScheduleItemResponseDto> createScheduleItem(Long scheduleId, List<ScheduleItemRequestDto> scheduleItemRequests) {
+    public List<ScheduleItemResponseDto> createScheduleItems(Long scheduleId, List<ScheduleItemRequestDto> scheduleItemRequests) {
 
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
