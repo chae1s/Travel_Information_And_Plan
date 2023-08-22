@@ -55,10 +55,16 @@ public class ScheduleService {
 
     public ScheduleResponseDto readSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+//        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // mates에 로그인한 사용자의 정보가 없을 경우 Exception 처리
+//        if (matesRepository.existsByScheduleAndUser(schedule, user)) {
+//            log.error("{} {} 일정 접근 불가", user.getEmail, schedule.getTitle());
+//            throw new CustomException(ErrorCode.USER_NO_AUTH);
+//        }
+
+        // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 mates list
         List<Mates> mates = matesRepository.findAllBySchedule(schedule);
-
-        // TODO : mates에 로그인한 사용자의 정보가 없을 경우 Exception 처리
 
         List<MatesResponseDto> matesResponses = new ArrayList<>();
         for (Mates mate : mates) {
@@ -128,7 +134,7 @@ public class ScheduleService {
         return matesRepository.save(mates);
     }
 
-    // schedule에 일자별 일정 한 번에 등록하기
+    // schedule에 일자별 세부 계획 한 번에 등록하기
     private void createScheduleItemEach(Schedule schedule, List<ScheduleItemResponseDto> scheduleItemResponses, ScheduleItemRequestDto scheduleItemRequest) {
         int turn = 1;
 
