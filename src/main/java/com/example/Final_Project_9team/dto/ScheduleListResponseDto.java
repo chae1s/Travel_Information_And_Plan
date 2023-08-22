@@ -3,7 +3,7 @@ package com.example.Final_Project_9team.dto;
 import com.example.Final_Project_9team.entity.Schedule;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ public class ScheduleListResponseDto {
     private String title;
     private String description;
     private UserResponseDto userResponse;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private List<LocalDateTime> tourDates;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private List<LocalDate> tourDates;
 
     public ScheduleListResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -26,7 +26,7 @@ public class ScheduleListResponseDto {
         this.startDate = schedule.getStartDate();
         this.endDate = schedule.getEndDate();
         this.tourDates = new ArrayList<>();
-        int period = Period.between(schedule.getStartDate().toLocalDate(), schedule.getEndDate().toLocalDate()).getDays() + 1;
+        int period = Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1;
         for (int i = 0; i < period; i++) {
             tourDates.add(schedule.getStartDate().plusDays(i));
         }

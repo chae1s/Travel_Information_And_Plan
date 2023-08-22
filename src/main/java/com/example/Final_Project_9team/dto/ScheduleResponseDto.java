@@ -1,12 +1,10 @@
 package com.example.Final_Project_9team.dto;
 
-import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,8 +12,8 @@ public class ScheduleResponseDto {
     private Long id;
     private String title;
     private String description;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
@@ -42,7 +40,7 @@ public class ScheduleResponseDto {
         this.sumDistance = schedule.getSumDistance();
         this.sumDuration = schedule.getSumDuration();
         this.display = schedule.getDisplay();
-        this.period = Period.between(schedule.getStartDate().toLocalDate(), schedule.getEndDate().toLocalDate()).getDays() + 1;
+        this.period = Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1;
         this.matesResponses = matesResponses;
     }
 }

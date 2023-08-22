@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,7 +81,7 @@ public class ScheduleService {
     public List<ScheduleListResponseDto> readSchedulesAfterToday() {
 //        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         User user = userRepository.findById(1L).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        LocalDateTime today = LocalDateTime.now();
+        LocalDate today = LocalDate.now();
         log.info("일정 조회 기준 - 오늘 날짜 : {}", today);
 
         List<Schedule> schedules = scheduleRepository.findByUserAndEndDateGreaterThanEqual(user, today);
