@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;;
@@ -35,8 +35,8 @@ class ScheduleRepositoryTest {
     public void createSchedule() {
         // given
         String title = "즐거운 여행";
-        LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(2023, 8, 25, 0, 0, 0);
+        LocalDate startDate = LocalDate.of(2023, 8, 20);
+        LocalDate endDate = LocalDate.of(2023, 8, 25);
         Schedule schedule = Schedule.builder()
                 .title(title)
                 .description("제주도")
@@ -57,10 +57,10 @@ class ScheduleRepositoryTest {
     @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
     public void readSchedulesAfterToday() {
         String title = "즐거운 여행";
-        LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(2023, 8, 22, 0, 0, 0);
+        LocalDate startDate = LocalDate.of(2023, 8, 20);
+        LocalDate endDate = LocalDate.of(2023, 8, 22);
 
-        LocalDateTime today = LocalDateTime.of(2023, 8, 21, 0, 0, 0);
+        LocalDate today = LocalDate.of(2023, 8, 21);
 
         User user = userRepository.findById(1L).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Schedule schedule = Schedule.builder()
