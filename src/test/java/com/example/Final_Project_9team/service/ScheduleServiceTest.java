@@ -45,6 +45,7 @@ class ScheduleServiceTest {
     private final String title = "즐거운 여행";
     private final LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
     private final LocalDateTime endDate = LocalDateTime.of(2023, 8, 25, 0, 0, 0);
+    private final LocalDateTime tourDate = LocalDateTime.of(2023, 8, 23, 0, 0, 0);
 
     @Test
     @DisplayName("일정 등록 후 mates에 일정과 작성자 등록하기")
@@ -80,7 +81,7 @@ class ScheduleServiceTest {
         doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
         doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
         // when
-        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItem(schedule().getId(), scheduleItemRequests);
+        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItems(schedule().getId(), scheduleItemRequests);
 
         // then
         assertThat(scheduleItemResponses.size()).isEqualTo(6);
@@ -102,6 +103,27 @@ class ScheduleServiceTest {
 
         // then
         assertThat(scheduleListResponseDs.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("하나의 여행지 일정의 원하는 날짜에 추가")
+    public void createDateToScheduleItem() {
+
+        // given
+        doReturn(Optional.of(schedule())).when(scheduleRepository).findById(any(Long.class));
+        doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
+        doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
+
+
+        ScheduleItemRequestDto scheduleItemRequest = new ScheduleItemRequestDto();
+
+        // when
+        ScheduleItemResponseDto scheduleItemResponse = scheduleService.createDateToScheduleItem(item().getId(), schedule().getId(), scheduleItemRequest);
+
+        // then
+        assertThat(scheduleItemResponse.getTourDate()).isEqualTo(tourDate);
+        assertThat(scheduleItemResponse.getTurn()).isEqualTo(1);
+
     }
 
     private Mates mates() {
@@ -144,6 +166,7 @@ class ScheduleServiceTest {
     private ScheduleItem scheduleItem() {
         return ScheduleItem.builder()
                 .id(1L)
+                .tourDate(tourDate)
                 .turn(1)
                 .item(item())
                 .build();

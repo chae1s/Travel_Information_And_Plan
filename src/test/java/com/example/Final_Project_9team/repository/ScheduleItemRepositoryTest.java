@@ -62,4 +62,31 @@ class ScheduleItemRepositoryTest {
         // then
         assertThat(scheduleItems.size()).isEqualTo(5);
     }
+
+    @Test
+    @DisplayName("하나의 여행지 일정의 원하는 날짜에 추가")
+    public void createDateToScheduleItem() {
+        // given
+        Schedule schedule = Schedule.builder()
+                .id(1L)
+                .title(title)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        schedule = scheduleRepository.save(schedule);
+
+        LocalDateTime tourDate = LocalDateTime.of(2023, 8, 22, 0, 0, 0);
+        ScheduleItem scheduleItem = ScheduleItem.builder()
+                .id(1L)
+                .schedule(schedule)
+                .tourDate(tourDate)
+                .build();
+
+        // when
+        scheduleItem = scheduleItemRepository.save(scheduleItem);
+
+        // then
+        assertThat(scheduleItem.getTourDate()).isEqualTo(tourDate);
+    }
 }
