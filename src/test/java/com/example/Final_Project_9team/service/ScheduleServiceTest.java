@@ -17,7 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,9 +43,9 @@ class ScheduleServiceTest {
     private ScheduleService scheduleService;
 
     private final String title = "즐거운 여행";
-    private final LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
-    private final LocalDateTime endDate = LocalDateTime.of(2023, 8, 25, 0, 0, 0);
-    private final LocalDateTime tourDate = LocalDateTime.of(2023, 8, 23, 0, 0, 0);
+    private final LocalDate startDate = LocalDate.of(2023, 8, 20);
+    private final LocalDate endDate = LocalDate.of(2023, 8, 25);
+    private final LocalDate tourDate = LocalDate.of(2023, 8, 23);
 
     @Test
     @DisplayName("일정 등록 후 mates에 일정과 작성자 등록하기")
@@ -96,7 +96,7 @@ class ScheduleServiceTest {
         schedules.add(schedule());
         schedules.add(schedule());
 
-        doReturn(schedules).when(scheduleRepository).findByUserAndEndDateGreaterThanEqual(any(User.class), any(LocalDateTime.class));
+        doReturn(schedules).when(scheduleRepository).findByUserAndEndDateGreaterThanEqual(any(User.class), any(LocalDate.class));
 
         // when
         List<ScheduleListResponseDto> scheduleListResponseDs = scheduleService.readSchedulesAfterToday();
