@@ -91,6 +91,17 @@ public class ScheduleService {
         return scheduleItemResponses;
     }
 
+    public ScheduleItemResponseDto createDateToScheduleItem(Long itemId, Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        int count = scheduleItemRepository.countScheduleItemByScheduleAndTourDate(schedule, scheduleItemRequest.getTourDate());
+        ScheduleItem scheduleItem = scheduleItemRequest.toEntity(count + 1, schedule, item);
+
+        scheduleItem = scheduleItemRepository.save(scheduleItem);
+
+        return new ScheduleItemResponseDto(scheduleItem);
+    }
 
     private Mates createScheduleWriter(User user, Schedule schedule) {
         Mates mates = Mates.builder()
