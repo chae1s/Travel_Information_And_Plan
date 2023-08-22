@@ -15,6 +15,7 @@ public class ItemController {
 
     private final ScheduleService scheduleService;
 
+    // 한 개의 여행지 일정에 추가하기
     @PostMapping("/{itemId}/schedules/{scheduleId}")
     public ScheduleItemResponseDto createDateToScheduleItem(@PathVariable("itemId")Long itemId, @PathVariable("scheduleId")Long scheduleId,
                                                             @RequestBody ScheduleItemRequestDto scheduleItemRequest) {
