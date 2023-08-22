@@ -51,25 +51,27 @@ public class UserService {
     }
 
     public JwtDto login(LoginDto dto, HttpServletResponse response) {
-        UserDetails userDetails
-                = manager.loadUserByUsername(dto.getEmail());
+        UserDetails userDetails = manager.loadUserByUsername(dto.getEmail());
         log.info("\"{}\" 로그인", dto.getEmail());
 
         if (!passwordEncoder.matches(dto.getPassword(), userDetails.getPassword())) {
             log.info("비밀번호 불일치");
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
+
         log.info("비밀번호 확인완료");
         String jwtToken = jwtTokenUtils.generateToken(userDetails);
+
+        // 응답 헤더에 jwt 전달
         response.setHeader("Authorization", "Bearer " + jwtToken);
         log.info("jwt: {}", jwtTokenUtils.generateToken(userDetails));
         log.info("Header: {}", response.getHeader("Authorization"));
         return JwtDto.builder().token(jwtToken).build();
     }
 
-    public UserResponseDto readUser(String nickname) {
-        log.info("유저 \"{}\" 정보 조회", nickname);
-        User user = userRepository.findByNickname(nickname).orElseThrow(
+    public UserResponseDto readUser(String username) {
+        log.info("유저 \"{}\" 정보 조회", username);
+        User user = userRepository.findByEmail(username).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserResponseDto.builder()

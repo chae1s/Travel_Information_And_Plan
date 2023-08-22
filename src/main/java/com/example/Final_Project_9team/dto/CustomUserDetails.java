@@ -18,13 +18,15 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private Long id;
-    private String email;
+    private String username; // email
     private String password;
     private String nickname;
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 현재 유저당 부여되는 권한은 하나임으로 하나만 추가함
+        // 여러 Role 부여시 User의 Role 필드 수정 필요
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.toString()));
         return authorities;
@@ -35,10 +37,14 @@ public class CustomUserDetails implements UserDetails {
         return this.password;
     }
 
-    // 사용자 인증주체 정보를 nickname으로 설정함
+    // 사용자 식별 정보는 로그인 email
     @Override
     public String getUsername() {
-        return this.nickname;
+        return this.username;
+    }
+
+    public Long getUserId() {
+        return this.id;
     }
 
     // 사용하지 않는 기능으로, 전부 true 반환
@@ -65,7 +71,7 @@ public class CustomUserDetails implements UserDetails {
     public static CustomUserDetails fromEntity(User user) {
         return CustomUserDetails.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .nickname(user.getNickname())
                 .role(user.getRole())
@@ -74,9 +80,10 @@ public class CustomUserDetails implements UserDetails {
 
     public User toEntity() {
         return User.builder()
+                .id(id)
                 .nickname(nickname)
                 .password(password)
-                .email(email)
+                .email(username)
                 .role(role)
                 .build();
     }
