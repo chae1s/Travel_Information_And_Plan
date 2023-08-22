@@ -12,10 +12,13 @@ import com.example.Final_Project_9team.exception.ErrorCode;
 import com.example.Final_Project_9team.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -64,10 +67,22 @@ public class ScheduleService {
 
     }
 
+    public List<ScheduleListResponseDto> readSchedulesAfterToday() {
+//        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(1L).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        LocalDateTime today = LocalDateTime.now();
+
+        List<Schedule> schedules = scheduleRepository.findByUserAndEndDateGreaterThanEqual(user, today);
+        List<ScheduleListResponseDto> scheduleListResponses = schedules.stream().map(schedule -> new ScheduleListResponseDto(schedule))
+                .collect(Collectors.toList());
+
+        return scheduleListResponses;
+    }
+
     public List<ScheduleItemResponseDto> createScheduleItem(Long scheduleId, List<ScheduleItemRequestDto> scheduleItemRequests) {
-        // TODO: scheduleId로 schedule 조회
+
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-        // TODO: scheduleItemRequests 하나씩 repository에 저장
+
         List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
         for (ScheduleItemRequestDto scheduleItemRequest : scheduleItemRequests) {
             createScheduleItemEach(schedule, scheduleItemResponses, scheduleItemRequest);
@@ -75,6 +90,7 @@ public class ScheduleService {
 
         return scheduleItemResponses;
     }
+
 
     private Mates createScheduleWriter(User user, Schedule schedule) {
         Mates mates = Mates.builder()
