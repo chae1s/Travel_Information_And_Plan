@@ -37,6 +37,8 @@ public class WebSecurityConfig {
                                 "/users/login"
                         )
                         .anonymous()
+                        // TODO 권한에 따른 접근 불가, 해결하기
+                        .requestMatchers("/roleUser").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement

@@ -37,7 +37,10 @@ public enum ErrorCode {
     INVALID_PASSWORD(404, "ERR_NOT_FOUND", "비밀번호가 일치하지 않습니다."),
 
     // 500 내부 서버 에러
-    INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다.");
+    INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다."),
+
+    // JWT 관련 에러
+    TOKEN_NO_AUTH(403, "TOKEN_NO_AUTH", "권한 정보가 없는 토큰입니다.");
 
     private final int status;
     private final String code;
