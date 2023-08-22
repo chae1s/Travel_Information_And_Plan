@@ -28,4 +28,9 @@ public class Mates extends BaseTimeEntity {
     @JoinColumn
     private Schedule schedule;
 
+    public void setAccepted(Boolean isAccepted) {
+        this.isAccepted = isAccepted;
+//        this.schedule = schedule;
+    }
+
 }

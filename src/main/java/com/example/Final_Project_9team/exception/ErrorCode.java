@@ -25,7 +25,10 @@ public enum ErrorCode {
     // 400 BAD_REQUEST 잘못된 요청
     ALREADY_EXISTED_USERNAME(400, "", "이미 존재하는 닉네임입니다"),
     ALREADY_EXISTED_EMAIL(400, "", "이미 존재하는 이메일입니다"),
+    ALREADY_ACCEPTED_MATES(400, "", "이미 초대를 수락한 유저입니다"),
+
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
+    MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),
 
     // 403 FORBIDDEN 권한이 없는 경우
     USER_NO_AUTH(403, "ERR_FORBIDDEN", "해당 기능에 대해 권한이 없습니다."),
