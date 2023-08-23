@@ -39,6 +39,10 @@ public class User extends BaseTimeEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
+    private List<Schedule> schedules = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
     private List<ItemReview> itemReviews = new ArrayList<>();
 
     @Builder.Default

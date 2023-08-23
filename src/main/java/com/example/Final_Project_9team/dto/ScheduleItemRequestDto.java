@@ -6,14 +6,14 @@ import com.example.Final_Project_9team.entity.item.Item;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class ScheduleItemRequestDto {
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime tourDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate tourDate;
     private List<Long> itemIds = new ArrayList<>();
 
     public ScheduleItem toEntity(int turn, Schedule schedule, Item item) {

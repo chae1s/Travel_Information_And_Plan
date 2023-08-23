@@ -1,9 +1,6 @@
 package com.example.Final_Project_9team.service;
 
-import com.example.Final_Project_9team.dto.ScheduleItemRequestDto;
-import com.example.Final_Project_9team.dto.ScheduleItemResponseDto;
-import com.example.Final_Project_9team.dto.ScheduleRequestDto;
-import com.example.Final_Project_9team.dto.ScheduleResponseDto;
+import com.example.Final_Project_9team.dto.*;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.ScheduleItem;
@@ -20,7 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +43,9 @@ class ScheduleServiceTest {
     private ScheduleService scheduleService;
 
     private final String title = "즐거운 여행";
-    private final LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
-    private final LocalDateTime endDate = LocalDateTime.of(2023, 8, 25, 0, 0, 0);
+    private final LocalDate startDate = LocalDate.of(2023, 8, 20);
+    private final LocalDate endDate = LocalDate.of(2023, 8, 25);
+    private final LocalDate tourDate = LocalDate.of(2023, 8, 23);
 
     @Test
     @DisplayName("일정 등록 후 mates에 일정과 작성자 등록하기")
@@ -83,10 +81,49 @@ class ScheduleServiceTest {
         doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
         doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
         // when
-        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItem(schedule().getId(), scheduleItemRequests);
+        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItems(schedule().getId(), scheduleItemRequests);
 
         // then
         assertThat(scheduleItemResponses.size()).isEqualTo(6);
+    }
+
+    @Test
+    @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
+    public void readSchedulesAfterToday() {
+        // given
+        doReturn(Optional.of(user())).when(userRepository).findById(any(Long.class));
+        List<Schedule> schedules = new ArrayList<>();
+        schedules.add(schedule());
+        schedules.add(schedule());
+
+        doReturn(schedules).when(scheduleRepository).findByUserAndEndDateGreaterThanEqual(any(User.class), any(LocalDate.class));
+
+        // when
+        List<ScheduleListResponseDto> scheduleListResponseDs = scheduleService.readSchedulesAfterToday();
+
+        // then
+        assertThat(scheduleListResponseDs.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("하나의 여행지 일정의 원하는 날짜에 추가")
+    public void createDateToScheduleItem() {
+
+        // given
+        doReturn(Optional.of(schedule())).when(scheduleRepository).findById(any(Long.class));
+        doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
+        doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
+
+
+        ScheduleItemRequestDto scheduleItemRequest = new ScheduleItemRequestDto();
+
+        // when
+        ScheduleItemResponseDto scheduleItemResponse = scheduleService.createDateToScheduleItem(item().getId(), schedule().getId(), scheduleItemRequest);
+
+        // then
+        assertThat(scheduleItemResponse.getTourDate()).isEqualTo(tourDate);
+        assertThat(scheduleItemResponse.getTurn()).isEqualTo(1);
+
     }
 
     private Mates mates() {
@@ -113,6 +150,7 @@ class ScheduleServiceTest {
                 .id(1L)
                 .title(title)
                 .description("제주도")
+                .user(user())
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
@@ -128,6 +166,7 @@ class ScheduleServiceTest {
     private ScheduleItem scheduleItem() {
         return ScheduleItem.builder()
                 .id(1L)
+                .tourDate(tourDate)
                 .turn(1)
                 .item(item())
                 .build();
