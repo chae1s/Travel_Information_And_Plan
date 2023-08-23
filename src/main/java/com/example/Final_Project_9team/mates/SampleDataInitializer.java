@@ -3,8 +3,9 @@ package com.example.Final_Project_9team.mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.User;
 import com.example.Final_Project_9team.entity.enums.Role;
-import com.example.Final_Project_9team.etc.ScheduleRepository;
-import com.example.Final_Project_9team.etc.UserRepository;
+import com.example.Final_Project_9team.repository.MatesRepository;
+import com.example.Final_Project_9team.repository.ScheduleRepository;
+import com.example.Final_Project_9team.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -44,12 +45,23 @@ public class SampleDataInitializer implements CommandLineRunner {
 //                .role(Role.ROLE_USER)
 //                .build();
 //        userRepository.save(user3);
-
+//                User user4 = User.builder()
+//                .email("user4@naver.com")
+//                .nickname("user4")
+//                .password("1234")
+//                .role(Role.ROLE_USER)
+//                .build();
+//        userRepository.save(user4);
+//        matesRepository.deleteAll();
+//        for (Long i = 5L; i < 12L; i++) {
+//            userRepository.deleteById(i);
+//        }
 //
 //        Schedule schedule = Schedule.builder()
 //                .title("신나는 목포 여행")
 //                .build();
 //        scheduleRepository.save(schedule);
 
+//        matesRepository.deleteById(2L);
     }
 }

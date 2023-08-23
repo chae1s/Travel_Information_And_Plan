@@ -30,7 +30,9 @@ public class Mates extends BaseTimeEntity {
 
     public void setAccepted(Boolean isAccepted) {
         this.isAccepted = isAccepted;
-//        this.schedule = schedule;
+    }
+    public void setDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
 }
