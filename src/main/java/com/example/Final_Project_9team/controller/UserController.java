@@ -50,6 +50,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.readUser(auth.getName()));
     }
 
+    // TODO 다른 회원 검색
+
+
+    // 회원정보 수정
+    // 비밀번호를 요구하지 않음
+    // 현재 수정할 수 있는 정보는 nickname뿐이며, 여러 정보 수정시 unique해야 하는 하기 때문에 별도로 검증이 필요함
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDto> updateUserNickName(@Valid @RequestBody UserUpdateDto dto, Authentication auth) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(dto, auth.getName()));
+    }
+
+
 
     // 나의 일정 중 날짜 기준으로 목록 조회하기
     @GetMapping("/me/schedules/after-day")
@@ -58,4 +70,15 @@ public class UserController {
         return scheduleService.readSchedulesAfterToday();
 
     }
+
+
+    // role test
+    @GetMapping("/roleUSer")
+//    @PreAuthorize("hasAnyRole('USER')")
+    public String roleTest(Authentication auth) {
+        log.info(auth.getName() + " 로그인, 권한 : {}" + auth.getAuthorities());
+        return "test";
+    }
+
+
 }

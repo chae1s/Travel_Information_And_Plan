@@ -71,4 +71,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "userTo")
     private List<LikesUser> toUsers = new ArrayList<>();
 
-}
+    public void updateUser(String newNickname) {
+        this.nickname = newNickname;
+    }
+
+
+    }
