@@ -9,6 +9,9 @@ spring:
   mvc:
     path match:
       matching-strategy: ant_path_matcher
+  web:
+    resources:
+      static-locations: file:media/, classpath:/static
 
   datasource:
     url: jdbc:sqlite:db.sqlite

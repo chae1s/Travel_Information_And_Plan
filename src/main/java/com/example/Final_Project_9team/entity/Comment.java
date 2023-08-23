@@ -28,4 +28,12 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Board board;
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

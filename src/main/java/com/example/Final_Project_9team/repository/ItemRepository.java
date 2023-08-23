@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.repository;
 
+import com.example.Final_Project_9team.entity.Board;
 import com.example.Final_Project_9team.entity.item.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+
+    @Query(
+            "SELECT i FROM Item i " +
+                    "INNER JOIN i.likesItems li " +
+                    "WHERE " +
+                    "li.user.email = :email " +
+                    "AND li.isLike = true " +
+                    "ORDER BY li.id DESC "
+    )
+    Page<Item> findAllLikedItemsByMe(@Param("email") String email, Pageable pageable);
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido")
     Page<Item> findBySido(@Param("sido")String sido, Pageable pageable);
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu")

@@ -24,6 +24,15 @@ public class ScheduleController {
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
 
+    // display true인 schedule 페이지 단위 조회
+    @GetMapping
+    public ResponseEntity<PageDto<ScheduleListResponseDto>> readAll(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(scheduleService.readAll(page, size));
+    }
+
     // 일정 정보 보기 - 세부 계획을 짤 수 있는 페이지에 보여주기
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId) {
