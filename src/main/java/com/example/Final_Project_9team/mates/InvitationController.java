@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.mates;
 
+import com.example.Final_Project_9team.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,40 +17,35 @@ public class InvitationController {
 
     // POST /schedules/{scheduleId}/invited-users
     @PostMapping
-    public ResponseEntity<String> inviteUserToSchedule(
+    public ResponseEntity<ResponseDto> inviteUserToSchedule(
 //                       Authentication authentication,
                                                        @PathVariable("scheduleId") Long scheduleId,
                                                        @RequestParam("invitedUsername") String invitedUsername
 
     ) {
 //        return invitationsService.inviteUserToSchedule(authentication.getName(), invitedUsername, scheduleId);
-        log.info("controller 실행");
         return invitationsService.inviteUserToSchedule("user123@naver.com", invitedUsername, scheduleId);
     }
 
-    // POST /schedules/{scheduleId}/acceptance/{matesId}        u3u3@naver.com
+    // POST /schedules/{scheduleId}/acceptance/{matesId}
     @PostMapping("/acceptance/{matesId}")
-    public ResponseEntity<String> acceptInvitation(
-//            Authentication authentication,
+    public ResponseEntity<ResponseDto> acceptInvitation(
                                                    @PathVariable("scheduleId") Long scheduleId,
                                                    @PathVariable Long matesId) {
-        return invitationsService.acceptInvitation("dani123@naver.com", scheduleId, matesId);
+        return invitationsService.acceptInvitation("u3u3@naver.com", scheduleId, matesId);
     }
     // POST /schedules/{scheduleId}/rejection/{matesId}
     @PostMapping("/rejection/{matesId}")
-    public ResponseEntity<String> rejectInvitation(
-//            Authentication authentication,
+    public ResponseEntity<ResponseDto> rejectInvitation(
                                                    @PathVariable("scheduleId") Long scheduleId,
                                                    @PathVariable Long matesId) {
         return invitationsService.rejectInvitation("u3u3@naver.com", scheduleId, matesId);
     }
-    // TODO 초대된 유저가 중간에 일정(메이트)에서 나가기
-    // 우선 메이트 탈퇴는 일정,유저정보만 가지고 하기
-    @PutMapping
-    public ResponseEntity<String> leaveMates(@PathVariable("scheduleId") Long scheduleId,
+    // POST /schedules/{scheduleId}/drop/{matesId}
+    @PostMapping("/drop/{matesId}") // 중간에 일정(메이트) 탈퇴
+    public ResponseEntity<ResponseDto> leaveMates(@PathVariable("scheduleId") Long scheduleId,
                                              @PathVariable Long matesId
-//    Authentication authentication
     ) {
-        return invitationsService.leaveMates("dani123@naver.com", scheduleId,matesId);
+        return invitationsService.leaveMates("u3u3@naver.com", scheduleId,matesId);
     }
 }

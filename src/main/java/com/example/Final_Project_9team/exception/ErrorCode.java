@@ -26,7 +26,7 @@ public enum ErrorCode {
     ALREADY_EXISTED_USERNAME(400, "ERR_BAD_REQUEST", "이미 존재하는 닉네임입니다"),
     ALREADY_EXISTED_EMAIL(400, "ERR_BAD_REQUEST", "이미 존재하는 이메일입니다"),
     ALREADY_ACCEPTED_MATES(400, "ERR_BAD_REQUEST", "이미 초대를 수락한 유저입니다"),
-    ALREADY_DELETED_MATES(400, "ERR_BAD_REQUEST", "이미 메이트를 떠난 유저입니다"),
+    ALREADY_LEFT_MATES(400, "ERR_BAD_REQUEST", "이미 메이트를 떠난 유저입니다"),
     ALREADY_INVITED_MATES(400, "ERR_BAD_REQUEST", "이미 초대된 유저입니다"),
 
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
