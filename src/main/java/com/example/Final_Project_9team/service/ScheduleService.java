@@ -12,6 +12,8 @@ import com.example.Final_Project_9team.exception.ErrorCode;
 import com.example.Final_Project_9team.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -150,6 +152,29 @@ public class ScheduleService {
         }
     }
 
+    private void updateDisplay(String email, Long scheduleId) {
+        User user = userRepository.findByEmail(email).get();
 
+        Schedule schedule = scheduleRepository.findByIdAndIsDeletedFalse(scheduleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
+        if (!user.equals(schedule.getUser())) {
+            throw new CustomException(ErrorCode.USER_NO_AUTH);
+        }
+
+        schedule.updateDisplay();
+        scheduleRepository.save(schedule);
+    }
+
+    // display true인 schedule 전체 조회
+    public PageDto<ScheduleListResponseDto> readAll(int page, int size) {
+        Page<Schedule> pagedSchedules = scheduleRepository.findAllByDisplayTrueAndIsDeletedFalseOrderByIdDesc(
+                PageRequest.of(page - 1, size)
+        );
+
+        Page<ScheduleListResponseDto> pagedDto
+                = pagedSchedules.map(schedule -> ScheduleListResponseDto.fromEntity(schedule));
+        return PageDto.fromPage(pagedDto);
+
+    }
 }

@@ -23,4 +23,8 @@ public class LikesBoard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Board board;
+
+    public void updateIsLike() {
+        this.isLike = !this.isLike;
+    }
 }
