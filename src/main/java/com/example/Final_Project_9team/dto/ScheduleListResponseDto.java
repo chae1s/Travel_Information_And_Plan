@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.dto;
 
 import com.example.Final_Project_9team.entity.Schedule;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -8,7 +9,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Data
 public class ScheduleListResponseDto {
     private Long id;
     private String title;
@@ -18,18 +19,25 @@ public class ScheduleListResponseDto {
     private LocalDate endDate;
     private List<LocalDate> tourDates;
 
-    public ScheduleListResponseDto(Schedule schedule) {
-        this.id = schedule.getId();
-        this.title = schedule.getTitle();
-        this.description = getDescription();
-        this.userResponse = new UserResponseDto(schedule.getUser());
-        this.startDate = schedule.getStartDate();
-        this.endDate = schedule.getEndDate();
-        this.tourDates = new ArrayList<>();
+    public static ScheduleListResponseDto fromEntity(Schedule schedule) {
+        ScheduleListResponseDto dto = new ScheduleListResponseDto();
+        dto.setId(schedule.getId());
+        dto.setTitle(schedule.getTitle());
+        dto.setDescription(schedule.getDescription());
+        dto.setUserResponse(UserResponseDto.fromEntity(schedule.getUser()));
+        dto.setStartDate(schedule.getStartDate());
+        dto.setEndDate(schedule.getEndDate());
+        List<LocalDate> tourDates = new ArrayList<>();
         int period = Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1;
         for (int i = 0; i < period; i++) {
             tourDates.add(schedule.getStartDate().plusDays(i));
         }
+        dto.setTourDates(tourDates);
+
+
+        return dto;
     }
+
+
 
 }

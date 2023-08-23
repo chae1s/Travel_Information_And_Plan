@@ -1,13 +1,14 @@
 package com.example.Final_Project_9team.dto;
 
 import com.example.Final_Project_9team.entity.Schedule;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-@Getter
+@Data
 public class ScheduleResponseDto {
     private Long id;
     private String title;
@@ -20,27 +21,33 @@ public class ScheduleResponseDto {
     private Integer period;
     private List<MatesResponseDto> matesResponses;
 
-    public ScheduleResponseDto(Schedule schedule) {
-        this.id = schedule.getId();
-        this.title = schedule.getTitle();
-        this.description = schedule.getDescription();
-        this.startDate = schedule.getStartDate();
-        this.endDate = schedule.getEndDate();
-        this.sumDistance = schedule.getSumDistance();
-        this.sumDuration = schedule.getSumDuration();
-        this.display = schedule.getDisplay();
+    public static ScheduleResponseDto fromEntity(Schedule schedule) {
+        ScheduleResponseDto dto = new ScheduleResponseDto();
+        dto.setId(schedule.getId());
+        dto.setTitle(schedule.getTitle());
+        dto.setDescription(schedule.getDescription());
+        dto.setStartDate(schedule.getStartDate());
+        dto.setEndDate(schedule.getEndDate());
+        dto.setSumDistance(schedule.getSumDistance());
+        dto.setSumDuration(schedule.getSumDuration());
+        dto.setDisplay(schedule.getDisplay());
+
+        return dto;
     }
 
-    public ScheduleResponseDto(Schedule schedule, List<MatesResponseDto> matesResponses) {
-        this.id = schedule.getId();
-        this.title = schedule.getTitle();
-        this.description = schedule.getDescription();
-        this.startDate = schedule.getStartDate();
-        this.endDate = schedule.getEndDate();
-        this.sumDistance = schedule.getSumDistance();
-        this.sumDuration = schedule.getSumDuration();
-        this.display = schedule.getDisplay();
-        this.period = Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1;
-        this.matesResponses = matesResponses;
+    public static ScheduleResponseDto fromEntity(Schedule schedule, List<MatesResponseDto> matesResponses) {
+        ScheduleResponseDto dto = new ScheduleResponseDto();
+        dto.setId(schedule.getId());
+        dto.setTitle(schedule.getTitle());
+        dto.setDescription(schedule.getDescription());
+        dto.setStartDate(schedule.getStartDate());
+        dto.setEndDate(schedule.getEndDate());
+        dto.setSumDistance(schedule.getSumDistance());
+        dto.setSumDuration(schedule.getSumDuration());
+        dto.setDisplay(schedule.getDisplay());
+        dto.setPeriod(Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1);
+        dto.setMatesResponses(matesResponses);
+
+        return dto;
     }
 }

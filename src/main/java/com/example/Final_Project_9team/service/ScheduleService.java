@@ -50,7 +50,7 @@ public class ScheduleService {
         // 일정의 작성자 등록
         Mates mates = createScheduleWriter(user, schedule);
 
-        return new ScheduleResponseDto(schedule);
+        return ScheduleResponseDto.fromEntity(schedule);
     }
 
     public ScheduleResponseDto readSchedule(Long scheduleId) {
@@ -69,11 +69,11 @@ public class ScheduleService {
         List<MatesResponseDto> matesResponses = new ArrayList<>();
         for (Mates mate : mates) {
             if (mate.getIsAccepted()) {
-                matesResponses.add(new MatesResponseDto(mate));
+                matesResponses.add(MatesResponseDto.fromEntity(mate));
             }
         }
 
-        return new ScheduleResponseDto(schedule, matesResponses);
+        return ScheduleResponseDto.fromEntity(schedule, matesResponses);
 
     }
 
@@ -85,7 +85,7 @@ public class ScheduleService {
         log.info("일정 조회 기준 - 오늘 날짜 : {}", today);
 
         List<Schedule> schedules = scheduleRepository.findByUserAndEndDateGreaterThanEqual(user, today);
-        List<ScheduleListResponseDto> scheduleListResponses = schedules.stream().map(schedule -> new ScheduleListResponseDto(schedule))
+        List<ScheduleListResponseDto> scheduleListResponses = schedules.stream().map(schedule -> ScheduleListResponseDto.fromEntity(schedule))
                 .collect(Collectors.toList());
 
         return scheduleListResponses;
@@ -117,7 +117,7 @@ public class ScheduleService {
 
         scheduleItem = scheduleItemRepository.save(scheduleItem);
 
-        return new ScheduleItemResponseDto(scheduleItem);
+        return ScheduleItemResponseDto.fromEntity(scheduleItem);
     }
 
     // schedule 작성자를 mates 테이블에 추가
@@ -144,7 +144,7 @@ public class ScheduleService {
             Item item = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
             ScheduleItem scheduleItem = scheduleItemRequest.toEntity(turn, schedule, item);
             scheduleItem = scheduleItemRepository.save(scheduleItem);
-            scheduleItemResponses.add(new ScheduleItemResponseDto(scheduleItem));
+            scheduleItemResponses.add(ScheduleItemResponseDto.fromEntity(scheduleItem));
 
             turn++;
         }
