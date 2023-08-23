@@ -74,11 +74,7 @@ public class UserService {
         User user = userRepository.findByEmail(username).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return UserResponseDto.builder()
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .role(user.getRole().name())
-                .build();
+        return UserResponseDto.fromEntity(user);
     }
 
 }
