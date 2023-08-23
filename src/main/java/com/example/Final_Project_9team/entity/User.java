@@ -23,6 +23,8 @@ public class User extends BaseTimeEntity {
     private String email;
     private String password;
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
     private Boolean isDeleted;
 
@@ -36,6 +38,10 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Schedule> schedules = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

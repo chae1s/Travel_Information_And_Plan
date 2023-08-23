@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Entity
 @Getter
@@ -18,7 +19,7 @@ public class ScheduleItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer turn;
-    private LocalDateTime tourDate;
+    private LocalDate tourDate;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
