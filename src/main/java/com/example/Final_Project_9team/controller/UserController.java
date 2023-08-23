@@ -52,9 +52,9 @@ public class UserController {
 
     // role test
     @GetMapping("/roleUSer")
-    @PreAuthorize("hasAnyRole('USER')")
-    public ResponseEntity<ResponseDto> roleTest(Authentication auth) {
+//    @PreAuthorize("hasAnyRole('USER')")
+    public String roleTest(Authentication auth) {
         log.info(auth.getName() + " 로그인, 권한 : {}" + auth.getAuthorities());
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.getMessage(auth.getName() + " 접근 허용"));
+        return "test";
     }
 }
