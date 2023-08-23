@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.mates;
+package com.example.Final_Project_9team.testmates;
 
 import com.example.Final_Project_9team.repository.MatesRepository;
 import com.example.Final_Project_9team.repository.ScheduleRepository;

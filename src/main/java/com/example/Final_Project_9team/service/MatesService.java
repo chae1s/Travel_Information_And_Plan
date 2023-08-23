@@ -46,8 +46,8 @@ public class MatesService {
                     .user(invitedUser)
                     .schedule(schedule)
                     .isDeleted(false)
-                    .isAccepted(false) // 초대 수락 여부 초기화
-                    .isHost(false) // 초대한 사용자가 호스트인지 여부를 초기화
+                    .isAccepted(false)
+                    .isHost(false)
                     .build();
             matesRepository.save(mate);
         }
@@ -69,20 +69,16 @@ public class MatesService {
 
         // 이미 초대를 수락한 경우
         isAcceptedMates(mates);
-        log.info("1번지점");
         // 이미 탈퇴한 경우
         isLeftMates(mates);
-        log.info("2번지점");
 
-
-        // 메이트의 초대상태를 수락으로 변경
         mates.setAccepted(true);
         matesRepository.save(mates);
 
         return ResponseEntity.ok(ResponseDto.getMessage("초대가 정상적으로 수락되었습니다."));
     }
 
-    // 초대 거절 시(test완)
+    // 초대 거절 시
     public ResponseEntity<ResponseDto> rejectInvitation(String userEmail, Long scheduleId, Long matesId) {
         log.info("rejectInvitation() 실행");
         User invitedUser = userRepository.findByEmail(userEmail).orElseThrow(
@@ -90,7 +86,6 @@ public class MatesService {
         Mates mates = matesRepository.findById(matesId).orElseThrow(
                 ()->new CustomException(ErrorCode.MATES_NOT_FOUND));
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                // 추후 스케줄 에러코드 만든 사람의 에러 따서 변경할 예정
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         isMatchedUserAndMates(invitedUser, mates);
@@ -111,7 +106,7 @@ public class MatesService {
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         isMatchedUserAndMates(user, mates);
-        isLeftMates(mates); // 이미 탈퇴한 경우
+        isLeftMates(mates);
 
         mates.setDeleted(true);
         mates.setAccepted(false);
