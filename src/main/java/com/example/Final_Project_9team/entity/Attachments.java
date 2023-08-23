@@ -31,4 +31,10 @@ public class Attachments {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Item item;
+
+    public void delete() {
+        this.isDeleted = true;
+        this.board = null;
+        this.item = null;
+    }
 }
