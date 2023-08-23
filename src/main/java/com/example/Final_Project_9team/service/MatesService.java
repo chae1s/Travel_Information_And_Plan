@@ -69,6 +69,11 @@ public class MatesService {
 
         // 이미 초대를 수락한 경우
         isAcceptedMates(mates);
+        log.info("1번지점");
+        // 이미 탈퇴한 경우
+        isLeftMates(mates);
+        log.info("2번지점");
+
 
         // 메이트의 초대상태를 수락으로 변경
         mates.setAccepted(true);
@@ -90,6 +95,7 @@ public class MatesService {
 
         isMatchedUserAndMates(invitedUser, mates);
         isAcceptedMates(mates);
+        isLeftMates(mates);
 
         matesRepository.delete(mates);
         return ResponseEntity.ok(ResponseDto.getMessage("초대가 정상적으로 거절되었습니다."));
@@ -105,9 +111,7 @@ public class MatesService {
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         isMatchedUserAndMates(user, mates);
-
-        if (mates.getIsDeleted() == true) // 이미 탈퇴한 경우
-            throw new CustomException(ErrorCode.ALREADY_LEFT_MATES);
+        isLeftMates(mates); // 이미 탈퇴한 경우
 
         mates.setDeleted(true);
         mates.setAccepted(false);
@@ -122,5 +126,10 @@ public class MatesService {
     public void isAcceptedMates(Mates mates) {
         if(mates.getIsAccepted()==true)
             throw new CustomException(ErrorCode.ALREADY_ACCEPTED_MATES);
+    }
+    public void isLeftMates(Mates mates) {
+        log.info(mates.getIsDeleted().toString());
+        if (mates.getIsDeleted() == true)
+            throw new CustomException(ErrorCode.ALREADY_LEFT_MATES);
     }
 }

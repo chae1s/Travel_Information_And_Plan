@@ -1,13 +1,9 @@
 package com.example.Final_Project_9team.mates;
 
-import com.example.Final_Project_9team.entity.Schedule;
-import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.entity.enums.Role;
 import com.example.Final_Project_9team.repository.MatesRepository;
 import com.example.Final_Project_9team.repository.ScheduleRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -63,5 +59,6 @@ public class SampleDataInitializer implements CommandLineRunner {
 //        scheduleRepository.save(schedule);
 
 //        matesRepository.deleteById(2L);
+//        matesRepository.deleteAll();
     }
 }
