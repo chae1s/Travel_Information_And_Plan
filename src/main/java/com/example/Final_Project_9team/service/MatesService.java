@@ -1,13 +1,11 @@
-package com.example.Final_Project_9team.mates;
+package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.entity.enums.Role;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
-import com.example.Final_Project_9team.exception.SuccessCode;
 import com.example.Final_Project_9team.repository.MatesRepository;
 import com.example.Final_Project_9team.repository.ScheduleRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
@@ -21,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InvitationsService {
+public class MatesService {
     private final MatesRepository matesRepository;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;

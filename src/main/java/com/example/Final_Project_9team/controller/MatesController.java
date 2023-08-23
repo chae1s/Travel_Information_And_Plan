@@ -1,10 +1,10 @@
-package com.example.Final_Project_9team.mates;
+package com.example.Final_Project_9team.controller;
 
 import com.example.Final_Project_9team.dto.ResponseDto;
+import com.example.Final_Project_9team.service.MatesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("schedules/{scheduleId}/invited-users")
 // 일정에 유저 초대하는 기능의 컨틀롤러
-public class InvitationController {
-    private final InvitationsService invitationsService;
+public class MatesController {
+    private final MatesService matesService;
 
     // POST /schedules/{scheduleId}/invited-users
     @PostMapping
@@ -24,7 +24,7 @@ public class InvitationController {
 
     ) {
 //        return invitationsService.inviteUserToSchedule(authentication.getName(), invitedUsername, scheduleId);
-        return invitationsService.inviteUserToSchedule("user123@naver.com", invitedUsername, scheduleId);
+        return matesService.inviteUserToSchedule("user123@naver.com", invitedUsername, scheduleId);
     }
 
     // POST /schedules/{scheduleId}/acceptance/{matesId}
@@ -32,20 +32,20 @@ public class InvitationController {
     public ResponseEntity<ResponseDto> acceptInvitation(
                                                    @PathVariable("scheduleId") Long scheduleId,
                                                    @PathVariable Long matesId) {
-        return invitationsService.acceptInvitation("u3u3@naver.com", scheduleId, matesId);
+        return matesService.acceptInvitation("u3u3@naver.com", scheduleId, matesId);
     }
     // POST /schedules/{scheduleId}/rejection/{matesId}
     @PostMapping("/rejection/{matesId}")
     public ResponseEntity<ResponseDto> rejectInvitation(
                                                    @PathVariable("scheduleId") Long scheduleId,
                                                    @PathVariable Long matesId) {
-        return invitationsService.rejectInvitation("u3u3@naver.com", scheduleId, matesId);
+        return matesService.rejectInvitation("u3u3@naver.com", scheduleId, matesId);
     }
     // POST /schedules/{scheduleId}/drop/{matesId}
     @PostMapping("/drop/{matesId}") // 중간에 일정(메이트) 탈퇴
     public ResponseEntity<ResponseDto> leaveMates(@PathVariable("scheduleId") Long scheduleId,
                                              @PathVariable Long matesId
     ) {
-        return invitationsService.leaveMates("u3u3@naver.com", scheduleId,matesId);
+        return matesService.leaveMates("u3u3@naver.com", scheduleId,matesId);
     }
 }
