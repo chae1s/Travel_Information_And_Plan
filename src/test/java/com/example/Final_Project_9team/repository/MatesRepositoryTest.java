@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -40,8 +40,8 @@ class MatesRepositoryTest {
 
         // 로그인한 유저가 만드는 일정
         String title = "즐거운 여행";
-        LocalDateTime startDate = LocalDateTime.of(2023, 8, 20, 0, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(2023, 8, 25, 0, 0, 0);
+        LocalDate startDate = LocalDate.of(2023, 8, 20);
+        LocalDate endDate = LocalDate.of(2023, 8, 25);
         Schedule schedule = Schedule.builder()
                 .id(1L)
                 .title(title)

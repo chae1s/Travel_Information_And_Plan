@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
+@MappedSuperclass
 @SuperBuilder(toBuilder = true)
 @MappedSuperclass
 public abstract class BaseTimeEntity {

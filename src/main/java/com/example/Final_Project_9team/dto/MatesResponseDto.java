@@ -1,12 +1,13 @@
 package com.example.Final_Project_9team.dto;
 
 import com.example.Final_Project_9team.entity.Mates;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 public class MatesResponseDto {
     private Long id;
     private Boolean isHost;
@@ -14,12 +15,15 @@ public class MatesResponseDto {
     private LocalDate createdAt;
     private LocalDate modifiedAt;
 
-    public MatesResponseDto(Mates mates) {
-        this.id = mates.getId();
-        this.isHost = mates.getIsHost();
-        this.userResponse = new UserResponseDto(mates.getUser());
-        this.createdAt = mates.getCreatedAt();
-        this.modifiedAt = mates.getModifiedAt();
+    public static MatesResponseDto fromEntity(Mates mates) {
+        MatesResponseDto dto = new MatesResponseDto();
+        dto.setId(mates.getId());
+        dto.setIsHost(mates.getIsHost());
+        dto.setUserResponse(UserResponseDto.fromEntity(mates.getUser()));
+        dto.setCreatedAt(mates.getCreatedAt());
+        dto.setModifiedAt(mates.getModifiedAt());
+
+        return dto;
     }
 
 }
