@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /home
+    context-path:
     encoding:
       charset: UTF-8
 
@@ -26,7 +26,6 @@ spring:
         show_sql: true
         format_sql: true
 
-
-  #시큐리티 임시 비활성화
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+jwt:
+  secret: ${JWT_SECRET}
+  accessExpirationTime: ${JWT_EXPIRATION}

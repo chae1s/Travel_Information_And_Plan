@@ -23,6 +23,8 @@ public class User extends BaseTimeEntity {
     private String email;
     private String password;
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
     private Boolean isDeleted;
 
