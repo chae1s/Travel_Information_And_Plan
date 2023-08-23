@@ -29,14 +29,29 @@ public class Board extends BaseTimeEntity {
     private User user;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Attachments> attachments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<LikesBoard> likesBoards = new ArrayList<>();
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public void updateViewCnt() {
+        this.viewCnt ++;
+    }
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
 }
