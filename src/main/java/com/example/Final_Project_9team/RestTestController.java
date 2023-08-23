@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -104,8 +105,8 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                        LocalDate createdTime = LocalDate.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDate modifiedTime = LocalDate.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
                         // Attraction 엔티티에 설정
                         attraction.setCreatedAt(createdTime);
@@ -141,9 +142,10 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                        LocalDate createdTime = LocalDate.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDate modifiedTime = LocalDate.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
+                        // accommodation 엔티티에 설정
                         accommodation.setCreatedAt(createdTime);
                         accommodation.setModifiedAt(modifiedTime);
                         accommodation.setContentId((String) tmp.get("contentid"));
@@ -176,9 +178,10 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                        LocalDate createdTime = LocalDate.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDate modifiedTime = LocalDate.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
+                        // restaurant 엔티티에 설정
                         restaurant.setCreatedAt(createdTime);
                         restaurant.setModifiedAt(modifiedTime);
                         restaurant.setContentId((String) tmp.get("contentid"));
