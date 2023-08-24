@@ -53,9 +53,9 @@ public class UserController {
 
     // 나의 일정 중 날짜 기준으로 목록 조회하기
     @GetMapping("/me/schedules/after-day")
-    public List<ScheduleListResponseDto> readSchedulesAfterToday() {
+    public List<ScheduleListResponseDto> readSchedulesAfterToday(Authentication auth) {
 
-        return scheduleService.readSchedulesAfterToday();
+        return scheduleService.readSchedulesAfterToday(auth);
 
     }
 }
