@@ -10,6 +10,6 @@ import java.util.List;
 public interface MatesRepository extends JpaRepository<Mates, Long> {
     List<Mates> findAllBySchedule(Schedule schedule);
 
-    Boolean existsByScheduleAndUser(Schedule schedule, User user);
+
 
 }
