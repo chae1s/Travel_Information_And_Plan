@@ -30,6 +30,7 @@ public class ScheduleRequestDto {
                 .sido(sido)
                 .sumDistance(0)
                 .sumDuration(0)
+                .isDeleted(false)
                 .display(false)
                 .build();
     }

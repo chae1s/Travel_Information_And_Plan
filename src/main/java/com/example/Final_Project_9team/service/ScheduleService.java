@@ -33,9 +33,9 @@ public class ScheduleService {
     private final ItemRepository itemRepository;
     private final ScheduleItemRepository scheduleItemRepository;
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto, Authentication auth) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto, String email) {
         // 로그인한 유저 정보 가져오기
-        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = dto.toEntity(user);
         // 일정 등록
@@ -47,12 +47,12 @@ public class ScheduleService {
         return ScheduleResponseDto.fromEntity(schedule);
     }
 
-    public ScheduleResponseDto readSchedule(Long scheduleId, Authentication auth) {
+    public ScheduleResponseDto readSchedule(Long scheduleId, String email) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // mates에 로그인한 사용자의 정보가 없을 경우 Exception 처리
-        if (matesRepository.existsByScheduleAndUser(schedule, user)) {
+        if (!scheduleRepository.existsByUserEmailAndScheduleId(email, scheduleId)) {
             log.error("{} {} 일정 접근 불가", user.getEmail(), schedule.getTitle());
             throw new CustomException(ErrorCode.USER_NO_AUTH);
         }
@@ -72,8 +72,8 @@ public class ScheduleService {
     }
 
     // 여행지 상세 페이지에서 여행지를 일정에 추가할 때 보기 위한 일정 목록
-    public List<ScheduleListResponseDto> readSchedulesAfterToday(Authentication auth) {
-        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public List<ScheduleListResponseDto> readSchedulesAfterToday(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         LocalDate today = LocalDate.now();
         log.info("일정 조회 기준 - 오늘 날짜 : {}", today);
