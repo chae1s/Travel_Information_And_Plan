@@ -33,17 +33,9 @@ public class ScheduleService {
     private final ItemRepository itemRepository;
     private final ScheduleItemRepository scheduleItemRepository;
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto dto, Authentication auth) {
         // 로그인한 유저 정보 가져오기
-//        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        User user = User.builder()
-                .id(1L)
-                .email("test@gmail.com")
-                .password("password")
-                .nickname("nickname")
-                .role(Role.ROLE_USER)
-                .build();
-        user = userRepository.save(user);
+        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = dto.toEntity(user);
         // 일정 등록
@@ -55,15 +47,15 @@ public class ScheduleService {
         return ScheduleResponseDto.fromEntity(schedule);
     }
 
-    public ScheduleResponseDto readSchedule(Long scheduleId) {
+    public ScheduleResponseDto readSchedule(Long scheduleId, Authentication auth) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-//        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // mates에 로그인한 사용자의 정보가 없을 경우 Exception 처리
-//        if (matesRepository.existsByScheduleAndUser(schedule, user)) {
-//            log.error("{} {} 일정 접근 불가", user.getEmail, schedule.getTitle());
-//            throw new CustomException(ErrorCode.USER_NO_AUTH);
-//        }
+        if (matesRepository.existsByScheduleAndUser(schedule, user)) {
+            log.error("{} {} 일정 접근 불가", user.getEmail(), schedule.getTitle());
+            throw new CustomException(ErrorCode.USER_NO_AUTH);
+        }
 
         // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 mates list
         List<Mates> mates = matesRepository.findAllBySchedule(schedule);
@@ -80,9 +72,9 @@ public class ScheduleService {
     }
 
     // 여행지 상세 페이지에서 여행지를 일정에 추가할 때 보기 위한 일정 목록
-    public List<ScheduleListResponseDto> readSchedulesAfterToday() {
-//        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        User user = userRepository.findById(1L).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public List<ScheduleListResponseDto> readSchedulesAfterToday(Authentication auth) {
+        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         LocalDate today = LocalDate.now();
         log.info("일정 조회 기준 - 오늘 날짜 : {}", today);
 
