@@ -18,17 +18,17 @@ public class ScheduleController {
 
     // 일정 만들기
     @PostMapping
-    public ResponseEntity<ResponseDto> create(@RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseDto> create(@RequestBody ScheduleRequestDto requestDto, Authentication auth) {
 
-        scheduleService.createSchedule(requestDto);
+        scheduleService.createSchedule(requestDto, auth);
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
 
     // 일정 정보 보기 - 세부 계획을 짤 수 있는 페이지에 보여주기
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId) {
+    public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
-        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId));
+        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth));
     }
 
     // 세부 계획 저장하기
