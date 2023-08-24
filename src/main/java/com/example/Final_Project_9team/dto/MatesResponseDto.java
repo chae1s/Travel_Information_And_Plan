@@ -12,8 +12,8 @@ public class MatesResponseDto {
     private Long id;
     private Boolean isHost;
     private UserResponseDto userResponse;
-    private LocalDate createdAt;
-    private LocalDate modifiedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     public static MatesResponseDto fromEntity(Mates mates) {
         MatesResponseDto dto = new MatesResponseDto();

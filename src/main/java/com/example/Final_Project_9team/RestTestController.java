@@ -105,8 +105,8 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDate createdTime = LocalDate.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
-                        LocalDate modifiedTime = LocalDate.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
                         // Attraction 엔티티에 설정
                         attraction.setCreatedAt(createdTime);
@@ -142,8 +142,8 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDate createdTime = LocalDate.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
-                        LocalDate modifiedTime = LocalDate.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
                         // accommodation 엔티티에 설정
                         accommodation.setCreatedAt(createdTime);
@@ -178,8 +178,8 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDate createdTime = LocalDate.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
-                        LocalDate modifiedTime = LocalDate.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
                         // restaurant 엔티티에 설정
                         restaurant.setCreatedAt(createdTime);
