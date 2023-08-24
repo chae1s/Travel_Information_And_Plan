@@ -23,9 +23,14 @@ public enum ErrorCode {
     ERROR_NETWORK_AUTHENTICATION_REQUIRED(511, "ERR_NETWORK_AUTH_REQUIRED", "Network authentication required"),
 
     // 400 BAD_REQUEST 잘못된 요청
-    ALREADY_EXISTED_USERNAME(400, "", "이미 존재하는 닉네임입니다"),
-    ALREADY_EXISTED_EMAIL(400, "", "이미 존재하는 이메일입니다"),
+    ALREADY_EXISTED_USERNAME(400, "ERR_BAD_REQUEST", "이미 존재하는 닉네임입니다"),
+    ALREADY_EXISTED_EMAIL(400, "ERR_BAD_REQUEST", "이미 존재하는 이메일입니다"),
+    ALREADY_ACCEPTED_MATES(400, "ERR_BAD_REQUEST", "이미 초대를 수락한 유저입니다"),
+    ALREADY_LEFT_MATES(400, "ERR_BAD_REQUEST", "이미 메이트를 떠난 유저입니다"),
+    ALREADY_INVITED_MATES(400, "ERR_BAD_REQUEST", "이미 초대된 유저입니다"),
+
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
+    MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),
 
     // 403 FORBIDDEN 권한이 없는 경우
     USER_NO_AUTH(403, "ERR_FORBIDDEN", "해당 기능에 대해 권한이 없습니다."),
@@ -37,6 +42,7 @@ public enum ErrorCode {
     INVALID_PASSWORD(404, "ERR_NOT_FOUND", "비밀번호가 일치하지 않습니다."),
     SCHEDULE_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 일정입니다."),
     ITEM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 관광상품입니다."),
+    MATES_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 메이트입니다."),
 
     // 500 내부 서버 에러
     INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다."),
