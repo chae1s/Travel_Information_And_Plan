@@ -55,7 +55,7 @@ public class UserController {
     @GetMapping("/me/schedules/after-day")
     public List<ScheduleListResponseDto> readSchedulesAfterToday(Authentication auth) {
 
-        return scheduleService.readSchedulesAfterToday(auth);
+        return scheduleService.readSchedulesAfterToday(auth.getName());
 
     }
 }

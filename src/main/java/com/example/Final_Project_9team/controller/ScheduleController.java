@@ -20,7 +20,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ResponseDto> create(@RequestBody ScheduleRequestDto requestDto, Authentication auth) {
 
-        scheduleService.createSchedule(requestDto, auth);
+        scheduleService.createSchedule(requestDto, auth.getName());
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
 
@@ -37,7 +37,7 @@ public class ScheduleController {
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
-        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth));
+        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth.getName()));
     }
 
     // 세부 계획 저장하기
