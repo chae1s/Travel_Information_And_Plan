@@ -26,6 +26,7 @@ public class Schedule {
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
+    private Boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
@@ -46,4 +47,8 @@ public class Schedule {
     @Builder.Default
     @OneToMany(mappedBy = "schedule")
     private List<LikesSchedule> likesSchedules = new ArrayList<>();
+
+    public void updateDisplay() {
+        this.display = !this.display;
+    }
 }
