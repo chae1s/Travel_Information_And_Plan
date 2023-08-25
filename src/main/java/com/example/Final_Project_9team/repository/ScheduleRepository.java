@@ -42,4 +42,15 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     )
     Page<Schedule> findAllLikedSchedulesByMe(@Param("email") String email, Pageable pageable);
 
+    @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
+            "FROM Schedule s " +
+            "INNER JOIN s.mates m " +
+            "INNER JOIN m.user u " +
+            "WHERE u.email = :email " +
+            "AND s.id = :scheduleId " +
+            "AND s.isDeleted = false " +
+            "AND m.isDeleted = false " +
+            "AND m.isAccepted = true")
+    boolean existsByUserEmailAndScheduleId(@Param("email") String email, @Param("scheduleId")Long scheduleId);
+
 }
