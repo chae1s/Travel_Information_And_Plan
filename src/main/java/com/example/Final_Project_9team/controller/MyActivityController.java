@@ -19,7 +19,6 @@ import java.util.List;
 // 내 활동 페이지에서 조회할 것들
 public class MyActivityController {
     private final MyActivityService myActivityService;
-    private final ScheduleService scheduleService;
 
     // 작성한 board 페이지 단위 조회
     @GetMapping("boards")
@@ -109,7 +108,7 @@ public class MyActivityController {
     @GetMapping("/me/schedules/after-day")
     public List<ScheduleListResponseDto> readSchedulesAfterToday(Authentication auth) {
 
-        return scheduleService.readSchedulesAfterToday(auth.getName());
+        return myActivityService.readSchedulesAfterToday(auth.getName());
 
     }
 }

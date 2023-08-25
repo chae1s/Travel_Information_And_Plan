@@ -71,20 +71,6 @@ public class ScheduleService {
 
     }
 
-    // 여행지 상세 페이지에서 여행지를 일정에 추가할 때 보기 위한 일정 목록
-    public List<ScheduleListResponseDto> readSchedulesAfterToday(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        LocalDate today = LocalDate.now();
-        log.info("일정 조회 기준 - 오늘 날짜 : {}", today);
-
-        List<Schedule> schedules = scheduleRepository.findByUserAndEndDateGreaterThanEqual(user, today);
-        List<ScheduleListResponseDto> scheduleListResponses = schedules.stream().map(schedule -> ScheduleListResponseDto.fromEntity(schedule))
-                .collect(Collectors.toList());
-
-        return scheduleListResponses;
-    }
-
     // 여행 일정 기간동안의 계획 한 번에 저장
     public List<ScheduleItemResponseDto> createScheduleItems(Long scheduleId, List<ScheduleItemRequestDto> scheduleItemRequests) {
 
