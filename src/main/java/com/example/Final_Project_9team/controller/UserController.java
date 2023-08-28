@@ -14,14 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.Final_Project_9team.dto.ScheduleListResponseDto;
 import com.example.Final_Project_9team.service.ScheduleService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 
 @Slf4j
@@ -50,7 +47,6 @@ public class UserController {
     }
 
     // 로그인한 회원 정보 조회
-    // GET users/me
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> readUser(Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.readUser(auth.getName()));
@@ -90,14 +86,6 @@ public class UserController {
     @PostMapping("/me/verify-password")
     private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth){
         return ResponseEntity.status(HttpStatus.OK).body(userService.verifyPassword(dto, auth.getName()));
-    }
-
-    // 나의 일정 중 날짜 기준으로 목록 조회하기
-    @GetMapping("/me/schedules/after-day")
-    public List<ScheduleListResponseDto> readSchedulesAfterToday() {
-
-        return scheduleService.readSchedulesAfterToday();
-
     }
 
 }

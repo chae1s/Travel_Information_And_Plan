@@ -14,6 +14,6 @@ public interface MatesRepository extends JpaRepository<Mates, Long> {
 
     Optional<Mates> findByScheduleIdAndUserId(Long scheduleId, Long userId);
 
-    Boolean existsByScheduleAndUser(Schedule schedule, User user);
+
 
 }

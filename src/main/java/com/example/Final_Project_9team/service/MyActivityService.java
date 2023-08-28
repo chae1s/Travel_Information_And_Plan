@@ -7,18 +7,24 @@ import com.example.Final_Project_9team.dto.ScheduleListResponseDto;
 import com.example.Final_Project_9team.entity.Board;
 import com.example.Final_Project_9team.entity.LikesBoard;
 import com.example.Final_Project_9team.entity.Schedule;
+import com.example.Final_Project_9team.entity.User;
 import com.example.Final_Project_9team.entity.item.Item;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
 import com.example.Final_Project_9team.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
@@ -127,5 +133,19 @@ public class MyActivityService {
                 = pagedItems.map(item -> ItemListResponseDto.fromEntity(item));
 
         return PageDto.fromPage(pagedDto);
+    }
+
+    // 여행지 상세 페이지에서 여행지를 일정에 추가할 때 보기 위한 일정 목록
+    public List<ScheduleListResponseDto> readSchedulesAfterToday(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDate today = LocalDate.now();
+        log.info("일정 조회 기준 - 오늘 날짜 : {}", today);
+
+        List<Schedule> schedules = scheduleRepository.findByUserAndEndDateGreaterThanEqual(user, today);
+        List<ScheduleListResponseDto> scheduleListResponses = schedules.stream().map(schedule -> ScheduleListResponseDto.fromEntity(schedule))
+                .collect(Collectors.toList());
+
+        return scheduleListResponses;
     }
 }

@@ -15,6 +15,7 @@ public class ScheduleRequestDto {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    private String sido;
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
@@ -26,8 +27,10 @@ public class ScheduleRequestDto {
                 .user(user)
                 .startDate(startDate)
                 .endDate(endDate)
+                .sido(sido)
                 .sumDistance(0)
                 .sumDuration(0)
+                .isDeleted(false)
                 .display(false)
                 .build();
     }
