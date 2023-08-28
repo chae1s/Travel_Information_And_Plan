@@ -1,10 +1,9 @@
 package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.dto.CustomUserDetails;
+import com.example.Final_Project_9team.dto.user.CustomUserDetails;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
-import com.example.Final_Project_9team.repository.ProfileRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.dto;
+package com.example.Final_Project_9team.dto.user;
 
 import com.example.Final_Project_9team.entity.enums.Role;
 import jakarta.validation.constraints.Email;

@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.dto;
+package com.example.Final_Project_9team.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

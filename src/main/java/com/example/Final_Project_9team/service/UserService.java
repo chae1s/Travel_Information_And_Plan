@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.service;
 
-import com.example.Final_Project_9team.dto.*;
+import com.example.Final_Project_9team.dto.auth.JwtDto;
+import com.example.Final_Project_9team.dto.user.*;
 import com.example.Final_Project_9team.entity.User;
 import com.example.Final_Project_9team.entity.enums.Role;
 import com.example.Final_Project_9team.exception.CustomException;
@@ -11,9 +12,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -50,7 +61,7 @@ public class UserService {
                 .build());
     }
 
-    public JwtDto login(LoginDto dto, HttpServletResponse response) {
+    public JwtDto login(UserLoginDto dto, HttpServletResponse response) {
         UserDetails userDetails = manager.loadUserByUsername(dto.getEmail());
         log.info("\"{}\" 로그인", dto.getEmail());
 
@@ -76,6 +87,30 @@ public class UserService {
         return UserResponseDto.fromEntity(user);
     }
 
+
+    // 회원 검색
+    // 검색어가 포함된 닉네임, 이메일을 가진 회원을 반환한다.
+    public Page<UserResponseDto> findUser(String keyword, Integer pageNumber, Integer pageSize, String email) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        log.info("user 검색");
+        List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndUsernameNot(keyword, email);
+        List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndUsernameNot(keyword, email);
+        List<User> mergedList = new ArrayList<>();
+        mergedList.addAll(findByEmail);
+        mergedList.addAll(findByNickname);
+
+        // 중복제거 후 닉네임 기준으로 정렬
+        List<User> distinctAndSorted = mergedList.stream()
+                .distinct()
+                .sorted(Comparator.comparing(User::getNickname)) // 닉네임 기준으로 정렬
+                .collect(Collectors.toList());
+
+        Page<User> userPaged = new PageImpl<>(distinctAndSorted, pageable, distinctAndSorted.size());
+        Page<UserResponseDto> userListResponseDto = userPaged.map(user -> UserResponseDto.fromEntity(user));
+        return userListResponseDto;
+    }
+
+    @Transactional
     public UserResponseDto updateUser(UserUpdateDto dto, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -94,5 +129,47 @@ public class UserService {
 
         return UserResponseDto.fromEntity(user);
 
-        }
     }
+
+    // 비밀번호 수정
+    @Transactional
+    public void updateUserPassword(UserUpdatePwDto dto, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("비밀번호 수정: 비밀번호 입력 확인");
+        if (!dto.getNewPassword().equals(dto.getPasswordCheck())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+        user.updatePassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    // 회원 탈퇴
+    // soft deleted 구현
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+//        }        if (user.getProfileImg() != null) {
+        // 프로필 이미지 제거
+//            fileHandler.fileDelete(user.getProfileImg());
+//        }
+        userRepository.delete(user);
+    }
+
+    // 비밀번호 검증
+    public boolean verifyPassword(UserVerifyPwDto dto, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info(user.getPassword());
+        log.info(passwordEncoder.encode(dto.getPassword()));
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            log.info("login: 비밀번호 불일치");
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+        return true;
+
+
+
+
+    }
+
+}

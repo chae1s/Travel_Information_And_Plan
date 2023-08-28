@@ -1,6 +1,6 @@
 package com.example.Final_Project_9team.global.jwt;
 
-import com.example.Final_Project_9team.dto.CustomUserDetails;
+import com.example.Final_Project_9team.dto.user.CustomUserDetails;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
 import io.jsonwebtoken.Claims;

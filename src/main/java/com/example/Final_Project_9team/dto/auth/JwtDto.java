@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.dto;
+package com.example.Final_Project_9team.dto.auth;
 
 
 import lombok.Builder;
