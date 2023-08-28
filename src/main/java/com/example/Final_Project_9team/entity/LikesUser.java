@@ -23,4 +23,8 @@ public class LikesUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_to_id")
     private User userTo;
+
+    public void updateIsLike(Boolean updateIsLike) {
+        this.isLike = updateIsLike;
+    }
 }

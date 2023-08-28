@@ -30,6 +30,7 @@ public enum ErrorCode {
     ALREADY_INVITED_MATES(400, "ERR_BAD_REQUEST", "이미 초대된 유저입니다"),
     ALREADY_LIKED_USER(400, "ERR_BAD_REQUEST", "이미 즐겨찾기된 유저입니다."),
     ALREADY_UNLIKED_USER(400, "ERR_BAD_REQUEST", "이미 즐겨찾기가 취소된 유저입니다."),
+    USER_NOT_LIKED(400, "ERR_BAD_REQUEST", "즐겨찾기된 유저가 아닙니다."),
 
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
     MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),

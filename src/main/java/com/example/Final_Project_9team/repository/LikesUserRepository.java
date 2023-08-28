@@ -8,6 +8,4 @@ import java.util.Optional;
 
 public interface LikesUserRepository extends JpaRepository<LikesUser, Long> {
     Optional<LikesUser> findByUserFromAndUserTo(User userFrom, User userTo);
-
-
 }
