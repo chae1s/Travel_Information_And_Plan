@@ -93,7 +93,7 @@ public class UserService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         log.info("user 검색");
         List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
-        List<User> findByNickname = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
+        List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
         List<User> mergedList = new ArrayList<>();
         mergedList.addAll(findByEmail);
         mergedList.addAll(findByNickname);
