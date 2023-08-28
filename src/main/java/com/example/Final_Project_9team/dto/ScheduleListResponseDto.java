@@ -14,6 +14,7 @@ public class ScheduleListResponseDto {
     private Long id;
     private String title;
     private String description;
+    private String sido;
     private UserResponseDto userResponse;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -24,6 +25,7 @@ public class ScheduleListResponseDto {
         dto.setId(schedule.getId());
         dto.setTitle(schedule.getTitle());
         dto.setDescription(schedule.getDescription());
+        dto.setSido(schedule.getSido());
         dto.setUserResponse(UserResponseDto.fromEntity(schedule.getUser()));
         dto.setStartDate(schedule.getStartDate());
         dto.setEndDate(schedule.getEndDate());
