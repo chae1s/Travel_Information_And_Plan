@@ -47,6 +47,7 @@ public class UserController {
     }
 
     // 로그인한 회원 정보 조회
+    // GET /users/me
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> readUser(Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.readUser(auth.getName()));
