@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final ScheduleService scheduleService;
 
     // 회원가입
     // POST /users/register

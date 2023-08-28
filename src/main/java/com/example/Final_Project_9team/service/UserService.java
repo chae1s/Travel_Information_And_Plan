@@ -78,6 +78,7 @@ public class UserService {
         return JwtDto.builder().token(jwtToken).build();
     }
 
+    // 회원정보 조회
     public UserResponseDto readUser(String email) {
         log.info("유저 \"{}\" 정보 조회", email);
         User user = userRepository.findByEmail(email).orElseThrow(
@@ -86,9 +87,9 @@ public class UserService {
         return UserResponseDto.fromEntity(user);
     }
 
-
     // 회원 검색
-    // 검색어가 포함된 닉네임, 이메일을 가진 회원을 반환한다.
+    // keyword가 포함된 email, nickname으로 회원 검색, 탈퇴회원 및 본인을 제외하고 반환
+    // 결과가 없을 경우 빈 결과로 페이지 반환한
     public Page<UserResponseDto> findUser(String keyword, Integer pageNumber, Integer pageSize, String email) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         log.info("user 검색");
@@ -101,14 +102,15 @@ public class UserService {
         // 중복제거 후 닉네임 기준으로 정렬
         List<User> distinctAndSorted = mergedList.stream()
                 .distinct()
-                .sorted(Comparator.comparing(User::getNickname)) // 닉네임 기준으로 정렬
+                .sorted(Comparator.comparing(User::getNickname))
                 .collect(Collectors.toList());
-
+        // paging 후 page<dto>로 변환
         Page<User> userPaged = new PageImpl<>(distinctAndSorted, pageable, distinctAndSorted.size());
-        Page<UserResponseDto> userListResponseDto = userPaged.map(user -> UserResponseDto.fromEntity(user));
-        return userListResponseDto;
+        Page<UserResponseDto> userPagedResponseDto = userPaged.map(user -> UserResponseDto.fromEntity(user));
+        return userPagedResponseDto;
     }
 
+    // 회원정보 수정
     @Transactional
     public UserResponseDto updateUser(UserUpdateDto dto, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(

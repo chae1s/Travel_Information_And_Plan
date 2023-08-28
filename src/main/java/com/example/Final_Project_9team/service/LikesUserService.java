@@ -29,7 +29,6 @@ public class LikesUserService {
     private final LikesUserRepository likesUserRepository;
 
 
-
     // 회원 즐겨찾기 추가
     @Transactional
     public void likeUser(Long toUserId, String email) {
@@ -111,6 +110,8 @@ public class LikesUserService {
         log.info("즐겨찾기: from {} to {} 취소", userFrom.getNickname(), userTo.getNickname());
     }
 
+    // 현재 회원이 즐겨찾기한 회원 목록 조회
+    // 결과가 없을 경우 빈 결과로 페이지 반환
     public Page<UserResponseDto> readUserLikedByMe(String email, Integer pageNumber, Integer pageSize) {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -118,17 +119,35 @@ public class LikesUserService {
         log.info("즐겨찾기 조회: \"{}.{}\" 즐겨찾기 회원 목록 조회", user.getId(), user.getNickname());
 
         // LikesUser를 UserResponseDto로 반환
-        // 현재 회원이 즐겨찾기에 추가했는지 여부
-        // 현재 회원이 From이면서 대상 회원이 To인 컬럼이 존재하고, 해당 컬럼의 isLike가 true인 경우 isLikeByMe 필드를 반환한다.
         List<UserResponseDto> likedUserDtoTo = user.getFromUsers()
                 .stream()
                 .filter(likesUser -> likesUser.getIsLike())
-                .map(likesUser -> UserResponseDto.fromEntity(likesUser.getUserTo(), likesUser.getIsLike()))
+                .map(likesUser -> UserResponseDto.fromEntity(likesUser.getUserTo()))
                 .collect(Collectors.toList());
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<UserResponseDto> likedUserToPagedDto =  new PageImpl<>(likedUserDtoTo, pageable, likedUserDtoTo.size());
+        Page<UserResponseDto> likedUserToPagedDto = new PageImpl<>(likedUserDtoTo, pageable, likedUserDtoTo.size());
+        return likedUserToPagedDto;
+    }
+
+    // 현재 회원을 즐겨찾기한 회원 목록 조회
+    // 결과가 없을 경우 빈 결과로 페이지 반환
+    public Page<UserResponseDto> readUserWhoLikedMe(String email, Integer pageNumber, Integer pageSize) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        log.info("즐겨찾기 조회: \"{}.{}\" 즐겨찾기한 회원 목록 조회", user.getId(), user.getNickname());
+
+        // LikesUser를 UserResponseDto로 반환
+        List<UserResponseDto> likedUserDtoTo = user.getFromUsers()
+                .stream()
+                .filter(likesUser -> likesUser.getIsLike())
+                .map(likesUser -> UserResponseDto.fromEntity(likesUser.getUserTo()))
+                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<UserResponseDto> likedUserToPagedDto = new PageImpl<>(likedUserDtoTo, pageable, likedUserDtoTo.size());
         return likedUserToPagedDto;
     }
 }
+
 
 
