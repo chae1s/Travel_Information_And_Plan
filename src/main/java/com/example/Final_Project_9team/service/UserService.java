@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -93,8 +92,8 @@ public class UserService {
     public Page<UserResponseDto> findUser(String keyword, Integer pageNumber, Integer pageSize, String email) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         log.info("user 검색");
-        List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndUsernameNot(keyword, email);
-        List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndUsernameNot(keyword, email);
+        List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
+        List<User> findByNickname = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
         List<User> mergedList = new ArrayList<>();
         mergedList.addAll(findByEmail);
         mergedList.addAll(findByNickname);
@@ -144,18 +143,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // 회원 탈퇴
-    // soft deleted 구현
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-//        }        if (user.getProfileImg() != null) {
-        // 프로필 이미지 제거
-//            fileHandler.fileDelete(user.getProfileImg());
-//        }
-        userRepository.delete(user);
-    }
-
     // 비밀번호 검증
     public boolean verifyPassword(UserVerifyPwDto dto, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -166,9 +153,6 @@ public class UserService {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
         return true;
-
-
-
 
     }
 

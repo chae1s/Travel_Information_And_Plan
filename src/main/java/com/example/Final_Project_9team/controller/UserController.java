@@ -1,12 +1,14 @@
 package com.example.Final_Project_9team.controller;
 
-import com.example.Final_Project_9team.dto.*;
-import com.example.Final_Project_9team.global.ResponseDto;
+import com.example.Final_Project_9team.dto.ResponseDto;
+import com.example.Final_Project_9team.dto.auth.JwtDto;
+import com.example.Final_Project_9team.dto.user.*;
 import com.example.Final_Project_9team.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class UserController {
     private final ScheduleService scheduleService;
 
     // 회원가입
+    // POST /users/register
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> register(@Valid @RequestBody UserSignupDto dto) {
         userService.registerUser(dto);
@@ -39,29 +43,54 @@ public class UserController {
 
     // 로그인 및 jwt 발급
     // jwt가 응답 헤더와 body에 중복으로 전달됨 -> 차후 필요에 따라 선택
+    // POST /users/login
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> login(@RequestBody LoginDto dto, HttpServletResponse response) {
+    public ResponseEntity<JwtDto> login(@RequestBody UserLoginDto dto, HttpServletResponse response) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.login(dto, response));
     }
 
     // 로그인한 회원 정보 조회
+    // GET users/me
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> readUser(Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.readUser(auth.getName()));
     }
 
-    // TODO 다른 회원 검색
+    // 회원 검색
+    // GET /users?q=keyword
+    @GetMapping
+    public ResponseEntity<Page<UserResponseDto>> findUser(
+            @RequestParam("q") String keyword,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+            Authentication auth){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, page, limit, auth.getName()));
 
-
+    }
     // 회원정보 수정
     // 비밀번호를 요구하지 않음
-    // 현재 수정할 수 있는 정보는 nickname뿐이며, 여러 정보 수정시 unique해야 하는 하기 때문에 별도로 검증이 필요함
+    // PUT /users/me
     @PutMapping("/me")
-    public ResponseEntity<UserResponseDto> updateUserNickName(@Valid @RequestBody UserUpdateDto dto, Authentication auth) {
+    public ResponseEntity<UserResponseDto> updateUser(@Valid @RequestBody UserUpdateDto dto, Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(dto, auth.getName()));
     }
 
+    // 비밀번호 수정
+    // 별도의 엔드포인트에서 비밀번호 인증 후 진입
+    // PUT /users/me/pass-word
+    @PutMapping("/me/pass-word")
+    public ResponseEntity<ResponseDto> updateUserPassword(@Valid @RequestBody UserUpdatePwDto dto, Authentication auth){
+        userService.updateUserPassword(dto, auth.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto().getMessage("비밀번호가 수정되었습니다."));
+    }
 
+    // 비밀번호 인증
+    // 현재 로그인한 유저의 비밀번호와 입력한 비밀번호가 맞는지 검증 후 boolean으로 반환
+    // POST /users/me/verify-password
+    @PostMapping("/me/verify-password")
+    private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.verifyPassword(dto, auth.getName()));
+    }
 
     // 나의 일정 중 날짜 기준으로 목록 조회하기
     @GetMapping("/me/schedules/after-day")
@@ -70,15 +99,5 @@ public class UserController {
         return scheduleService.readSchedulesAfterToday();
 
     }
-
-
-    // role test
-    @GetMapping("/roleUSer")
-//    @PreAuthorize("hasAnyRole('USER')")
-    public String roleTest(Authentication auth) {
-        log.info(auth.getName() + " 로그인, 권한 : {}" + auth.getAuthorities());
-        return "test";
-    }
-
 
 }
