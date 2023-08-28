@@ -40,7 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         log.info("authHeader 확인: " + authHeader);
         // Header 검증
-        // 비어있거나, "Bearer "로 시작하는 경우
+        // 비어있지 않거나, "Bearer "로 시작하는 경우
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.split(" ")[1];
 
