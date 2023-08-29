@@ -17,7 +17,7 @@ public class SampleDataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // 샘플 데이터 추가
+//         샘플 데이터 추가
 //        userRepository.deleteAll();
 //
 //        User user = User.builder()

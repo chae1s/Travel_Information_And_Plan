@@ -30,7 +30,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
-                                "/users/register"
+                                "/users/register",
+                                "/chat/**"
                         )
                         .permitAll()
                         .requestMatchers(
