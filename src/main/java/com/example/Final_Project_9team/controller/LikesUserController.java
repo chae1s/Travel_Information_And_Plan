@@ -41,6 +41,13 @@ public class LikesUserController {
             Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(likesUserService.readUserLikedByMe(auth.getName(), page, limit));
     }
-
-
+    // 나를 즐겨찾기한 회원 조회
+    // GET /users/me/liked-user/from
+    @GetMapping("/liked-user/from")
+    public ResponseEntity<Page<UserResponseDto>> readLikedUserMe(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+            Authentication auth) {
+        return ResponseEntity.status(HttpStatus.OK).body(likesUserService.readUserWhoLikedMe(auth.getName(), page, limit));
+    }
 }

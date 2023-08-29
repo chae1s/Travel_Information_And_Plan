@@ -38,6 +38,12 @@ public class LikesUserService {
         User userFrom = userRepository.findByEmail(email).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // 현재 회원을 추가하려고 할 경우
+        if (userFrom.getId() == toUserId){
+            log.info("즐겨찾기: 자신을 즐겨찾기할 수 없음");
+            throw new CustomException(ErrorCode.ERROR_BAD_REQUEST);
+        }
+
         // 즐겨찾기에 추가될 회원 확인
         log.info("즐겨찾기: 추가할 회원 찾기");
         User userTo = userRepository.findById(toUserId).orElseThrow(
@@ -56,6 +62,7 @@ public class LikesUserService {
                     .isLike(true)
                     .build());
         }
+
         // likesUser에 존재함, isLiked 확인
         else {
             log.info("즐겨찾기: likesUser is present");
@@ -119,6 +126,7 @@ public class LikesUserService {
         log.info("즐겨찾기 조회: \"{}.{}\" 즐겨찾기 회원 목록 조회", user.getId(), user.getNickname());
 
         // LikesUser를 UserResponseDto로 반환
+        // 현재 회원이 From으로 있는 필드의 To 회원 조회
         List<UserResponseDto> likedUserDtoTo = user.getFromUsers()
                 .stream()
                 .filter(likesUser -> likesUser.getIsLike())
@@ -138,14 +146,15 @@ public class LikesUserService {
         log.info("즐겨찾기 조회: \"{}.{}\" 즐겨찾기한 회원 목록 조회", user.getId(), user.getNickname());
 
         // LikesUser를 UserResponseDto로 반환
-        List<UserResponseDto> likedUserDtoTo = user.getFromUsers()
+        // 현재 회원이 To로 있는 필드의 From 회원 조회
+        List<UserResponseDto> likedUserDtoFrom = user.getToUsers()
                 .stream()
                 .filter(likesUser -> likesUser.getIsLike())
-                .map(likesUser -> UserResponseDto.fromEntity(likesUser.getUserTo()))
+                .map(likesUser -> UserResponseDto.fromEntity(likesUser.getUserFrom()))
                 .collect(Collectors.toList());
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<UserResponseDto> likedUserToPagedDto = new PageImpl<>(likedUserDtoTo, pageable, likedUserDtoTo.size());
-        return likedUserToPagedDto;
+        Page<UserResponseDto> likedUserFromPagedDto = new PageImpl<>(likedUserDtoFrom, pageable, likedUserDtoFrom.size());
+        return likedUserFromPagedDto;
     }
 }
 
