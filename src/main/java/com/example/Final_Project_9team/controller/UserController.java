@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.controller;
 
+import com.example.Final_Project_9team.dto.ProfileDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.dto.auth.JwtDto;
 import com.example.Final_Project_9team.dto.user.*;
@@ -14,11 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.Final_Project_9team.service.ScheduleService;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 
 
 @Slf4j
@@ -59,23 +61,44 @@ public class UserController {
             @RequestParam("q") String keyword,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit,
-            Authentication auth){
+            Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, page, limit, auth.getName()));
 
     }
+
     // 회원정보 수정
     // 비밀번호를 요구하지 않음
     // PUT /users/me
     @PutMapping("/me")
-    public ResponseEntity<UserResponseDto> updateUser(@Valid @RequestBody UserUpdateDto dto, Authentication auth) {
+    public ResponseEntity<UserResponseDto> updateUser(
+            @Valid @RequestBody UserUpdateDto dto,
+            Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(dto, auth.getName()));
+    }
+
+    //프로필 조회
+    // PUT /users/me/profile
+    @GetMapping("/me/profile")
+    public ResponseEntity<ProfileDto> readProfile(Authentication auth) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.readProfile(auth.getName()));
+    }
+
+    //프로필 수정
+    // PUT /users/me/profile
+    @PutMapping("/me/profile")
+    public ResponseEntity<ResponseDto> updateProfile(
+            @RequestPart(value = "profile", required = false) ProfileDto dto,
+            @RequestParam(value = "image", required = false) MultipartFile profileImage,
+            Authentication auth) {
+        userService.updateProfile(dto, profileImage, auth.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.getMessage("프로필이 수정되었습니다."));
     }
 
     // 비밀번호 수정
     // 별도의 엔드포인트에서 비밀번호 인증 후 진입
     // PUT /users/me/pass-word
     @PutMapping("/me/pass-word")
-    public ResponseEntity<ResponseDto> updateUserPassword(@Valid @RequestBody UserUpdatePwDto dto, Authentication auth){
+    public ResponseEntity<ResponseDto> updateUserPassword(@Valid @RequestBody UserUpdatePwDto dto, Authentication auth) {
         userService.updateUserPassword(dto, auth.getName());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto().getMessage("비밀번호가 수정되었습니다."));
     }
@@ -84,7 +107,7 @@ public class UserController {
     // 현재 로그인한 유저의 비밀번호와 입력한 비밀번호가 맞는지 검증 후 boolean으로 반환
     // POST /users/me/verify-password
     @PostMapping("/me/verify-password")
-    private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth){
+    private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.verifyPassword(dto, auth.getName()));
     }
 
