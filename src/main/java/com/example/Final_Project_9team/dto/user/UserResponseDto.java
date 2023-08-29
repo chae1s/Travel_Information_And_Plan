@@ -1,6 +1,5 @@
 package com.example.Final_Project_9team.dto.user;
 
-import com.example.Final_Project_9team.entity.LikesUser;
 import com.example.Final_Project_9team.entity.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -21,7 +20,7 @@ public class UserResponseDto {
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setNickname(user.getNickname());
-//        dto.setProfileImage(user.getProfile().getProfileImage());
+        dto.setProfileImage("/static/" + user.getProfile().getProfileImage());
         return dto;
     }
 
