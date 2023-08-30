@@ -41,6 +41,8 @@ class ScheduleServiceTest {
     private ScheduleItemRepository scheduleItemRepository;
     @InjectMocks
     private ScheduleService scheduleService;
+    @InjectMocks
+    private MyActivityService myActivityService;
 
     private final String title = "즐거운 여행";
     private final LocalDate startDate = LocalDate.of(2023, 8, 20);
@@ -61,7 +63,7 @@ class ScheduleServiceTest {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user().getEmail(), "password");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ScheduleResponseDto scheduleResponse = scheduleService.createSchedule(scheduleRequest);
+        ScheduleResponseDto scheduleResponse = scheduleService.createSchedule(scheduleRequest, authentication.getName());
 
         // then
         assertThat(scheduleResponse.getId()).isNotNull();
@@ -98,8 +100,9 @@ class ScheduleServiceTest {
 
         doReturn(schedules).when(scheduleRepository).findByUserAndEndDateGreaterThanEqual(any(User.class), any(LocalDate.class));
 
+        String email = "";
         // when
-        List<ScheduleListResponseDto> scheduleListResponseDs = scheduleService.readSchedulesAfterToday();
+        List<ScheduleListResponseDto> scheduleListResponseDs = myActivityService.readSchedulesAfterToday(email);
 
         // then
         assertThat(scheduleListResponseDs.size()).isEqualTo(2);

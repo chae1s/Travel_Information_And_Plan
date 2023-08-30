@@ -24,6 +24,7 @@ public class Schedule {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String sido;
     private Integer sumDistance;
     private Integer sumDuration;
     private Boolean display;
