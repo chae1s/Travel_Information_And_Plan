@@ -76,24 +76,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(dto, auth.getName()));
     }
 
-    //프로필 조회
-    // PUT /users/me/profile
-    @GetMapping("/me/profile")
-    public ResponseEntity<ProfileDto> readProfile(Authentication auth) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.readProfile(auth.getName()));
-    }
-
-    //프로필 수정
-    // PUT /users/me/profile
-    @PutMapping("/me/profile")
-    public ResponseEntity<ResponseDto> updateProfile(
-            @RequestPart(value = "profile", required = false) ProfileDto dto,
-            @RequestParam(value = "image", required = false) MultipartFile profileImage,
-            Authentication auth) {
-        userService.updateProfile(dto, profileImage, auth.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.getMessage("프로필이 수정되었습니다."));
-    }
-
     // 비밀번호 수정
     // 별도의 엔드포인트에서 비밀번호 인증 후 진입
     // PUT /users/me/pass-word
@@ -102,6 +84,14 @@ public class UserController {
         userService.updateUserPassword(dto, auth.getName());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto().getMessage("비밀번호가 수정되었습니다."));
     }
+
+    // 회원탈퇴
+    @PutMapping("/me/delete")
+    public ResponseEntity<ResponseDto> deleteUser(Authentication auth) {
+        userService.deleteUser(auth.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto().getMessage("회원탈퇴가 완료되었습니다."));
+    }
+
 
     // 비밀번호 인증
     // 현재 로그인한 유저의 비밀번호와 입력한 비밀번호가 맞는지 검증 후 boolean으로 반환

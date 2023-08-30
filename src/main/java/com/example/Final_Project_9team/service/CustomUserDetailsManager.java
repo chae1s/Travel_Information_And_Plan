@@ -22,6 +22,10 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (user.getIsDeleted() == true) {
+            log.info("탈퇴된 회원");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
         return CustomUserDetails.fromEntity(user);
     }
 

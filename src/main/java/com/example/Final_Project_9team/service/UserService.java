@@ -13,14 +13,12 @@ import com.example.Final_Project_9team.global.jwt.JwtTokenUtils;
 import com.example.Final_Project_9team.repository.ProfileRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
 import com.example.Final_Project_9team.utils.FileHandler;
+import com.example.Final_Project_9team.utils.UserUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,11 +36,17 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     private final CustomUserDetailsManager manager;
     private final JwtTokenUtils jwtTokenUtils;
     private final PasswordEncoder passwordEncoder;
-    private final FileHandler fileHandler;
+    private final LikesUserService likesUserService;
+    private final MatesService matesService;
+
+//    private final FileHandler fileHandler;
+//    private final ProfileRepository profileRepository;
+
+    private final UserUtils userUtils;
 
     // 회원등록
     @Transactional
@@ -69,8 +73,8 @@ public class UserService {
                 .isDeleted(false)
                 .build();
         userRepository.save(user);
-        log.info("회원가입: 기본프로필 생성");
-        profileRepository.save(Profile.builder().user(user).build());
+        profileService.createProfile(user);
+
     }
 
     // 로그인
@@ -95,9 +99,7 @@ public class UserService {
     // 회원정보 조회
     public UserResponseDto readUser(String email) {
         log.info("유저 \"{}\" 정보 조회", email);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
+        User user = userUtils.getUser(email);
         return UserResponseDto.fromEntity(user);
     }
 
@@ -105,7 +107,7 @@ public class UserService {
     // keyword가 포함된 email, nickname으로 회원 검색, 탈퇴회원 및 본인을 제외하고 반환
     // 결과가 없을 경우 빈 결과로 페이지 반환한
     public Page<UserResponseDto> findUser(String keyword, Integer pageNumber, Integer pageSize, String email) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("nickname"));
         log.info("user 검색");
         List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
         List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
@@ -127,8 +129,8 @@ public class UserService {
     // 회원정보 수정
     @Transactional
     public UserResponseDto updateUser(UserUpdateDto dto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userUtils.getUser(email);
+//        User user = getUser(email);
         log.info("회원정보 수정: 닉네임 중복 여부 확인");
         String newNickname = dto.getNickname();
         // 새로운 닉네임과 기존 닉네임이 다를 경우 중복확인 수행
@@ -143,14 +145,12 @@ public class UserService {
         userRepository.save(user);
 
         return UserResponseDto.fromEntity(user);
-
     }
 
     // 비밀번호 수정
     @Transactional
     public void updateUserPassword(UserUpdatePwDto dto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userUtils.getUser(email);
         log.info("비밀번호 수정: 비밀번호 입력 확인");
         if (!dto.getNewPassword().equals(dto.getPasswordCheck())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
@@ -171,62 +171,92 @@ public class UserService {
         return true;
     }
 
-    // 프로필 조회
-    public ProfileDto readProfile(String email) {
-        log.info("프로필: 사용자 프로필 조회");
-        Profile profile = profileRepository.findByUserEmailAndIsDeletedIsFalse(email).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return ProfileDto.fromEntity(profile);
-    }
+//    // 본인 프로필 조회
+//    public ProfileDto readMyProfile(String email) {
+//        log.info("프로필: 사용자 프로필 조회");
+//        Profile profile = profileRepository.findByUserEmailAndIsDeletedIsFalse(email).orElseThrow(
+//                () -> new CustomException(ErrorCode.ERROR_NOT_FOUND));
+//        return ProfileDto.fromEntity(profile);
+//    }
+//
+//    // 다른 회원의 프로필 조회
+//    public ProfileDto readProfile(Long userId) {
+//        log.info("프로필: 사용자 프로필 조회");
+//        Profile profile = profileRepository.findByUserIdAndIsDeletedIsFalse(userId).orElseThrow(
+//                () -> new CustomException(ErrorCode.ERROR_NOT_FOUND));
+//        return ProfileDto.fromEntity(profile);
+//    }
+//
+//
+//    // 프로필 수정
+//    public void updateProfile(ProfileDto dto, MultipartFile profileImage, String email) {
+//        User user = getUser(email);
+//        Profile profile = user.getProfile();
+//        // 프로필이 존재하는지 확인
+//        if (profile == null) {
+//            throw new CustomException(ErrorCode.ERROR_NOT_FOUND);
+//        }
+//        log.info("프로필: 내용 수정");
+//        profile.update(dto.getContent(), dto.getLocation());
+//
+//        // 파일이 제대로 첨부되어 전달되었는지 확인, null이라면 다시 첨부 필요
+//        log.info("프로필: 프로필 이미지 설정");
+//        if (profileImage == null) {
+//            throw new CustomException(ErrorCode.INVALID_FILE);
+//        }
+//        // 이미지가 첨부되어 있다면 파일을 저장하고 Porfile에 path 저장
+//        if (!profileImage.isEmpty()) {
+//            // 기존 파일을 삭제
+//            try {
+//                fileHandler.deleteFile(profile.getProfileImage());
+//            } catch (FileNotFoundException e) {
+//                log.info("프로필: 삭제할 파일이 존재하지 않습니다.");
+//            }
+//            // 새 파일을 저장
+//            FileDto profileImageDto = fileHandler.saveFile(profileImage);
+//            profile.updateImage(profileImageDto.getPath());
+//        }
+//        profileRepository.save(profile);
+//        log.info("프로필: 수정완료");
+//    }
+//
+//    // 프로필 삭제
+//    // 한번 생성된 프로필은 삭제할 수 없고, 회원 탈퇴시 삭제처리 됨.
+//    // 프로필 이미지 삭제, 프로필 profileImage == null, isDeleted == true
+//    public void deleteProfile(User user) {
+//        // 물리 파일 삭제
+//        Profile profile = user.getProfile();
+//        // 프로필이 존재하는지 확인
+//        if (profile == null) {
+//            throw new CustomException(ErrorCode.ERROR_NOT_FOUND);
+//        }
+//        String filePath = profile.getProfileImage();
+//        try {
+//            fileHandler.deleteFile(filePath);
+//        } catch (FileNotFoundException e) {
+//            log.info("프로필: 삭제할 파일이 존재하지 않습니다.");
+//        }
+//        // 프로필 엔티티 변경
+//        profile.delete();
+//        profileRepository.save(profile);
+//    }
 
-    // 프로필 수정
-    public void updateProfile(ProfileDto dto, MultipartFile profileImage, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Profile profile = user.getProfile();
-        // 프로필이 존재하는지 확인
-        if (profile == null) {
-            throw new CustomException(ErrorCode.ERROR_NOT_FOUND);
-        }
-        log.info("프로필: 내용 수정");
-        profile.update(dto.getContent(), dto.getLocation());
-
-        // 파일이 제대로 첨부되어 전달되었는지 확인, null이라면 다시 첨부 필요
-        log.info("프로필: 프로필 이미지 설정");
-        if (profileImage == null) {
-            throw new CustomException(ErrorCode.INVALID_FILE);
-        }
-        // 이미지가 첨부되어 있다면 파일을 저장하고 Porfile에 path 저장
-        if (!profileImage.isEmpty()) {
-            // 기존 파일을 삭제
-            try {
-                fileHandler.deleteFile(profile.getProfileImage());
-            } catch (FileNotFoundException e) {
-                log.info("프로필: 삭제할 파일이 존재하지 않습니다.");
-            }
-            // 새 파일을 저장
-            FileDto profileImageDto = fileHandler.saveFile(profileImage);
-            profile.updateImage(profileImageDto.getPath());
-        }
-        profileRepository.save(profile);
-        log.info("프로필: 수정완료");
-    }
-
-    // 프로필 삭제
-    // 한번 생성된 프로필은 삭제할 수 없고, 회원 탈퇴시 삭제처리 됨.
-    // 프로필 이미지 삭제, 프로필 profileImage == null, isDeleted == true
-    public void deleteProfile(Profile profile, Long userId) {
-        // 물리 파일 삭제
-        String filePath = profile.getProfileImage();
-        try {
-            fileHandler.deleteFile(filePath);
-        } catch (FileNotFoundException e) {
-            log.info("프로필: 삭제할 파일이 존재하지 않습니다.");
-        }
-        // 프로필 엔티티 변경
-        profile.delete();
-        profileRepository.save(profile);
-
+    // 회원탈퇴
+    // 프로필 삭제, 즐겨찾기 삭제, 메이트 삭제
+    @Transactional
+    public void deleteUser(String email) {
+        // 회원 확인
+        User user = userUtils.getUser(email);
+        // 프로필 정리
+        profileService.deleteProfile(user);
+        // 즐겨찾기 정리
+        likesUserService.deleteLikesUserAll(user);
+        // 메이트 정리
+        matesService.deleteMateAll(user);
+        // 회원 탈퇴
+        log.info("{} 회원 탈퇴 완료", email);
+        user.delete();
+        userRepository.save(user);
     }
 }
 
