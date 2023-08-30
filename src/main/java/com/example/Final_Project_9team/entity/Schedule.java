@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.entity;
 
+import com.example.Final_Project_9team.stomp.jpa.ChatRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -47,6 +48,9 @@ public class Schedule {
     @Builder.Default
     @OneToMany(mappedBy = "schedule")
     private List<LikesSchedule> likesSchedules = new ArrayList<>();
+
+    @OneToOne(mappedBy = "schedule")
+    private ChatRoom chatRoom;
 
     public void updateDisplay() {
         this.display = !this.display;

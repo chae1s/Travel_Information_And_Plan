@@ -41,5 +41,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                     "ORDER BY ls.id DESC "
     )
     Page<Schedule> findAllLikedSchedulesByMe(@Param("email") String email, Pageable pageable);
+    List<Schedule> findAllByUserAndMatesIsAcceptedTrue(User user);
 
 }

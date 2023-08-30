@@ -24,10 +24,10 @@
     const chatRooms = await (await fetch("/chat/rooms")).json();
     const roomDiv = document.getElementById("room-list");
     roomDiv.innerText = ""
-    chatRooms.forEach((chatRoom) => {
-      console.log(chatRoom)
+    chatRooms.forEach((chatRoomDto) => {
+      console.log(chatRoomDto)
       const newRoom = document.createElement("div")
-      newRoom.innerHTML = `<a href="/chat/${chatRoom.id}/${nickname}">${chatRoom.roomName}</a>`;
+      newRoom.innerHTML = `<a href="/chat/${chatRoomDto.id}/${nickname}">${chatRoomDto.roomName}</a>`;
       roomDiv.appendChild(newRoom)
     });
   }

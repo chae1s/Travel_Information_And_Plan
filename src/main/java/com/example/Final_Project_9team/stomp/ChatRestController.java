@@ -1,9 +1,10 @@
 package com.example.Final_Project_9team.stomp;
 
-import com.example.Final_Project_9team.stomp.dto.ChatRoom;
+import com.example.Final_Project_9team.stomp.dto.ChatRoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,17 +17,17 @@ public class ChatRestController {
     private final ChatService chatService;
 
     @GetMapping("rooms")
-    public ResponseEntity<List<ChatRoom>> getChatRooms(){
-        return ResponseEntity.ok(chatService.getChatRooms());
+    public ResponseEntity<List<ChatRoomDto>> getChatRooms(Authentication authentication){
+        return ResponseEntity.ok(chatService.getChatRooms(authentication.getName())); //authentication.getName()
     }
 
     @PostMapping("rooms")
-    public ResponseEntity<ChatRoom> createRoom(@RequestBody ChatRoom chatRoom){
-        return ResponseEntity.ok(chatService.createChatRoom(chatRoom));
+    public ResponseEntity<ChatRoomDto> createRoom(@RequestBody ChatRoomDto chatRoomDto){
+        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
     }
 
     @GetMapping("rooms/{id}/name")
-    public ResponseEntity<ChatRoom> getRoomName(@PathVariable("id") Long roomId) {
+    public ResponseEntity<ChatRoomDto> getRoomName(@PathVariable("id") Long roomId) {
         return ResponseEntity.ok(chatService.findRoomById(roomId));
     }
 }
