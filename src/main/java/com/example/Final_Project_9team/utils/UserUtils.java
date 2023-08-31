@@ -19,6 +19,7 @@ public class UserUtils {
         log.info("getUserByEmail: 회원 확인");
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("회원 {} 확인", user.getEmail());
         checkIsDeleted(user);
         return user;
     }
@@ -27,6 +28,7 @@ public class UserUtils {
         log.info("getUserById: 회원 확인");
         User user = userRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("회원 {} 확인", user.getEmail());
         checkIsDeleted(user);
         return user;
     }

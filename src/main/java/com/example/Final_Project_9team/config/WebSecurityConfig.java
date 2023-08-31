@@ -30,14 +30,15 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
-                                "/users/register"
+                                "/users/register",
+                                "users/profile/**"
                         )
                         .permitAll()
                         .requestMatchers(
                                 "/users/login"
                         )
                         .anonymous()
-                        .requestMatchers("/users/roleUser").hasRole("USER")
+//                        .requestMatchers("/users/roleUser").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
