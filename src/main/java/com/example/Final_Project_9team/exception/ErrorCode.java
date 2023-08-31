@@ -44,6 +44,7 @@ public enum ErrorCode {
     ITEM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 관광상품입니다."),
     MATES_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 메이트입니다."),
     CHATROOM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 채팅방입니다."),
+    INVITATION_NOT_FOUND(404, "ERR_NOT_FOUND", "초대받은 일정이 없습니다."),
 
     // 500 내부 서버 에러
     INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다."),

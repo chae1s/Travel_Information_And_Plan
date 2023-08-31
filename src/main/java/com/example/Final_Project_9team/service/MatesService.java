@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.service;
 
+import com.example.Final_Project_9team.dto.InvitationResponseDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -54,6 +57,28 @@ public class MatesService {
 
         return ResponseEntity.ok(ResponseDto.getMessage("초대가 정상적으로 되었습니다."));
     }
+    // 초대 리스트 조회(수락대기중인 리스트)
+    public ResponseEntity<List<InvitationResponseDto>> readInvitations(String userEmail) {
+        User user = userRepository.findByEmail(userEmail).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<Mates> matesList = matesRepository.findAllByUserIdAndIsAcceptedFalseAndIsDeletedFalse(user.getId());
+
+        List<InvitationResponseDto> invitationResponseDtos = new ArrayList<>();
+
+        for (Mates mates : matesList) {
+            InvitationResponseDto invitationResponseDto = InvitationResponseDto.builder()
+                    .invitingUser(mates.getSchedule().getUser().getNickname())
+                    .invitedTime(mates.getCreatedAt().toString())
+                    .scheduleTitle(mates.getSchedule().getTitle())
+                    .build();
+            invitationResponseDtos.add(invitationResponseDto);
+        }
+        if(invitationResponseDtos.isEmpty())
+            throw new CustomException(ErrorCode.INVITATION_NOT_FOUND);
+
+        return ResponseEntity.ok(invitationResponseDtos);
+    }
+
     // 초대 승낙 시
     public ResponseEntity<ResponseDto> acceptInvitation(String userEmail,Long scheduleId,Long matesId) {
 
