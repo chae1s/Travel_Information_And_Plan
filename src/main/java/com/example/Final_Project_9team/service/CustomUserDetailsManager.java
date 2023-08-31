@@ -1,10 +1,9 @@
 package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.dto.CustomUserDetails;
+import com.example.Final_Project_9team.dto.user.CustomUserDetails;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
-import com.example.Final_Project_9team.repository.ProfileRepository;
 import com.example.Final_Project_9team.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,10 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (user.getIsDeleted() == true) {
+            log.info("탈퇴된 회원");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
         return CustomUserDetails.fromEntity(user);
     }
 

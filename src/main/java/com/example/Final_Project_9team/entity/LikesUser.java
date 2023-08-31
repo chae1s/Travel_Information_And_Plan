@@ -14,7 +14,7 @@ public class LikesUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean isLike;
+    private Boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_from_id")
@@ -23,4 +23,8 @@ public class LikesUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_to_id")
     private User userTo;
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

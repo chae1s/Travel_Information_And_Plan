@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.global.util;
+package com.example.Final_Project_9team.utils;
 
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
