@@ -37,13 +37,15 @@ public class WebSocketMapping {
         log.info(chatMessageDto.toString());
         log.info(headers.toString());
         log.info(nativeHeaders.toString());
-        String time = new SimpleDateFormat("HH:mm").format(new Date());
-        chatMessageDto.setTime(time);
-        chatService.saveChatMessage(chatMessageDto);
-        simpMessagingTemplate.convertAndSend(
-                String.format("/topic/%s", chatMessageDto.getRoomId()),
-                chatMessageDto
-        );
+        if (!chatMessageDto.getMessage().equals("")) { // 입력되지 않은 메시지는 전송되지 않도록
+            String time = new SimpleDateFormat("HH:mm").format(new Date());
+            chatMessageDto.setTime(time);
+            chatService.saveChatMessage(chatMessageDto);
+            simpMessagingTemplate.convertAndSend(
+                    String.format("/topic/%s", chatMessageDto.getRoomId()),
+                    chatMessageDto
+            );
+        }
     }
 
     // 누군가가 구독할때 실행하는 메소드
