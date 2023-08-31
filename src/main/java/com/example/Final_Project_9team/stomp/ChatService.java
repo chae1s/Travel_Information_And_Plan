@@ -40,39 +40,32 @@ public class ChatService {
     ) {
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
-        ChatRoom room = ChatRoom.builder()
-                .roomName("general")
-                .build();
-        this.chatRoomRepository.save(room);
+//        ChatRoom room = ChatRoom.builder()
+//                .roomName("general")
+//                .build();
+//        this.chatRoomRepository.save(room);
         this.userRepository = userRepository;
         this.matesRepository = matesRepository;
         this.scheduleRepository = scheduleRepository;
     }
 
-//    public List<ChatRoomDto> getChatRooms() {
-//        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
-//        for (ChatRoom chatRoom : chatRoomRepository.findAll())
-//            chatRoomDtoList.add(ChatRoomDto.fromEntity(chatRoom));
-//        return chatRoomDtoList;
-//    }
     // (리스트조회) 내가 속한 메이트의 채팅방 리스트 조회하기
-    public List<ChatRoomDto> getChatRooms(String userEmail) {
-
+    public List<ChatRoomDto> getChatRooms() { //String userEmail
+        String userEmail ="sampleUser2@gmail.com";
         User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
-        // 유저가 속하며 메이트가 accepted=true 인 일정 리스트 찾기
-        List<Schedule> acceptedSchedules = scheduleRepository.findAllByUserAndMatesIsAcceptedTrue(user);
-
+        List<Mates> matesList = matesRepository.findAllByUserIdAndIsAcceptedTrue(user.getId());
         List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
-        for (Schedule schedule : acceptedSchedules) {
-            ChatRoom chatRoom = chatRoomRepository.findBySchedule(schedule).orElseThrow(()->
+
+        for (Mates mates : matesList) {
+            log.info("mates.getSchedule()="+mates.getSchedule().getId());
+            ChatRoom chatRoom = chatRoomRepository.findBySchedule(mates.getSchedule()).orElseThrow(()->
                     new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
             chatRoomDtoList.add(ChatRoomDto.fromEntity(chatRoom));
         }
+
         return chatRoomDtoList;
     }
-
-    // (단일 조회)해당 일정의 채팅방 조회하기
 
     public ChatRoomDto createChatRoom(ChatRoomDto chatRoomDto) {
         ChatRoom chatRoom = ChatRoom.builder()
