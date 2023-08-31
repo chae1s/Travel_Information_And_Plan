@@ -6,10 +6,12 @@ import com.example.Final_Project_9team.stomp.jpa.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class ChatMessageDto {
     private Long roomId;
     private String sender;

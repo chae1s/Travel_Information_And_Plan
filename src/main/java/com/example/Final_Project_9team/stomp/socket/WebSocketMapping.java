@@ -31,15 +31,15 @@ public class WebSocketMapping {
             @Payload ChatMessageDto chatMessageDto,
             // STOMP over WebSocket은 Header를 포함할 수 있다
             @Headers Map<String, Object> headers,
-            @Header("nativeHeaders") Map<String, String> nativeHeaders,
-            Authentication authentication
+            @Header("nativeHeaders") Map<String, String> nativeHeaders
+//            Authentication authentication
     ){
         log.info(chatMessageDto.toString());
         log.info(headers.toString());
         log.info(nativeHeaders.toString());
         String time = new SimpleDateFormat("HH:mm").format(new Date());
         chatMessageDto.setTime(time);
-        chatService.saveChatMessage(chatMessageDto, authentication.getName());
+        chatService.saveChatMessage(chatMessageDto);
         simpMessagingTemplate.convertAndSend(
                 String.format("/topic/%s", chatMessageDto.getRoomId()),
                 chatMessageDto
