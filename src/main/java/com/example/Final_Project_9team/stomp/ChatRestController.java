@@ -11,12 +11,12 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("chat")
+@RequestMapping("schedules/chat")
 @RequiredArgsConstructor
 public class ChatRestController {
     private final ChatService chatService;
 
-    @GetMapping("rooms")
+    @GetMapping("/rooms")
     public ResponseEntity<List<ChatRoomDto>> getChatRooms(){ /*Authentication authentication*/
         return ResponseEntity.ok(chatService.getChatRooms()); //authentication.getName()
     }
@@ -26,7 +26,7 @@ public class ChatRestController {
 //        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
 //    }
 
-    @GetMapping("rooms/{id}")
+    @GetMapping("/rooms/{id}")
     public ResponseEntity<ChatRoomDto> getRoomName(@PathVariable("id") Long roomId) {
         return ResponseEntity.ok(chatService.findRoomById(roomId));
     }

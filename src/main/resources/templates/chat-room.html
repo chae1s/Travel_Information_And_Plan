@@ -22,11 +22,11 @@
 <script type="text/javascript">
   let stompClient = null;
   const pathname = window.location.pathname;
-  const roomId = parseInt(pathname.split("/")[2]);
+  const roomId = parseInt(pathname.split("/")[3]);
   // const nickname = decodeURI(pathname.split("/")[3]);
 
   function getRoomName() {
-    fetch(`/chat/rooms/${roomId}`).then((response) => {
+    fetch(`/schedules/chat/rooms/${roomId}`).then((response) => {
       response.json().then((responseBody) => {
         console.log(responseBody);
         document.getElementById('room-name').innerHTML = responseBody.roomName;

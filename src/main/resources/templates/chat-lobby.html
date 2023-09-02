@@ -20,20 +20,20 @@
 <script type="text/javascript">
 
   async function loadRooms(){
-    const chatRooms = await (await fetch("/chat/rooms")).json();
+    const chatRooms = await (await fetch("/schedules/chat/rooms")).json();
     const roomDiv = document.getElementById("room-list");
     roomDiv.innerText = ""
     chatRooms.forEach((chatRoomDto) => {
       console.log(chatRoomDto)
       const newRoom = document.createElement("div")
-      newRoom.innerHTML = `<a href="/chat/${chatRoomDto.id}">${chatRoomDto.roomName}</a>`;
+      newRoom.innerHTML = `<a href="/schedules/chat/${chatRoomDto.id}">${chatRoomDto.roomName}</a>`;
       roomDiv.appendChild(newRoom)
     });
   }
 
   async function createRoom() {
     const roomName = document.getElementById("room-name").value;
-    const response = await (await fetch(`/chat/rooms`, {
+    const response = await (await fetch(`/schedules/chat/rooms`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -43,7 +43,7 @@
       })
     })).json();
     const roomId = response.id;
-    window.location.href = `/chat/${roomId}`;
+    window.location.href = `/schedules/chat/${roomId}`;
   }
 </script>
 </body>
