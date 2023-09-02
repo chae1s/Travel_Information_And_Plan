@@ -21,12 +21,12 @@ public class ChatRestController {
         return ResponseEntity.ok(chatService.getChatRooms()); //authentication.getName()
     }
 
-    @PostMapping("rooms")
-    public ResponseEntity<ChatRoomDto> createRoom(@RequestBody ChatRoomDto chatRoomDto){
-        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
-    }
+//    @PostMapping("rooms")
+//    public ResponseEntity<ChatRoomDto> createRoom(@RequestBody ChatRoomDto chatRoomDto){
+//        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
+//    }
 
-    @GetMapping("rooms/{id}/name")
+    @GetMapping("rooms/{id}")
     public ResponseEntity<ChatRoomDto> getRoomName(@PathVariable("id") Long roomId) {
         return ResponseEntity.ok(chatService.findRoomById(roomId));
     }

@@ -13,7 +13,7 @@ public class ChatController {
         return "chat-lobby";
     }
 
-    @GetMapping("{roomId}/{userId}")
+    @GetMapping("{roomId}")
     public String enterRoom(){
         return "chat-room";
     }

@@ -9,7 +9,6 @@
 <body onload="">
 <div>
   <div>
-    <label for="nickname">이름: </label><input type="text" id="nickname" placeholder="Choose a nickname"/>
     <button id="connect" onclick="loadRooms()">방 찾기</button>
     <br><br>
     <input type="text" id="room-name" placeholder="Create Room">
@@ -21,20 +20,18 @@
 <script type="text/javascript">
 
   async function loadRooms(){
-    const nickname = document.getElementById("nickname").value ?? 'anonymous';
     const chatRooms = await (await fetch("/chat/rooms")).json();
     const roomDiv = document.getElementById("room-list");
     roomDiv.innerText = ""
     chatRooms.forEach((chatRoomDto) => {
       console.log(chatRoomDto)
       const newRoom = document.createElement("div")
-      newRoom.innerHTML = `<a href="/chat/${chatRoomDto.id}/${nickname}">${chatRoomDto.roomName}</a>`;
+      newRoom.innerHTML = `<a href="/chat/${chatRoomDto.id}">${chatRoomDto.roomName}</a>`;
       roomDiv.appendChild(newRoom)
     });
   }
 
   async function createRoom() {
-    const nickname = document.getElementById("nickname").value;
     const roomName = document.getElementById("room-name").value;
     const response = await (await fetch(`/chat/rooms`, {
       method: "POST",
@@ -46,7 +43,7 @@
       })
     })).json();
     const roomId = response.id;
-    window.location.href = `/chat/${roomId}/${nickname}`;
+    window.location.href = `/chat/${roomId}`;
   }
 </script>
 </body>

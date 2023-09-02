@@ -74,33 +74,34 @@ public class ChatService {
 
         return ChatRoomDto.fromEntity(chatRoomRepository.save(chatRoom));
     }
-
+    // 채팅방 클릭 시
     public ChatRoomDto findRoomById(Long id) {
-        Optional<ChatRoom> optionalChatRoom
-                = chatRoomRepository.findById(id);
-        if (optionalChatRoom.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return ChatRoomDto.fromEntity(optionalChatRoom.get());
+        String userEmail ="sampleUser2@gmail.com";
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
+                ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+        return ChatRoomDto.fromEntity(chatRoom);
     }
 
+    public void saveChatMessage(ChatMessageDto chatMessageDto) {
+        String userEmail ="sampleUser2@gmail.com";
 
-    public void saveChatMessage(ChatMessageDto chatMessageDto,String userEmail) {
         User user = userRepository.findByEmail(userEmail).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
         ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDto.getRoomId()).orElseThrow(
                 ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
-
         chatMessageRepository.save(chatMessageDto.newEntity(chatRoom,user));
     }
 
     public List<ChatMessageDto> getLast5Messages(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
-
         List<ChatMessageDto> chatMessageDtos = new ArrayList<>();
         List<ChatMessage> chatMessageEntities = chatMessageRepository.findTop5ByChatRoomOrderByIdDesc(chatRoom);
         Collections.reverse(chatMessageEntities);
         for (ChatMessage messageEntity: chatMessageEntities) {
-            chatMessageDtos.add(ChatMessageDto.fromEntity(messageEntity));
+            chatMessageDtos.add(ChatMessageDto.fromEntity(messageEntity)); //여기서 에러
         }
         return chatMessageDtos;
     }

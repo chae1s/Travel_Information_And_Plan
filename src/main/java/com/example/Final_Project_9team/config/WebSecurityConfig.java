@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
                                 "/users/register",
-                                "/chat/**", "/static/**","/js/**","/chatting"
+                                "/chat/**", "/static/**","/js/**","/chatting","/error"
                         )
                         .permitAll()
                         .requestMatchers(
