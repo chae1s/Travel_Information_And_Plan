@@ -1,5 +1,7 @@
 package com.example.Final_Project_9team.stomp;
 
+import com.example.Final_Project_9team.dto.MatesResponseDto;
+import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.stomp.dto.ChatRoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +27,21 @@ public class ChatRestController {
 //    public ResponseEntity<ChatRoomDto> createRoom(@RequestBody ChatRoomDto chatRoomDto){
 //        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
 //    }
-
-    @GetMapping("/rooms/{id}")
-    public ResponseEntity<ChatRoomDto> getRoomName(@PathVariable("id") Long roomId) {
+    // 채팅방 단일 조회
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<ChatRoomDto> getRoomName(@PathVariable("roomId") Long roomId) {
         return ResponseEntity.ok(chatService.findRoomById(roomId));
+    }
+
+    // 해당 채팅방 유저들 조회
+    @GetMapping("/rooms/{roomId}/chat-users")
+    public ResponseEntity<List<MatesResponseDto>> readChatMates(@PathVariable("roomId") Long roomId) {
+        return ResponseEntity.ok(chatService.readChatMates(roomId));
+    }
+    // 채팅방명 변경
+    @PostMapping("/rooms/{roomId}")
+    public ResponseEntity<ResponseDto> updateRoomName(@PathVariable("roomId") Long roomId,
+                                                      @RequestBody ChatRoomDto chatRoomDto) { //Authentication authentication
+        return ResponseEntity.ok(chatService.updateRoomName(roomId, chatRoomDto.getRoomName(),"sampleUser1@gmail.com"));
     }
 }

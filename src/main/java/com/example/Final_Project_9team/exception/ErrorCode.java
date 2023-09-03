@@ -31,6 +31,7 @@ public enum ErrorCode {
 
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
     MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),
+    USER_NOT_MATCHED_HOST(400,"ERR_BAD_REQUEST","채팅방의 호스트와 일치하지 않습니다."),
 
     // 403 FORBIDDEN 권한이 없는 경우
     USER_NO_AUTH(403, "ERR_FORBIDDEN", "해당 기능에 대해 권한이 없습니다."),
