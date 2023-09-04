@@ -37,6 +37,10 @@ public class MyActivityService {
 
 
     public PageDto<BoardListResponseDto> readAllBoards(String email, int page, int size) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Page<Board> pagedBoards = boardRepository.findAllByUser_EmailAndIsDeletedFalse(
                 email,
                 PageRequest.of(page - 1, size)
@@ -52,6 +56,14 @@ public class MyActivityService {
 
     @Transactional
     public void likeBoard(String email, Long boardId) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        if (!boardRepository.existsByIdAndIsDeletedFalse(boardId)) {
+                throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
+        }
+
         Optional<LikesBoard> optionalLikes
                 = likesBoardRepository.findByUser_EmailAndBoard_Id(email, boardId);
 
@@ -71,6 +83,10 @@ public class MyActivityService {
     }
 
     public PageDto<BoardListResponseDto> readAllLikedBoards(String email, int page, int size) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Page<Board> pagedBoards = boardRepository.findAllLikedBoardsByMe(
                 email,
                 PageRequest.of(page - 1, size)
@@ -86,6 +102,10 @@ public class MyActivityService {
     }
 
     public PageDto<BoardListResponseDto> readAllCommentedBoards(String email, int page, int size) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Page<Board> pagedBoards = boardRepository.findAllCommentedBoardsByMe(
                 email,
                 PageRequest.of(page - 1, size)
@@ -100,6 +120,10 @@ public class MyActivityService {
     }
 
     public PageDto<ScheduleListResponseDto> readAllSchedules(String email, int page, int size) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Page<Schedule> pagedSchedules = scheduleRepository.findAllSchedulesContainsMe(
                 email,
                 PageRequest.of(page - 1, size)
@@ -112,6 +136,10 @@ public class MyActivityService {
     }
 
     public PageDto<ScheduleListResponseDto> readAllLikedSchedules(String email, int page, int size) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Page<Schedule> pagedSchedules = scheduleRepository.findAllLikedSchedulesByMe(
                 email,
                 PageRequest.of(page - 1, size)
@@ -124,6 +152,10 @@ public class MyActivityService {
     }
 
     public PageDto<ItemListResponseDto> readAllLikedItems(String email, int page, int size) {
+        if(!userRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Page<Item> pagedItems = itemRepository.findAllLikedItemsByMe(
                 email,
                 PageRequest.of(page - 1, size)
