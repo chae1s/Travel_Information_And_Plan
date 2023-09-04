@@ -1,7 +1,5 @@
-package com.example.Final_Project_9team.stomp.jpa;
+package com.example.Final_Project_9team.entity;
 
-import com.example.Final_Project_9team.entity.Schedule;
-import com.example.Final_Project_9team.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -26,9 +24,9 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
-    @OneToMany
-//            (mappedBy = "chat_room", fetch = FetchType.LAZY)
-    private List<User> user = new ArrayList<>();
+//    @OneToMany
+////            (mappedBy = "chat_room", fetch = FetchType.LAZY)
+//    private List<User> user = new ArrayList<>();
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;

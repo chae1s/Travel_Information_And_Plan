@@ -1,6 +1,5 @@
 package com.example.Final_Project_9team.entity;
 
-import com.example.Final_Project_9team.stomp.jpa.ChatRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

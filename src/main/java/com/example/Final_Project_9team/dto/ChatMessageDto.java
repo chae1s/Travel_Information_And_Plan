@@ -1,8 +1,8 @@
-package com.example.Final_Project_9team.stomp.dto;
+package com.example.Final_Project_9team.dto;
 
 import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.stomp.jpa.ChatMessage;
-import com.example.Final_Project_9team.stomp.jpa.ChatRoom;
+import com.example.Final_Project_9team.entity.ChatMessage;
+import com.example.Final_Project_9team.entity.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +18,6 @@ public class ChatMessageDto {
     private String message;
     private String time;
 
-
-
     public static ChatMessageDto fromEntity(ChatMessage messageEntity) {
         return new ChatMessageDto(
                 messageEntity.getChatRoom().getId(),
@@ -29,7 +27,7 @@ public class ChatMessageDto {
         );
     }
 
-    public ChatMessage newEntity(ChatRoom chatRoom, User user) {
+    public ChatMessage toEntity(ChatRoom chatRoom, User user) {
         ChatMessage messageEntity = ChatMessage.builder()
                 .chatRoom(chatRoom)
                 .user(user)

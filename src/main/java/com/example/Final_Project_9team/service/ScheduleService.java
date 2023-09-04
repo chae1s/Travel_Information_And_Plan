@@ -5,25 +5,21 @@ import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.ScheduleItem;
 import com.example.Final_Project_9team.entity.User;
-import com.example.Final_Project_9team.entity.enums.Role;
 import com.example.Final_Project_9team.entity.item.Item;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
 import com.example.Final_Project_9team.repository.*;
-import com.example.Final_Project_9team.stomp.dto.ChatRoomDto;
-import com.example.Final_Project_9team.stomp.jpa.ChatRoom;
-import com.example.Final_Project_9team.stomp.jpa.ChatRoomRepository;
+import com.example.Final_Project_9team.dto.ChatRoomDto;
+import com.example.Final_Project_9team.entity.ChatRoom;
+import com.example.Final_Project_9team.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

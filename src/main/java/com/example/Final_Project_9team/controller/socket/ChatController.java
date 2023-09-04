@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.stomp;
+package com.example.Final_Project_9team.controller.socket;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

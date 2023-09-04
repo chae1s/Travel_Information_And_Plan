@@ -28,11 +28,11 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-  rabbitmq:
-    host: localhost # rabbitMQ host (docker로 띄웠음)
-    port: 5672 # default port
-    username: guest # default username
-    password: guest # default password
+#  rabbitmq:
+#    host: localhost # rabbitMQ host (docker로 띄웠음)
+#    port: 5672 # default port
+#    username: guest # default username
+#    password: guest # default password
 
 jwt:
   secret: ${JWT_SECRET}

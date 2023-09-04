@@ -1,14 +1,13 @@
-package com.example.Final_Project_9team.stomp.socket;
+package com.example.Final_Project_9team.controller.socket;
 
-import com.example.Final_Project_9team.stomp.dto.ChatMessageDto;
-import com.example.Final_Project_9team.stomp.dto.ChatRoomDto;
-import com.example.Final_Project_9team.stomp.ChatService;
+import com.example.Final_Project_9team.dto.ChatMessageDto;
+import com.example.Final_Project_9team.dto.ChatRoomDto;
+import com.example.Final_Project_9team.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import java.text.SimpleDateFormat;

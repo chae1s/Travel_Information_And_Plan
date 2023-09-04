@@ -1,8 +1,7 @@
-package com.example.Final_Project_9team.stomp.dto;
+package com.example.Final_Project_9team.dto;
 
-import com.example.Final_Project_9team.dto.ScheduleRequestDto;
 import com.example.Final_Project_9team.entity.Schedule;
-import com.example.Final_Project_9team.stomp.jpa.ChatRoom;
+import com.example.Final_Project_9team.entity.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

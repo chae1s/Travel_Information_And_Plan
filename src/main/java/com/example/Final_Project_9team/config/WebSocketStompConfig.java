@@ -1,4 +1,4 @@
-package com.example.Final_Project_9team.stomp.config;
+package com.example.Final_Project_9team.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -18,8 +18,8 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     // MessageBroker를 활용하는 방법 설정
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.enableSimpleBroker("/topic");
-        registry.enableStompBrokerRelay("/topic");
+        registry.enableSimpleBroker("/topic");
+//        registry.enableStompBrokerRelay("/topic"); //rabbitmq사용시
         registry.setApplicationDestinationPrefixes("/app", "/topic");
     }
 }

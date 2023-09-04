@@ -1,8 +1,9 @@
-package com.example.Final_Project_9team.stomp;
+package com.example.Final_Project_9team.controller.socket;
 
 import com.example.Final_Project_9team.dto.MatesResponseDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
-import com.example.Final_Project_9team.stomp.dto.ChatRoomDto;
+import com.example.Final_Project_9team.dto.ChatRoomDto;
+import com.example.Final_Project_9team.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,9 @@ public class ChatRestController {
     private final ChatService chatService;
 
     @GetMapping("/rooms")
-    public ResponseEntity<List<ChatRoomDto>> getChatRooms(){ /*Authentication authentication*/
-        return ResponseEntity.ok(chatService.getChatRooms()); //authentication.getName()
+    public ResponseEntity<List<ChatRoomDto>> getChatRooms( /*Authentication authentication*/
+    ){
+        return ResponseEntity.ok(chatService.getChatRooms("authentication.getName()")); //authentication.getName()
     }
 
 //    @PostMapping("rooms")
@@ -41,7 +43,9 @@ public class ChatRestController {
     // 채팅방명 변경
     @PostMapping("/rooms/{roomId}")
     public ResponseEntity<ResponseDto> updateRoomName(@PathVariable("roomId") Long roomId,
-                                                      @RequestBody ChatRoomDto chatRoomDto) { //Authentication authentication
-        return ResponseEntity.ok(chatService.updateRoomName(roomId, chatRoomDto.getRoomName(),"sampleUser1@gmail.com"));
+                                                      @RequestBody ChatRoomDto chatRoomDto
+//                                                      Authentication authentication
+                                                      ) {
+        return ResponseEntity.ok(chatService.updateRoomName(roomId, chatRoomDto.getRoomName(), "authentication.getName()"));
     }
 }

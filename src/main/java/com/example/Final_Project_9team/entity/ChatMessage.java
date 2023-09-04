@@ -1,10 +1,8 @@
-package com.example.Final_Project_9team.stomp.jpa;
+package com.example.Final_Project_9team.entity;
 
-import com.example.Final_Project_9team.entity.User;
 import com.example.Final_Project_9team.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
