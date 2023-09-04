@@ -10,7 +10,7 @@
                     <router-link to="/">마이페이지</router-link>
                     <router-link to="/">로그인</router-link>
                     <router-link to="/">로그아웃</router-link>
-                    <router-link to="/">회원가입</router-link>
+                    <router-link to="/sign-up">회원가입</router-link>
                 </div>
             </div>
         </div>
