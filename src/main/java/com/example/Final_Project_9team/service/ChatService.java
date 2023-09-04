@@ -33,7 +33,6 @@ public class ChatService {
     private final UserRepository userRepository;
     private final MatesRepository matesRepository;
     private final ScheduleRepository scheduleRepository;
-    // TODO Authentication으로 사용자 정보 받아와 검사하는 로직으로 변경해야함. controller와 service(이메일 사용되는 곳)
 
     // (리스트조회) 내가 속한 메이트의 채팅방 리스트 조회하기
     public List<ChatRoomDto> getChatRooms(String userEmail) {
@@ -61,16 +60,38 @@ public class ChatService {
     }
     // 채팅방 클릭 시
     public ChatRoomDto findRoomById(Long id) {
-        //TODO user정보 필요한지 확인하기
-        String userEmail ="sampleUser2@gmail.com";
-        User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));
-
         ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
                 ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
         return ChatRoomDto.fromEntity(chatRoom);
     }
 
+    // 메시지 보내기
+//    public ChatMessageDto sendMessage(Long roomId, ChatMessageDto dto) {
+//        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
+//                ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+//
+////        User sender = authFacade.getUser();
+//        String userEmail ="sampleUser2@gmail.com";
+//        User sender = userRepository.findByEmail(userEmail).orElseThrow(
+//                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+//        ChatMessageDto payload = ChatMessageDto.fromEntity(chatMessageRepository.save(dto.toEntity(chatRoom,sender)));
+//
+//        User receiver = chatRoom.getUser().equals(sender) ?
+//                room.getItem().getUser() :
+//                room.getUser();
+//        messagingTemplate.convertAndSend(
+//                String.format(String.format("/topic/%s", receiver.getId())),
+//                payload
+//        );
+//        messagingTemplate.convertAndSend(
+//                String.format(String.format("/topic/%s", sender.getId())),
+//                payload
+//        );
+//
+//        return payload;
+//    }
+
+    // TODO 사용자 정보 받아와 검사하는 로직으로 변경해야함
     public void saveChatMessage(ChatMessageDto chatMessageDto) {
         String userEmail ="sampleUser2@gmail.com";
         User user = userRepository.findByEmail(userEmail).orElseThrow(

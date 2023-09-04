@@ -33,9 +33,9 @@ public class WebSocketMapping {
             @Header("nativeHeaders") Map<String, String> nativeHeaders
 //            Authentication authentication
     ){
-        log.info(chatMessageDto.toString());
-        log.info(headers.toString());
-        log.info(nativeHeaders.toString());
+//        log.info(chatMessageDto.toString());
+//        log.info(headers.toString());
+//        log.info(nativeHeaders.toString());
         if (!chatMessageDto.getMessage().equals("")) { // 입력되지 않은 메시지는 전송되지 않도록
             String time = new SimpleDateFormat("HH:mm").format(new Date());
             chatMessageDto.setTime(time);
@@ -52,22 +52,11 @@ public class WebSocketMapping {
     public List<ChatMessageDto> sendGreet(
             @DestinationVariable("roomId") Long roomId
     ) {
-        log.info("new subscription to {}", roomId);
+//        log.info("new subscription to {}", roomId);
         ChatRoomDto chatRoomDto = chatService.findRoomById(roomId);
         List<ChatMessageDto> last5Messages
                 = chatService.getLast5Messages(roomId);
-        ChatMessageDto chatMessageDto = new ChatMessageDto();
-        chatMessageDto.setRoomId(roomId);
-        chatMessageDto.setSender("admin");
-        if (last5Messages.size() > 0) {
-            int count = Math.min(last5Messages.size(), 5);
-            chatMessageDto.setMessage(String.format("hello! these are the last %d messages", count));
-            chatMessageDto.setTime(last5Messages.get(0).getTime());
-        } else {
-            chatMessageDto.setMessage("hello! there aren't any messages here");
-            chatMessageDto.setTime(new SimpleDateFormat("HH:mm").format(new Date()));
-        }
-        last5Messages.add(0, chatMessageDto);
+
         return last5Messages;
     }
 }
