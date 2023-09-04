@@ -100,7 +100,8 @@ export default {
             selectedItem: null,
             selectedItemIndex: null,
             selectedPosition: {top: 0, left: 0},
-            itemPath: []
+            itemPath: [],
+            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF']
         }
     },
     mounted() {
@@ -244,7 +245,7 @@ export default {
             const polyline = new naver.maps.Polyline({
                 map : map,
                 path: polylinePath,
-                strokeColor : '#72D3B6',
+                strokeColor : this.polylineHex[i],
                 strokeOpacity: 0.8,
                 strokeWeight: 6
             })
