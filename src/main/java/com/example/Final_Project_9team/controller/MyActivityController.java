@@ -105,10 +105,19 @@ public class MyActivityController {
     }
 
     // 나의 일정 중 날짜 기준으로 목록 조회하기
-    @GetMapping("/me/schedules/after-day")
+    @GetMapping("schedules/after-day")
     public List<ScheduleListResponseDto> readSchedulesAfterToday(Authentication auth) {
 
         return myActivityService.readSchedulesAfterToday(auth.getName());
 
+    }
+
+    @GetMapping("liked-items/{sido}")
+    public ResponseEntity<PageDto<ItemListResponseDto>> readLikedItemsBySido(Authentication auth,
+                                                                             @PathVariable("sido") String sido,
+                                                                             @RequestParam(value = "page", defaultValue = "1") int page,
+                                                                             @RequestParam(value = "size", defaultValue = "8") int size) {
+
+        return ResponseEntity.ok(myActivityService.readLikedItemsBySido("testUser@gmail.com", sido, page, size));
     }
 }
