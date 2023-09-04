@@ -1,0 +1,61 @@
+<template>
+
+    <Header />
+    <router-view></router-view>
+
+    <Footer />
+
+</template>
+
+<script>
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
+export default {
+  name: 'App',
+  components: {
+      Header,
+      Footer
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Pretendard;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2F3438;
+}
+
+.content {
+    width: 1170px;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    color: #2F3438;
+    cursor: pointer;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Pretendard;
+}
+
+ul, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 1903px;
+}
+
+input:focus {
+    outline: none;
+}
+</style>
