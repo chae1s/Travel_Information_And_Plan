@@ -24,5 +24,4 @@ public class ScheduleItemRequestDto {
                 .item(item)
                 .build();
     }
-
 }

@@ -31,6 +31,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
                                 "/users/register",
+                                "users/profile/**",
                                 "schedules/chat/**", "/static/**","/js/**","/chatting","/error"
                         )
                         .permitAll()
@@ -38,7 +39,7 @@ public class WebSecurityConfig {
                                 "/users/login"
                         )
                         .anonymous()
-                        .requestMatchers("/users/roleUser").hasRole("USER")
+//                        .requestMatchers("/users/roleUser").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
