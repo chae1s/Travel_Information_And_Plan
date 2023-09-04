@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.dto;
 
+import com.example.Final_Project_9team.dto.user.UserResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
 import lombok.Data;
 import lombok.Getter;

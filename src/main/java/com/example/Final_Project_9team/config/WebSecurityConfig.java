@@ -32,14 +32,15 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/users/register",
                                 "/item-list/**",
-                                "/**"
+                                "/**",
+                                "users/profile/**"
                         )
                         .permitAll()
                         .requestMatchers(
                                 "/users/login"
                         )
                         .anonymous()
-                        .requestMatchers("/users/roleUser").hasRole("USER")
+//                        .requestMatchers("/users/roleUser").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement

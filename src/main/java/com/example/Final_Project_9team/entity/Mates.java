@@ -28,4 +28,11 @@ public class Mates extends BaseTimeEntity {
     @JoinColumn
     private Schedule schedule;
 
+    public void setAccepted(Boolean isAccepted) {
+        this.isAccepted = isAccepted;
+    }
+    public void setDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
 }

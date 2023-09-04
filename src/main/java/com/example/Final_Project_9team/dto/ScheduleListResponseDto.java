@@ -1,8 +1,8 @@
 package com.example.Final_Project_9team.dto;
 
+import com.example.Final_Project_9team.dto.user.UserResponseDto;
 import com.example.Final_Project_9team.entity.Schedule;
 import lombok.Data;
-import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.Period;

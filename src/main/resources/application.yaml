@@ -7,11 +7,12 @@ server:
 
 spring:
   mvc:
+    static-path-pattern: /static/**
     path match:
       matching-strategy: ant_path_matcher
   web:
     resources:
-      static-locations: classpath:/templates/
+      static-locations: file:media, classpath:/static
 
   datasource:
     url: jdbc:sqlite:db.sqlite
@@ -34,7 +35,3 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   accessExpirationTime: ${JWT_EXPIRATION}
-naver:
-  client:
-    id: pvpyjs42ed
-    secret: axYdkxoOlcuU1lIoPJSVuNY3393unETitNf1wPxK
