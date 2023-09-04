@@ -6,7 +6,7 @@ import lombok.Data;
 //32:숙박
 @Data
 @Entity
-//@DiscriminatorValue("Accommodation")
+@DiscriminatorValue("Accommodation")
 public class Accommodation extends Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 이 부분을 추가합니다.

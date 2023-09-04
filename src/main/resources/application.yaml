@@ -11,7 +11,7 @@ spring:
       matching-strategy: ant_path_matcher
   web:
     resources:
-      static-locations: file:media/, classpath:/static
+      static-locations: classpath:/templates/
 
   datasource:
     url: jdbc:sqlite:db.sqlite
@@ -28,7 +28,13 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+#  thymeleaf:
+#    prefix: classpath:/templates/
 
 jwt:
   secret: ${JWT_SECRET}
   accessExpirationTime: ${JWT_EXPIRATION}
+naver:
+  client:
+    id: pvpyjs42ed
+    secret: axYdkxoOlcuU1lIoPJSVuNY3393unETitNf1wPxK

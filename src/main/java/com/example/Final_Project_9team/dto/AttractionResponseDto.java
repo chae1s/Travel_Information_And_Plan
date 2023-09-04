@@ -1,9 +1,12 @@
 package com.example.Final_Project_9team.dto;
 
+import com.example.Final_Project_9team.entity.ItemReview;
 import com.example.Final_Project_9team.entity.item.Attraction;
 import com.example.Final_Project_9team.entity.item.Item;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -32,6 +35,7 @@ public class AttractionResponseDto {
     private Long mLevel;
     private String overView;
     private String restDate;
+    private List<ItemReview> itemReviews;
     //-----------------------------------
     private String accomCount;
     private String openDate;
@@ -61,6 +65,7 @@ public class AttractionResponseDto {
                 .longitude(attraction.getLocation().getLongitude())
                 .contentId(attraction.getContentId())
                 .contentTypeId(attraction.getContentTypeId())
+                .itemReviews(attraction.getItemReviews())
                 //----------------------------------------------
                 .accomCount(attraction.getAccomCount())
                 .openDate(attraction.getOpenDate())

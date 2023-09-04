@@ -19,6 +19,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -51,31 +57,98 @@ public class ItemListService {
         return itemPage.map(ItemPartResponseDto::fromEntity);
     }
     //TODO: 상세정보 조회
-    public ResponseEntity<?> readItem(Long itemId) {
+//    public ResponseEntity<?> readItem(Long itemId) throws IOException {
+//        Optional<Item> optionalItem = itemRepository.findById(itemId);
+//
+//        if (optionalItem.isPresent()) {
+//            Item item = optionalItem.get();
+//            String contentTypeId = item.getContentTypeId();
+//
+//            switch (contentTypeId) {
+//                case "12", "14", "32", "39" -> {
+//                    String baseUrl = "https://apis.data.go.kr/B551011/KorService1/detailIntro1?";
+//                    String apiKey = "vqoXwkq9RMCWANTOOUUOJVPQ%2FDtls8Z099FreqNacdFobJPBCviYv10hegz5KtPrVxci7OYYwEBNv%2ByS7hZ9%2Fw%3D%3D";
+//                    String contentId = item.getContentId();
+//                    String urlStr = baseUrl +
+//                            "serviceKey=" + apiKey +
+//                            "&MobileOS=ETC" +
+//                            "&MobileApp=AppTest" +
+//                            "&_type=json" +
+//                            "&contentId=" + contentId +
+//                            "&contentTypeId=" + contentTypeId + //12, 14, 32, 39
+//                            "&numOfRows=10" +
+//                            "&pageNo=1";
+//
+//                    URL url = new URL(urlStr);
+//                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//                    urlConnection.setRequestMethod("GET");
+//
+//                    int responseCode = urlConnection.getResponseCode();
+//                    if (responseCode == HttpURLConnection.HTTP_OK) {
+//                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+//                        StringBuilder resultBuilder = new StringBuilder();
+//                        String line;
+//                        while ((line = br.readLine()) != null) {
+//                            resultBuilder.append(line).append("\n");
+//                        }
+//                        br.close();
+//
+//                        String resultData = resultBuilder.toString();
+//
+//                        return ResponseEntity.ok(resultData);
+//                    } else {
+//
+//                        throw new CustomException(ErrorCode.ERROR_NOT_FOUND);
+//                    }
+//                }
+//                default -> throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+//            }
+//        } else {
+//            throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+//        }
+//    }
+
+    public ResponseEntity<?> readItem(Long itemId) throws IOException {
+        String result = "";
         Optional<Item> optionalItem = itemRepository.findById(itemId);
         if(optionalItem.isPresent()) {
             Item item = optionalItem.get();
             String contentTypeId = item.getContentTypeId();
 
-            switch(contentTypeId) {
-                case "12":
-                case "14":
-                    Optional<Attraction> optionalAttraction = attractionRepository.findById(itemId);
-                    Attraction attraction = optionalAttraction.get();
-                    AttractionResponseDto attractionResponseDto = AttractionResponseDto.fromEntity(attraction);
-                    return ResponseEntity.ok(attractionResponseDto);
-                case "32":
-                    Optional<Accommodation> optionalAccommodation = accommodationRepository.findById(itemId);
-                    Accommodation accommodation = optionalAccommodation.get();
-                    AccommodationResponseDto accommodationResponseDto = AccommodationResponseDto.fromEntity(accommodation);
-                    return ResponseEntity.ok(accommodationResponseDto);
-                case "39":
-                    Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(itemId);
-                    Restaurant restaurant = optionalRestaurant.get();
-                    RestaurantResponseDto restaurantResponseDto = RestaurantResponseDto.fromEntity(restaurant);
-                    return ResponseEntity.ok(restaurantResponseDto);
-                default:
-                    throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+            switch (contentTypeId) {
+                case "12", "14", "32", "39" -> {
+                    String baseUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?";
+                    String apiKey = "vqoXwkq9RMCWANTOOUUOJVPQ%2FDtls8Z099FreqNacdFobJPBCviYv10hegz5KtPrVxci7OYYwEBNv%2ByS7hZ9%2Fw%3D%3D";
+                    String contentId = item.getContentId();
+                    String urlStr = baseUrl +
+                            "serviceKey=" + apiKey +
+                            "&MobileOS=ETC" +
+                            "&MobileApp=AppTest" +
+                            "&_type=json" +
+                            "&contentId=" + contentId +
+                            "&contentTypeId=" + contentTypeId + //12, 14, 32, 39
+                            "&defaultYN=Y"+
+                            "&firstImageYN=Y"+
+                            "&areacodeYN=Y"+
+                            "&catcodeYN=Y"+
+                            "&addrinfoYN=Y"+
+                            "&mapinfoYN=Y"+
+                            "&overviewYN=Y"+
+                            "&numOfRows=10" +
+                            "&pageNo=1";
+                    URL url = new URL(urlStr);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                    StringBuilder resultBuilder = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        resultBuilder.append(line).append("\n");
+                    }
+                    result = resultBuilder.toString();
+                    return ResponseEntity.ok(result);
+                }
+                default -> throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
             }
 
         } else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);

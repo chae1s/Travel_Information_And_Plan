@@ -1,9 +1,12 @@
 package com.example.Final_Project_9team.dto;
 
+import com.example.Final_Project_9team.entity.ItemReview;
 import com.example.Final_Project_9team.entity.item.Item;
 import com.example.Final_Project_9team.entity.item.Restaurant;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -32,6 +35,7 @@ public class RestaurantResponseDto {
     private Long mLevel;
     private String overView;
     private String restDate;
+    private List<ItemReview> itemReviews;
     //--------------------------------
     private String firstMenu;
     private String openTimeFood;//영업시간
@@ -61,6 +65,7 @@ public class RestaurantResponseDto {
                 .longitude(restaurant.getLocation().getLongitude())
                 .contentId(restaurant.getContentId())
                 .contentTypeId(restaurant.getContentTypeId())
+                .itemReviews(restaurant.getItemReviews())
                 //-----------------------------------------
                 .firstMenu(restaurant.getFirstMenu())
                 .openTimeFood(restaurant.getOpenTimeFood())
