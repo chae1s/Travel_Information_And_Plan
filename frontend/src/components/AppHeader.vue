@@ -10,7 +10,7 @@
                     <router-link to="/">마이페이지</router-link>
                     <router-link to="/login">로그인</router-link>
                     <router-link to="/">로그아웃</router-link>
-                    <router-link to="/">회원가입</router-link>
+                    <router-link to="/sign-up">회원가입</router-link>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                             <input type="text" id="header_keyword">
                             <!-- 검색 버튼 -->
                             <button>
-                               <img src="../assets/images/icons/u_search.png" alt="">
+                               <v-img src="../assets/images/icons/u_search.png" alt=""/>
                             </button>
                         </form>
                     </div>
