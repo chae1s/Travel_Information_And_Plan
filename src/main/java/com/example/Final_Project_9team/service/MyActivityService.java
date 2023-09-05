@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -179,5 +180,15 @@ public class MyActivityService {
                 .collect(Collectors.toList());
 
         return scheduleListResponses;
+    }
+
+    // 일정 작성 페이지에 보여질 내가 관심등록한 여행지 리스트 - 내가 가려고 하는 지역의 여행지 목록
+    public PageDto<ItemListResponseDto> readLikedItemsBySido(String email, String sido, int page, int size) {
+
+        Page<Item> pagedItems = itemRepository.findByLikedItemsBySido(email, sido, PageRequest.of(page - 1, size));
+
+        Page<ItemListResponseDto> pagedItemsResponses = pagedItems.map(item -> ItemListResponseDto.fromEntity(item));
+
+        return PageDto.fromPage(pagedItemsResponses);
     }
 }

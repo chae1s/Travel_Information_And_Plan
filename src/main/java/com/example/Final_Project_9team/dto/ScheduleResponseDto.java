@@ -13,6 +13,7 @@ public class ScheduleResponseDto {
     private Long id;
     private String title;
     private String description;
+    private String sido;
     private LocalDate startDate;
     private LocalDate endDate;
     private Integer sumDistance;
@@ -26,6 +27,7 @@ public class ScheduleResponseDto {
         dto.setId(schedule.getId());
         dto.setTitle(schedule.getTitle());
         dto.setDescription(schedule.getDescription());
+        dto.setSido(schedule.getSido());
         dto.setStartDate(schedule.getStartDate());
         dto.setEndDate(schedule.getEndDate());
         dto.setSumDistance(schedule.getSumDistance());
@@ -40,6 +42,7 @@ public class ScheduleResponseDto {
         dto.setId(schedule.getId());
         dto.setTitle(schedule.getTitle());
         dto.setDescription(schedule.getDescription());
+        dto.setSido(schedule.getSido());
         dto.setStartDate(schedule.getStartDate());
         dto.setEndDate(schedule.getEndDate());
         dto.setSumDistance(schedule.getSumDistance());
