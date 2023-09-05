@@ -7,7 +7,6 @@ server:
 
 spring:
   mvc:
-    static-path-pattern: /static/**
     path match:
       matching-strategy: ant_path_matcher
   web:
@@ -33,3 +32,9 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   accessExpirationTime: ${JWT_EXPIRATION}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

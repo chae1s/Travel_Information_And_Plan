@@ -177,8 +177,24 @@ export default {
                     this.startDate = this.selectedDate[0];
                     this.endDate = this.selectedDate[1];
                 }
+
+                this.checkDatePeriod()
             }
 
+        },
+        checkDatePeriod() {
+            const startDate = new Date(this.startDate)
+            const endDate = new Date(this.endDate)
+
+            let diff = Math.abs(endDate.getTime() - startDate.getTime())
+            diff = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+            console.log(diff)
+            if (diff > 5) {
+                alert("총 일수가 5일을 넘을 수 없습니다.")
+                this.selectedDate = []
+                this.startDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
+                this.endDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
+            }
         },
         handlePrevButton() {
             this.firstCalendar.month--
@@ -237,15 +253,19 @@ export default {
             this.$router.push('/schedules/'+id+'/schedule-items')
         },
         createSchedule() {
+
             const scheduleData = {
                 title: this.scheduleTitle,
                 description: this.scheduleDescription,
                 startDate: this.startDate,
                 endDate: this.endDate,
                 sido: this.scheduleSido
-            }
+            };
 
-            console.log(scheduleData)
+            if (this.scheduleTitle === '') alert("일정의 제목을 입력해주세요.")
+            else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
+            else if (!this.scheduleSido) alert("여행갈 도시를 선택해주세요.")
+            else {
                 this.axios.post('/schedules', scheduleData)
                     .then(res => {
                         this.moveSchedule(res.data)
@@ -253,6 +273,8 @@ export default {
                     .catch(error => {
                         console.log(error)
                     })
+            }
+
         }
     }
 }
