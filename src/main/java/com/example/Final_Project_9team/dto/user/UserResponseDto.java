@@ -20,7 +20,7 @@ public class UserResponseDto {
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setNickname(user.getNickname());
-        dto.setProfileImage("/static/" + user.getProfile().getProfileImage());
+        dto.setProfileImage("/media/" + user.getProfile().getProfileImage()); // 차후 외부경로로 수정
         return dto;
     }
 

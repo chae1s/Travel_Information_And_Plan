@@ -21,7 +21,10 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**");
+                .requestMatchers(
+                        "/static/**", "/js/**", "/css/**", "/img/**",
+                        "media/**" // 외부 정적자원 접근 경로
+                        );
     }
 
     @Bean
