@@ -21,7 +21,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**");
+                .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**");
     }
 
     @Bean
@@ -30,11 +30,14 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
+                                "/index.html",
+                                "/", "/error",
                                 "/users/register",
                                 "users/profile/**",
                                 "board-create",
                                 "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
-                                "schedules/write/**"
+                                "schedules/write/**",
+                                "/schedules/**","/users/me/**"
                         )
                         .permitAll()
                         .requestMatchers(
