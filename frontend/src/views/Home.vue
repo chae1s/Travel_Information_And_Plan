@@ -1,7 +1,7 @@
 <template>
     <main>
         <div class="ad_image_section">
-            <img src="../assets/images/adImage.png" alt="" class="ad_image">
+            <v-img src="@/assets/images/adImage.png" alt="" class="ad_image"/>
         </div>
         <div class="content">
             <div class="home_content">
@@ -13,7 +13,7 @@
                     <ul class="item_list">
                         <li class="item" v-for="i in 4" >
                             <a @click="$router.push('/schedules')">
-                                <img src="../assets/images/site_1.jpg" alt="">
+                                <v-img src="@/assets/images/site_1.jpg" alt=""/>
                                 <div class="item_info">
                                     <div class="item_text">
                                         <div class="item_title">안반데기</div>
@@ -42,7 +42,7 @@
                     <LocationCheckbox @checkedClick="clickLocationChecked" :homeChecked="homeChecked"></LocationCheckbox>
                     <ul class="item_list">
                         <li class="item" v-for="i in 4">
-                            <img src="../assets/images/site_1.jpg" alt="">
+                            <v-img src="../assets/images/site_1.jpg" alt=""/>
                             <div class="item_text">
                                 <div class="item_title">안반데기</div>
                                 <p class="item_fullAddress">주소</p>

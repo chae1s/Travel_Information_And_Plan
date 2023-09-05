@@ -25,14 +25,14 @@
                             <div class="month_calendar">
                                 <div class="calendar_header">
                                     <button class="month_button" type="button" @click="handlePrevButton" >
-                                        <img src="../assets/images/icons/chevron-left.png" alt="" v-if="firstCalendar.month > thisDayMonth.month || firstCalendar.year > thisDayMonth.year">
+                                        <v-img src="../assets/images/icons/chevron-left.png" alt="" v-if="firstCalendar.month > thisDayMonth.month || firstCalendar.year > thisDayMonth.year"/>
                                     </button>
                                     <span class="calendar_year_month">
                                         <span class="calendar_year" @click="">{{firstCalendar.year}}</span>년
                                         <span class="calendar_month">{{ firstCalendar.month }}</span>월
                                     </span>
                                     <button class="month_button" type="button" >
-                                        <img src="../assets/images/icons/chevron-right.png" alt="" style="display: none">
+                                        <v-img src="../assets/images/icons/chevron-right.png" alt="" style="display: none"/>
                                     </button>
                                 </div>
                                 <div class="calendar_main">
@@ -55,14 +55,14 @@
                             <div class="month_calendar">
                                 <div class="calendar_header">
                                     <button class="month_button" type="button" >
-                                        <img src="../assets/images/icons/chevron-left.png" alt="" style="display: none">
+                                        <v-img src="../assets/images/icons/chevron-left.png" alt="" style="display: none"/>
                                     </button>
                                     <span class="calendar_year_month">
                                         <span class="calendar_year" @click="">{{secondCalendar.year}}</span>년
                                         <span class="calendar_month">{{ secondCalendar.month }}</span>월
                                     </span>
                                         <button class="month_button" type="button" @click="handleNextButton">
-                                            <img src="../assets/images/icons/chevron-right.png" alt="" >
+                                            <v-img src="../assets/images/icons/chevron-right.png" alt=""/>
                                         </button>
                                     </div>
                                     <div class="calendar_main">

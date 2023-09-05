@@ -8,18 +8,18 @@
                         <div class="schedule_data_name">{{scheduleData.title}}</div>
                         <div class="schedule_data_mates">
                             <div v-for="i in 4" v-if="scheduleData.mates.length > 0 && scheduleData.mates[0].userResponse">
-                                <img src="../assets/images/icons/망글곰.jpeg" alt="">
+                                <v-img src="@/assets/images/icons/망글곰.jpeg" alt=""/>
                             </div>
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
                     </div>
                     <div class="my_liked_items_sido">
-                        <img src="../assets/images/icons/chevron-left-circle.png" alt="">
+                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt=""/>
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
                             <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
-                                <img src="../assets/images/site_1.jpg" alt="">
+                                <v-img src="@/assets/images/site_1.jpg" alt=""/>
                                 <div style="display: none" class="my_liked_item_id">{{ item.id }}</div>
                                 <div class="my_liked_item_name">{{ item.name }}</div>
                                 <div style="display: none" class="my_liked_item_address">{{ item.fullAddress }}</div>
@@ -29,7 +29,7 @@
                         <div class="selected_tour_date" v-if="selectedItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
                             <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.selectedItem, this.selectedItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
                         </div>
-                        <img src="../assets/images/icons/chevron-right-circle.png" alt="">
+                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt=""/>
                     </div>
                     <div class="schedule_view">
                         <div class="schedule_map" id="map">
@@ -48,10 +48,10 @@
                             <ul class="schedule_daily_item_list">
                                 <li v-if="tourRoute.tourDestination.length === 0" class="empty_item_list">일정을 채워주세요</li>
                                 <li v-for="(destination, index) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
-                                    <img :src="require('@/assets/images/icons/day' + (i + 1) + '/course_pin_' + (index + 1) + '.png')" alt="">
+                                    <v-img :src="require('@/assets/images/icons/day' + (i + 1) + '/course_pin_' + (index + 1) + '.png')" alt=""/>
                                     <div class="daily_item_info">
                                         <div class="daily_item_info_name">{{ destination.name }}</div>
-                                        <img src="../assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)">
+                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)"/>
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
                                     <div v-if="itemPath[index] && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">

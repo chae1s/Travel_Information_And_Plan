@@ -28,7 +28,7 @@
                             <input type="text" id="header_keyword">
                             <!-- 검색 버튼 -->
                             <button>
-                               <img src="../assets/images/icons/u_search.png" alt="">
+                               <v-img src="../assets/images/icons/u_search.png" alt=""/>
                             </button>
                         </form>
                     </div>
