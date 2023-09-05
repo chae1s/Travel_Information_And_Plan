@@ -15,6 +15,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // board 1개 조회
     Optional<Board> findByIdAndIsDeletedFalse(Long boardId);
 
+    Boolean existsByIdAndIsDeletedFalse(Long boardId);
+
     // board 전체 조회
     Page<Board> findAllByIsDeletedFalseOrderByIdDesc(Pageable pageable);
 
