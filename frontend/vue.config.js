@@ -1,6 +1,7 @@
 module.exports = {
   lintOnSave: false,
   outputDir: "../src/main/resources/static",
+
   devServer: {
     proxy: {
       '/': {
@@ -9,5 +10,11 @@ module.exports = {
         ws: false
       }
     }
+  },
+
+  pluginOptions: {
+    vuetify: {
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
   }
 }
