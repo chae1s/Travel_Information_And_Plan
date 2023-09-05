@@ -24,7 +24,7 @@ public class ScheduleController {
         log.info("schedule Title : {}, schedule StartDate : {}, schedule Sido : {}", requestDto.getTitle(), requestDto.getStartDate(), requestDto.getSido());
 //        scheduleService.createSchedule(requestDto, "testUser@gmail.com");
 //        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
-        return ResponseEntity.ok(scheduleService.createSchedule(requestDto, "testUser@gmail.com").getId());
+        return ResponseEntity.ok(scheduleService.createSchedule(requestDto, "user@gmail.com").getId());
     }
 
     // display true인 schedule 페이지 단위 조회
@@ -40,7 +40,7 @@ public class ScheduleController {
     @GetMapping("/{scheduleId:\\d+}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
-        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, "testUser@gmail.com"));
+        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, "user@gmail.com"));
     }
 
     // 세부 계획 저장하기
