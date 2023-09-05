@@ -12,18 +12,28 @@ import com.example.Final_Project_9team.repository.AttractionRepository;
 import com.example.Final_Project_9team.repository.ItemRepository;
 import com.example.Final_Project_9team.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -108,7 +118,8 @@ public class ItemListService {
 //        }
 //    }
 
-    public ResponseEntity<?> readItem(Long itemId) throws IOException {
+    public ResponseEntity<?> readItem(Long itemId) throws IOException, ParseException, URISyntaxException {
+        HashMap<String, Object> results = new HashMap<String, Object>();
         String result = "";
         Optional<Item> optionalItem = itemRepository.findById(itemId);
         if(optionalItem.isPresent()) {
@@ -137,16 +148,11 @@ public class ItemListService {
                             "&numOfRows=10" +
                             "&pageNo=1";
                     URL url = new URL(urlStr);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                    StringBuilder resultBuilder = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        resultBuilder.append(line).append("\n");
-                    }
-                    result = resultBuilder.toString();
-                    return ResponseEntity.ok(result);
+                    RestTemplate restTemplate = new RestTemplate();
+                    HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
+                    ResponseEntity<Map> resultMap = restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, Map.class);
+
+                    return resultMap;
                 }
                 default -> throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
             }

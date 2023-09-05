@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ItemPartResponseDto {
+    private Long itemId;
     private String contentId;
     private String contentTypeId;
     private String title;
@@ -17,9 +18,11 @@ public class ItemPartResponseDto {
     private String upmyundong;
     private String sido;
     private String siGunGu;
+    private String fullAddress;
 
     public static ItemPartResponseDto fromEntity(Item item) {
         return ItemPartResponseDto.builder()
+                .itemId(item.getId())
                 .contentId(item.getContentId())
                 .contentTypeId(item.getContentTypeId())
                 .title(item.getName())
@@ -27,6 +30,7 @@ public class ItemPartResponseDto {
                 .upmyundong(item.getLocation().getUpmyundong())
                 .sido(item.getLocation().getSido())
                 .siGunGu(item.getLocation().getSigungu())
+                .fullAddress(item.getLocation().getFullAddress())
                 .build();
     }
 }

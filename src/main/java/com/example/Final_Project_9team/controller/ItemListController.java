@@ -11,6 +11,7 @@ import com.example.Final_Project_9team.repository.ItemRepository;
 import com.example.Final_Project_9team.service.BookmarkItemService;
 import com.example.Final_Project_9team.service.ItemListService;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,33 +62,18 @@ public class ItemListController {
     }
 
     //관광상품 상세조회
-
-//    @GetMapping("/read/{itemId}")
-//    public String readOneItem(
-//            @PathVariable("itemId") Long itemId,
-//            Model model
-//    ) throws IOException {
-//        ResponseEntity<?> itemData = itemListService.readItem(itemId);
-//        model.addAttribute("itemData", itemData);
-//        model.addAttribute("itemId", itemId);
-//        return "detail-info";
-//    }
     @GetMapping("/read/{itemId}")
     public ResponseEntity<?> readOneItem(
             @PathVariable("itemId") Long itemId
-    ) throws IOException {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("detail-info");
-        modelAndView.addObject("item",itemListService.readItem(itemId));
-        modelAndView.addObject("itemId", itemId);
-        return itemListService.readItem(itemId);
+    ) throws IOException, ParseException, URISyntaxException {
+        return ResponseEntity.ok(itemListService.readItem(itemId).getBody());
     }
 
     //즐겨찾기 기능
-    @PostMapping("/{itemId}")
+    @PostMapping("/add")
     public ResponseEntity<ResponseDto> bookmarkItem(
             Authentication auth,
-            @PathVariable("itemId") Long itemId
+            Long itemId
     ) {
         bookmarkItemService.createOrDeleteBookmarkItem(auth.getName(), itemId);
         return ResponseEntity.ok(
