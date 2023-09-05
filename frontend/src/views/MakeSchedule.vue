@@ -264,7 +264,7 @@ export default {
 
             if (this.scheduleTitle === '') alert("일정의 제목을 입력해주세요.")
             else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
-            else if (!this.scheduleSido) alert("여행갈 도시를 선택해주세요.")
+            else if (this.scheduleSido === '') alert("여행갈 도시를 선택해주세요.")
             else {
                 this.axios.post('/schedules', scheduleData)
                     .then(res => {

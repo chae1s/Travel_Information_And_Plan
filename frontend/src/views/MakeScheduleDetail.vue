@@ -101,7 +101,8 @@ export default {
             selectedItemIndex: null,
             selectedPosition: {top: 0, left: 0},
             itemPath: [],
-            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF']
+            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
+            zoom: 11
         }
     },
     mounted() {
@@ -141,10 +142,12 @@ export default {
             script.defer = true
             document.head.appendChild(script)
 
+            if (this.scheduleData.sido === '0') this.zoom = 8
+
             script.onload = () => {
                 new window.naver.maps.Map("map", {
                     center: new window.naver.maps.LatLng(locations[sido].lat, locations[sido].lng),
-                    zoom: 11
+                    zoom: this.zoom
                 })
             }
         },
