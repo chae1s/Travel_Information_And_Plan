@@ -2,6 +2,9 @@ import {createWebHistory, createRouter} from "vue-router";
 import MakeSchedule from "@/views/MakeSchedule.vue";
 import Home from "@/views/Home.vue";
 import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
+import SignUp from "@/views/SignUp.vue";
+import LoginView from "@/views/LoginView.vue";
+import BoardCreate from "@/views/BoardCreate.vue";
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -23,8 +26,8 @@ const router = createRouter({
         },
         {
             path: '/sign-up',
-            name: 'signUp',
-            component: signUp
+            name: 'SignUp',
+            component: SignUp
         },
         {
             path: '/login',
