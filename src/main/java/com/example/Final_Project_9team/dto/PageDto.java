@@ -8,15 +8,13 @@ import java.util.List;
 public class PageDto<T> {
     private List<T> content;
     private int pageNumber;
-    private int pageSize;
-    private long totalElements;
+    private int lastPage;
 
     public static <T> PageDto<T> fromPage(Page<T> page) {
         PageDto<T> pageDto = new PageDto<>();
         pageDto.setContent(page.getContent());
-        pageDto.setPageNumber(page.getNumber());
-        pageDto.setPageSize(page.getSize());
-        pageDto.setTotalElements(page.getTotalElements());
+        pageDto.setPageNumber(page.getNumber() + 1); // 페이지 번호 1부터 시작
+        pageDto.setLastPage(page.getTotalPages()); // 마지막 페이지 번호 = 총 페이지 수
         return pageDto;
     }
 }

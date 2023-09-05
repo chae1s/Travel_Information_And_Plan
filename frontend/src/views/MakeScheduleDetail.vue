@@ -7,9 +7,7 @@
                     <div class="schedule_data_header">
                         <div class="schedule_data_name">{{scheduleData.title}}</div>
                         <div class="schedule_data_mates">
-                            <div v-for="i in 4" v-if="scheduleData.mates.length > 0 && scheduleData.mates[0].userResponse">
-                                <img src="../assets/images/icons/망글곰.jpeg" alt="">
-                            </div>
+                            <img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user">
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
@@ -94,7 +92,7 @@ export default {
                 startDate: '',
                 endDate: '',
                 period: 0,
-                mates: [{}]
+                users: [{}]
             },
             tourRouteList: [],
             likedItemList: [],
@@ -102,7 +100,8 @@ export default {
             selectedItem: null,
             selectedItemIndex: null,
             selectedPosition: {top: 0, left: 0},
-            itemPath: []
+            itemPath: [],
+            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF']
         }
     },
     mounted() {
@@ -118,7 +117,9 @@ export default {
                     this.scheduleData.startDate = dayjs(res.data.startDate).format("YYYY.MM.DD")
                     this.scheduleData.endDate = dayjs(res.data.endDate).format("YYYY.MM.DD")
                     this.scheduleData.period = res.data.period
-                    this.scheduleData.mates = res.data.matesResponses
+                    this.scheduleData.users = res.data.userResponses
+
+                    console.log(this.scheduleData.users)
 
                     this.createMap(res.data.sido)
 
@@ -244,7 +245,7 @@ export default {
             const polyline = new naver.maps.Polyline({
                 map : map,
                 path: polylinePath,
-                strokeColor : '#72D3B6',
+                strokeColor : this.polylineHex[i],
                 strokeOpacity: 0.8,
                 strokeWeight: 6
             })

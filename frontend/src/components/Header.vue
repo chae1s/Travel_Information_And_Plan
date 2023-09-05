@@ -8,7 +8,7 @@
                 <div class="user_info">
                     <router-link to="/">알림</router-link>
                     <router-link to="/">마이페이지</router-link>
-                    <router-link to="/">로그인</router-link>
+                    <router-link to="/login">로그인</router-link>
                     <router-link to="/">로그아웃</router-link>
                     <router-link to="/sign-up">회원가입</router-link>
                 </div>
@@ -19,7 +19,7 @@
                 <div class="nav_content">
                     <router-link to="/" :class="{'selected': isItemPage}">여행정보</router-link>
                     <router-link to="/schedules/write" :class="{'selected': isSchedulePage}">일정짜기</router-link>
-                    <router-link to="/" >커뮤니티</router-link>
+                    <router-link to="/board-create" >커뮤니티</router-link>
                     <router-link to="/" >여행지도</router-link>
                 </div>
                 <div>

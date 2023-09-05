@@ -32,7 +32,8 @@ public class BoardService {
 
     @Transactional
     public void create(String email, BoardRequestDto dto, List<MultipartFile> images) {
-        User writer = userRepository.findByEmail(email).get();
+        User writer = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Board newBoard = Board.builder()
                 .title(dto.getTitle())
@@ -85,7 +86,7 @@ public class BoardService {
     @Transactional
     public BoardResponseDto readOne(Long boardId, int commentPage, int commentSize) {
         Board board = boardRepository.findByIdAndIsDeletedFalse(boardId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ERROR_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         board.updateViewCnt();
         boardRepository.save(board);
 
@@ -99,10 +100,11 @@ public class BoardService {
     @Transactional
     // board 수정
     public void update(String email, Long boardId, BoardRequestDto dto, List<MultipartFile> images) throws FileNotFoundException {
-        User writer = userRepository.findByEmail(email).get();
+        User writer = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Board board = boardRepository.findByIdAndIsDeletedFalse(boardId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ERROR_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         if (!writer.equals(board.getUser())) {
             throw new CustomException(ErrorCode.USER_NO_AUTH);
@@ -144,10 +146,11 @@ public class BoardService {
 
     @Transactional
     public void delete(String email, Long boardId) throws FileNotFoundException {
-        User writer = userRepository.findByEmail(email).get();
+        User writer = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Board board = boardRepository.findByIdAndIsDeletedFalse(boardId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ERROR_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         if (!writer.equals(board.getUser())) {
             throw new CustomException(ErrorCode.USER_NO_AUTH);
