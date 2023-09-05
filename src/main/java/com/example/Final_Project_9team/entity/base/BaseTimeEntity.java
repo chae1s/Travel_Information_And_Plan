@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-@MappedSuperclass
 public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)

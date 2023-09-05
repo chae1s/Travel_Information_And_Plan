@@ -2,6 +2,7 @@ import {createWebHistory, createRouter} from "vue-router";
 import MakeSchedule from "@/views/MakeSchedule.vue";
 import Home from "@/views/Home.vue";
 import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
+import ItemList from "@/views/ItemList.vue";
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
             path: '/schedules/:id/schedule-items',
             name: 'MakeScheduleDetail',
             component: MakeScheduleDetail
+        },
+        {
+            path: '/items-list',
+            name: "ItemList",
+            component: ItemList
         }
     ]
 })

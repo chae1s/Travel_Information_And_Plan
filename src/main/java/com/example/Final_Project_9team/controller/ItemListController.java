@@ -44,8 +44,9 @@ public class ItemListController {
     @GetMapping("/{sido}")
     public ResponseEntity<Page<ItemPartResponseDto>> readSidoItemList(
             @PathVariable("sido") String sido,
-            @RequestParam(value = "page", defaultValue = "1") int page) {
-        return ResponseEntity.of(Optional.ofNullable(itemListService.readItemSidoPaged(page, sido)));
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
+        return ResponseEntity.of(Optional.ofNullable(itemListService.readItemSidoPaged(page, sido, pageSize)));
     }
 
     //시도 + 시군구 별 관광상품 조회
@@ -71,14 +72,14 @@ public class ItemListController {
 //        return "detail-info";
 //    }
     @GetMapping("/read/{itemId}")
-    public ModelAndView readOneItem(
+    public ResponseEntity<?> readOneItem(
             @PathVariable("itemId") Long itemId
     ) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("detail-info");
         modelAndView.addObject("item",itemListService.readItem(itemId));
         modelAndView.addObject("itemId", itemId);
-        return modelAndView;
+        return itemListService.readItem(itemId);
     }
 
     //즐겨찾기 기능

@@ -43,8 +43,8 @@ public class ItemListService {
         return itemPage.map(ItemPartResponseDto::fromEntity);
     }
     //TODO : 시도별 아이템 조회 (서울, 경기, 인천, 부산, 등등)
-    public Page<ItemPartResponseDto> readItemSidoPaged(int page, String sido) {
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id"));
+    public Page<ItemPartResponseDto> readItemSidoPaged(int page, String sido, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by("id"));
         Page<Item> itemPage = itemRepository.findBySido(sido, pageable);
 
         return itemPage.map(ItemPartResponseDto::fromEntity);
