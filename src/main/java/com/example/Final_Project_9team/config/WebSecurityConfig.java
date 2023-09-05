@@ -35,7 +35,8 @@ public class WebSecurityConfig {
                                 "schedules/chat/**", "/static/**","/js/**","/css/**","/img/**","images/**",
                                 "/chatting","/error",
                                 "/schedules/write/**","/users/me/**","schedules/write","schedules/**",
-                                "/api/hello"
+                                "/api/hello",
+                                "board-create"
                         )
                         .permitAll()
                         .requestMatchers(
