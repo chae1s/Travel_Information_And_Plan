@@ -7,17 +7,17 @@
                     <div class="schedule_data_header">
                         <div class="schedule_data_name">{{scheduleData.title}}</div>
                         <div class="schedule_data_mates">
-                            <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user"/>
+                            <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user" inline width="26" height="26" class="rounded-circle"/>
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
                     </div>
                     <div class="my_liked_items_sido">
-                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt=""/>
+                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" />
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
                             <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
-                                <v-img src="@/assets/images/site_1.jpg" alt=""/>
+                                <v-img src="@/assets/images/site_1.jpg" alt="" contain="contain" class="rounded-lg" height="80"/>
                                 <div style="display: none" class="my_liked_item_id">{{ item.id }}</div>
                                 <div class="my_liked_item_name">{{ item.name }}</div>
                                 <div style="display: none" class="my_liked_item_address">{{ item.fullAddress }}</div>
@@ -27,7 +27,7 @@
                         <div class="selected_tour_date" v-if="selectedItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
                             <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.selectedItem, this.selectedItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
                         </div>
-                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt=""/>
+                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button"/>
                     </div>
                     <div class="schedule_view">
                         <div class="schedule_map" id="map">
@@ -46,10 +46,10 @@
                             <ul class="schedule_daily_item_list">
                                 <li v-if="tourRoute.tourDestination.length === 0" class="empty_item_list">일정을 채워주세요</li>
                                 <li v-for="(destination, index) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
-                                    <v-img :src="require('@/assets/images/icons/day' + (i + 1) + '/course_pin_' + (index + 1) + '.png')" alt=""/>
+                                    <v-img :src="require('@/assets/images/icons/day' + (i + 1) + '/course_pin_' + (index + 1) + '.png')" alt="" width="26" height="26" inline class="my-auto mr-7"/>
                                     <div class="daily_item_info">
                                         <div class="daily_item_info_name">{{ destination.name }}</div>
-                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)"/>
+                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)" inline width="12" height="12" class="ml-3 remove_item"/>
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
                                     <div v-if="itemPath[index] && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="schedule_button_wrap">
-                        <button class="schedule_button" type="button" @click="createRouteList(0)">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="checkedEmptyDestination">일정 생성</button>
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@ export default {
             this.createRouteList(i)
         },
         createRouteList(i) {
-            if (this.requestTourList[i].itemIds.length === 1) {
+            if (this.requestTourList[i].itemIds.length <= 1) {
                 this.createItemMarkerAndPolyline(i);
             } else {
                 this.axios.post('/schedules/'+this.scheduleId+'/schedule-items/route', this.requestTourList[i])
@@ -261,6 +261,25 @@ export default {
                 })
             })
 
+        },
+        checkedEmptyDestination() {
+            let checked = true
+            for (let i = 0; i < this.tourRouteList.length; i++) {
+                checked = false
+                if (this.tourRouteList[i].tourDestination.length === 0) {
+                    alert(this.tourRouteList[i].tourDateWithoutYear + '에 갈 여행지를 골라주세요.')
+                    break
+                } else {
+                    checked = true
+                }
+            }
+
+            return checked
+        },
+        createScheduleItems() {
+            if (this.checkedEmptyDestination()) {
+                this.axios.post()
+            }
         },
     },
 }
@@ -317,10 +336,9 @@ export default {
         margin-top: 9px;
     }
 
-    .my_liked_items_sido img {
-        width: 24px;
-        height: 24px;
-        margin: auto 0;
+    .liked_icon_button {
+        margin-top: 52px;
+        cursor: pointer;
     }
 
     .my_liked_item_list {
@@ -457,7 +475,7 @@ export default {
 
     .daily_item_info {
         display: inline-block;
-        width: 274.66px;
+        width: 294.66px;
         background: #F5F5F5;
         border-radius: 8px;
         padding: 9px 10px;
@@ -475,7 +493,10 @@ export default {
         font-size: 16px;
         display: inline-block;
         font-weight: bold;
-        margin-bottom: 8px;
+    }
+
+    .remove_item {
+        cursor: pointer;
     }
 
     .daily_item_info_address {

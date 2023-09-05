@@ -430,8 +430,8 @@ export default {
     }
 
     .schedule_location_input:deep(.form_checkbox_btn label) {
-        width: 32px;
-        height: 23px;
+        width: 64px;
+        height: 42px;
         padding: 9px 16px;
         display: inline-block;
         border-radius: 15px;

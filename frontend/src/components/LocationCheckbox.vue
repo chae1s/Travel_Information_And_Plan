@@ -1,7 +1,7 @@
 <template>
     <div class="location_checkbox">
         <div class="form_checkbox_btn">
-            <input id="국내" type="checkbox" v-model="checked" @change="clickFunc()"  name="sido" value="0" >
+            <input id="국내" type="checkbox" v-model="checked" @change="clickFunc()"  name="sido" value="0" width="32" height="23">
             <label for="국내">국내</label>
         </div>
         <div class="form_checkbox_btn">
