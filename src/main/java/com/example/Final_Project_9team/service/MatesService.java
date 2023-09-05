@@ -62,8 +62,8 @@ public class MatesService {
     }
     // 초대 리스트 조회(수락대기중인 리스트)
     public ResponseEntity<List<InvitationResponseDto>> readInvitations(String userEmail) {
-        User user = userRepository.findByEmail(userEmail).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userUtils.getUser(userEmail);
+
         List<Mates> matesList = matesRepository.findAllByUserIdAndIsAcceptedFalseAndIsDeletedFalse(user.getId());
 
         List<InvitationResponseDto> invitationResponseDtos = new ArrayList<>();

@@ -32,7 +32,10 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/users/register",
                                 "users/profile/**",
-                                "schedules/chat/**", "/static/**","/js/**","/chatting","/error"
+                                "schedules/chat/**", "/static/**","/js/**","/css/**","/img/**","images/**",
+                                "/chatting","/error",
+                                "/schedules/write/**","/users/me/**","schedules/write","schedules/**",
+                                "/api/hello"
                         )
                         .permitAll()
                         .requestMatchers(

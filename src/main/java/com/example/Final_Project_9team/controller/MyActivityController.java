@@ -118,6 +118,6 @@ public class MyActivityController {
                                                                              @RequestParam(value = "page", defaultValue = "1") int page,
                                                                              @RequestParam(value = "size", defaultValue = "8") int size) {
 
-        return ResponseEntity.ok(myActivityService.readLikedItemsBySido("testUser@gmail.com", sido, page, size));
+        return ResponseEntity.ok(myActivityService.readLikedItemsBySido("sampleUser2@gmail.com", sido, page, size));
     }
 }
