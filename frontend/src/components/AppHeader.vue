@@ -6,11 +6,11 @@
                     <router-link to="/">어디갈래?</router-link>
                 </div>
                 <div class="user_info">
-                    <router-link to="/">알림</router-link>
-                    <router-link to="/mypage">마이페이지</router-link>
-                    <router-link to="/login">로그인</router-link>
-                    <router-link to="/">로그아웃</router-link>
-                    <router-link to="/">회원가입</router-link>
+                    <router-link to="/" v-if="isLogin">알림</router-link>
+                    <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>
+                    <router-link to="/login" v-if="!isLogin">로그인</router-link>
+                    <router-link to="/" v-if="isLogin">로그아웃</router-link>
+                    <router-link to="/sign-up" v-if="!isLogin">회원가입</router-link>
                 </div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                 <div class="nav_content">
                     <router-link to="/" :class="{'selected': isItemPage}">여행정보</router-link>
                     <router-link to="/schedules/write" :class="{'selected': isSchedulePage}">일정짜기</router-link>
-                    <router-link to="/board-create" >커뮤니티</router-link>
+                    <router-link to="/board-create" :class="{'selected': isBoardPage}">커뮤니티</router-link>
                     <router-link to="/" >여행지도</router-link>
                 </div>
                 <div>
@@ -28,7 +28,7 @@
                             <input type="text" id="header_keyword">
                             <!-- 검색 버튼 -->
                             <button>
-                               <img src="../assets/images/icons/u_search.png" alt="">
+                               <v-img src="../assets/images/icons/u_search.png" alt=""/>
                             </button>
                         </form>
                     </div>
@@ -48,10 +48,28 @@ export default {
     },
     computed: {
         isItemPage() {
-            return this.$route.path === '/items'
+            let checked = false
+            if (this.$route.path === '/items') {
+                checked = true
+            }
+            return checked;
         },
         isSchedulePage() {
-            return this.$route.name === 'MakeScheduleDetail' || this.$route.name === 'MakeSchedule'
+            let checked = false
+            if (this.$route.name === 'MakeScheduleDetail' || this.$route.name === 'MakeSchedule') {
+                checked = true
+            }
+            return checked
+        },
+        isBoardPage() {
+            let checked = false
+            if (this.$route.name === 'BoardCreate') {
+                checked = true
+            }
+            return checked
+        },
+        isLogin() {
+            return this.$store.getters.isLogin
         },
     },
     methods: {
@@ -153,6 +171,7 @@ export default {
 
   .selected {
       font-weight: bold;
+      color: #99C7FF;
   }
 
 </style>

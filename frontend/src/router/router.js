@@ -2,8 +2,9 @@ import {createWebHistory, createRouter} from "vue-router";
 import MakeSchedule from "@/views/MakeSchedule.vue";
 import Home from "@/views/Home.vue";
 import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
-import LoginView from '@/views/LoginView.vue';
-import BoardCreate from '@/views/BoardCreate.vue'
+import SignUp from "@/views/SignUp.vue";
+import LoginView from "@/views/LoginView.vue";
+import BoardCreate from "@/views/BoardCreate.vue";
 import MyPage from "@/views/MyPage.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -22,6 +23,11 @@ const router = createRouter({
             path: '/schedules/:id/schedule-items',
             name: 'MakeScheduleDetail',
             component: MakeScheduleDetail
+        },
+        {
+            path: '/sign-up',
+            name: 'SignUp',
+            component: SignUp
         },
         {
             path: '/login',

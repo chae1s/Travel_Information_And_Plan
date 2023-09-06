@@ -17,5 +17,23 @@ function readBoards() {
     return axiosInstance.get('/boards');
 }
 
-export { registerUser, loginUser, createBoard, readBoards };
+function createSchedule(scheduleData) {
+    return axiosInstance.post('/schedules', scheduleData)
+}
+
+function readSchedule(scheduleId) {
+    return axiosInstance.get('/schedules/' + scheduleId)
+}
+
+function readLikedItemBySido(sido) {
+    return axiosInstance.get('/users/me/liked-items/' + sido)
+}
+
+function createRouteList(scheduleId, tourList) {
+    return axiosInstance.post('/schedules/' + scheduleId + '/schedule-items/route', tourList)
+}
+
+export {
+    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList
+};
 

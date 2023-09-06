@@ -21,7 +21,10 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**");
+                .requestMatchers(
+                        "/static/**", "/js/**", "/css/**", "/img/**",
+                        "media/**" // 외부 정적자원 접근 경로
+                        );
     }
 
     @Bean
@@ -30,8 +33,13 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
+                                "/index.html",
+                                "/", "/error",
                                 "/users/register",
                                 "users/profile/**",
+                                "board-create",
+                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
+
                                 "schedules/chat/**","/chatting",
                                  "/js/**","/css/**","/img/**","images/**",
                                 "/error",
@@ -45,7 +53,7 @@ public class WebSecurityConfig {
                         )
                         .anonymous()
 //                        .requestMatchers("/users/roleUser").hasRole("USER")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
