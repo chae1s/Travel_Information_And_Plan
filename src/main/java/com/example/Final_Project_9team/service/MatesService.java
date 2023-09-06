@@ -32,11 +32,15 @@ public class MatesService {
     // 유저가 다른 유저를 초대
     public ResponseEntity<ResponseDto> inviteUserToSchedule(String userEmail, String invitedUsername, Long scheduleId) {
         log.info("invitedUser"+invitedUsername);
-//        User invitedUser = userUtils.getUser(invitedUsername);
+        User user = userUtils.getUser(userEmail);
         User invitedUser = userRepository.findByNickname(invitedUsername).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        // 유저가 일정의 멤버인지 검사
+        if(!matesRepository.existsByScheduleIdAndUserId(scheduleId,user.getId()))
+            throw new CustomException(ErrorCode.USER_NOT_INCLUDED_SCHEDULE);
 
         Optional<Mates> optionalMates = matesRepository.findByScheduleIdAndUserId(scheduleId, invitedUser.getId());
         // 이미 메이트가 존재하는 경우(이전에 초대된 적이 있다.)
