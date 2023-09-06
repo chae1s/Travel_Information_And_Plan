@@ -40,16 +40,15 @@ public class UserService {
     // 회원등록
     @Transactional
     public void registerUser(UserSignupDto dto) {
-
-        log.info("회원가입: 비밀번호 입력 확인");
-        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
-        }
-        log.info("회원가입: email 중복 확인");
+//        log.info("회원가입: 비밀번호 입력 확인");
+//        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
+//            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+//        }
+        log.info("회원가입: email 중복 확인 {}", dto.getEmail());
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_EXISTED_EMAIL);
         }
-        log.info("회원가입: nickname 중복 확인");
+        log.info("회원가입: nickname 중복 확인 {}", dto.getNickname());
         if (userRepository.existsByNickname(dto.getNickname())) {
             throw new CustomException(ErrorCode.ALREADY_EXISTED_NICKNAME);
         }
@@ -63,6 +62,7 @@ public class UserService {
                 .build();
         userRepository.save(user);
         profileService.createProfile(user);
+        log.info("회원가입 완료 pk:{}, email:{}, nickname:{}", user.getId(), user.getEmail(), user.getNickname());
 
     }
 
@@ -176,6 +176,15 @@ public class UserService {
         log.info("{} 회원 탈퇴 완료", email);
         user.delete();
         userRepository.save(user);
+    }
+
+    public Boolean checkEmailDuplicated(String email) {
+        log.info("{} 중복검사 existsByEmail: {}", email, userRepository.existsByEmail(email));
+        return userRepository.existsByEmail(email);
+    }
+    public Boolean checkNickNameDuplicated(String nickname) {
+        log.info("{} 중복검사 existsByEmail: {}", nickname, userRepository.existsByNickname(nickname));
+        return userRepository.existsByNickname(nickname);
     }
 }
 
