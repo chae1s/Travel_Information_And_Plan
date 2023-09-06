@@ -78,6 +78,7 @@ import Calendar from "@/components/Calendar.vue";
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
 import dayjs from 'dayjs';
+import {readSchedule, readLikedItemBySido, createRouteList} from "@/api/index";
 
 export default {
     name: "MakeScheduleDetail",
@@ -109,30 +110,26 @@ export default {
         this.readSchedule(this.scheduleId)
     },
     methods: {
-        readSchedule(id) {
-            this.axios.get('/schedules/'+id)
-                .then(res => {
-                    this.scheduleData.title = res.data.title
-                    this.scheduleData.description = res.data.description
-                    this.scheduleData.sido = res.data.sido
-                    this.scheduleData.startDate = dayjs(res.data.startDate).format("YYYY.MM.DD")
-                    this.scheduleData.endDate = dayjs(res.data.endDate).format("YYYY.MM.DD")
-                    this.scheduleData.period = res.data.period
-                    this.scheduleData.users = res.data.userResponses
+        async readSchedule(id) {
+            try {
+                const { data } = await readSchedule(id)
+                console.log(data)
+                this.scheduleData.title = data.title
+                this.scheduleData.description = data.description
+                this.scheduleData.sido = data.sido
+                this.scheduleData.startDate = dayjs(data.startDate).format("YYYY.MM.DD")
+                this.scheduleData.endDate = dayjs(data.endDate).format("YYYY.MM.DD")
+                this.scheduleData.period = data.period
+                this.scheduleData.users = data.userResponses
 
-                    console.log(this.scheduleData.users)
+                this.createMap(data.sido)
 
-                    this.createMap(res.data.sido)
+                this.readLikedItem(this.scheduleData.sido)
 
-                    this.readLikedItem(this.scheduleData.sido)
-
-                    this.createTourDate()
-
-
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                this.createTourDate()
+            } catch (error) {
+                console.log(error)
+            }
         },
         createMap(sido) {
             const script = document.createElement('script')
@@ -151,12 +148,17 @@ export default {
                 })
             }
         },
-        readLikedItem(sido) {
-            this.axios.get('/users/me/liked-items/'+sido)
-                .then(res => {
-                    this.likedItemList = res.data.content
+        async readLikedItem(sido) {
+            try {
+                const { data } = await readLikedItemBySido(sido)
 
-                })
+                this.likedItemList = data.content
+
+            } catch (error) {
+                console.log(error)
+            }
+
+
         },
         createTourDate() {
             let firstDate = new Date(this.scheduleData.startDate)
@@ -218,20 +220,18 @@ export default {
 
             this.createRouteList(i)
         },
-        createRouteList(i) {
-            if (this.requestTourList[i].itemIds.length <= 1) {
-                this.createItemMarkerAndPolyline(i);
-            } else {
-                this.axios.post('/schedules/'+this.scheduleId+'/schedule-items/route', this.requestTourList[i])
-                    .then(res => {
-                        this.createItemMarkerAndPolyline(i)
-                        this.itemPath = res.data
+        async createRouteList(i) {
+            try {
+                if (this.requestTourList[i].itemIds.length <= 1) {
+                    this.createItemMarkerAndPolyline(i);
+                } else {
+                    const { data } = await createRouteList(this.scheduleId, this.requestTourList[i])
 
-                        console.log(this.itemPath)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    });
+                    this.createItemMarkerAndPolyline(i)
+                    this.itemPath = data
+                }
+            } catch (error) {
+                console.log(error)
             }
         },
         createItemMarkerAndPolyline(i) {

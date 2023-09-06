@@ -103,6 +103,7 @@
 import dayjs from 'dayjs'
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import Calendar from "@/components/Calendar.vue";
+import { createSchedule } from '@/api/index'
 
 export default {
     name: "MakeSchedule",
@@ -257,28 +258,28 @@ export default {
         moveSchedule(id) {
             this.$router.push('/schedules/'+id+'/schedule-items')
         },
-        createSchedule() {
+        async createSchedule() {
+            try {
+                const scheduleData = {
+                    title: this.scheduleTitle,
+                    description: this.scheduleDescription,
+                    startDate: this.startDate,
+                    endDate: this.endDate,
+                    sido: this.scheduleSido
+                };
 
-            const scheduleData = {
-                title: this.scheduleTitle,
-                description: this.scheduleDescription,
-                startDate: this.startDate,
-                endDate: this.endDate,
-                sido: this.scheduleSido
-            };
+                if (this.scheduleTitle === '') alert("일정의 제목을 입력해주세요.")
+                else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
+                else if (this.scheduleSido === '') alert("여행갈 도시를 선택해주세요.")
+                else {
+                    const { data } = await createSchedule(scheduleData)
 
-            if (this.scheduleTitle === '') alert("일정의 제목을 입력해주세요.")
-            else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
-            else if (this.scheduleSido === '') alert("여행갈 도시를 선택해주세요.")
-            else {
-                this.axios.post('/schedules', scheduleData)
-                    .then(res => {
-                        this.moveSchedule(res.data)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                    this.moveSchedule(data)
+                }
+            } catch (error) {
+                console.log(error.response.data)
             }
+
 
         }
     }
