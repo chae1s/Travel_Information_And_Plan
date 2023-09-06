@@ -13,7 +13,7 @@
                     <ul class="item_list">
                         <li class="item" v-for="i in 4" >
                             <a @click="$router.push('/schedules')">
-                                <v-img src="@/assets/images/site_1.jpg" alt="" :height="155" class="rounded-lg" cover/>
+                                <v-img src="@/assets/images/site_1.jpg" alt="" height="155px" width="277.5" class="rounded-lg" cover/>
                                 <div class="item_info">
                                     <div class="item_text">
                                         <div class="item_title">안반데기</div>
@@ -42,7 +42,7 @@
                     <LocationCheckbox @checkedClick="clickLocationChecked" :homeChecked="homeChecked"></LocationCheckbox>
                     <ul class="item_list">
                         <li class="item" v-for="i in 4">
-                            <v-img src="../assets/images/site_1.jpg" alt="" :height="155" class="rounded-lg" cover/>
+                            <v-img src="../assets/images/site_1.jpg" alt="" cover height="155px" width="277.5px" class="rounded-lg" />
                             <div class="item_info">
                                 <div class="item_text">
                                     <div class="item_title">안반데기</div>

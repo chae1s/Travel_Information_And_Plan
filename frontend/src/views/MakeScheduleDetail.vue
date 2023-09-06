@@ -17,7 +17,7 @@
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
                             <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
-                                <v-img src="@/assets/images/site_1.jpg" alt="" contain="contain" class="rounded-lg" height="80"/>
+                                <v-img src="@/assets/images/site_1.jpg" alt="" cover class="rounded-lg" height="80"/>
                                 <div style="display: none" class="my_liked_item_id">{{ item.id }}</div>
                                 <div class="my_liked_item_name">{{ item.name }}</div>
                                 <div style="display: none" class="my_liked_item_address">{{ item.fullAddress }}</div>
