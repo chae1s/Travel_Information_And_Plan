@@ -18,9 +18,6 @@
                                     required
                                     @input="checkDuplicateEmail"
                             ></v-text-field>
-                            <h6 v-if="isEmailUnique !== undefined && !isEmailUnique" class="mb-2 chkMessage">
-                                이미 사용중인 이메일입니다.
-                            </h6>
                             <v-text-field
                                     v-model="formData.nickname"
                                     label="nickname"
@@ -29,9 +26,6 @@
                                     required
                                     @input="checkDuplicateNickname"
                             ></v-text-field>
-                            <h6 v-if="isNicknameUnique !== undefined && !isNicknameUnique" class="mb-2 chkMessage">
-                                이미 사용중인 이름입니다.
-                            </h6>
 
                             <v-text-field
                                     v-model="formData.password"
@@ -43,7 +37,7 @@
                             ></v-text-field>
 
                             <v-text-field
-                                    v-model="passwordCheck"
+                                    v-model="formData.passwordCheck"
                                     :type="show ? 'text' : 'password'"
                                     label="password check"
                                     counter="8"
@@ -80,21 +74,13 @@ import RegisterObj from "../models/registerObj"
 export default {
     name: "signUp",
     data: () => ({
-            formData: new RegisterObj("", "", ""),
-            passwordCheck: "",
+            formData: new RegisterObj("", "", "", ""),
+            valid: false,
             isEmailUnique: undefined,
             isNicknameUnique: undefined,
             isError: false,
             errorMsg: "",
             show: false,
-            emailRules: [
-                (v) => !!v || "e-mail을 입력해주세요.",
-                (v) => /.+@.+\..+/.test(v) || "e-mail 형식을 확인해주세요."
-            ],
-            nameRules: [
-                (v) => !!v || "nickname을 입력해주세요.",
-                (v) => (v && v.length <= 12) || "열두글자 이하로 작성해주세요."
-            ],
             rules: {
                 required: (value) => !!value || "비밀번호를 입력해주세요.",
                 password: v => !!(v || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[!@#$%^&])).+$/) ||
@@ -107,17 +93,40 @@ export default {
     computed: {
         passwordConfirmationRule() {
             return () =>
-                this.formData.password === this.passwordCheck || "비밀번호가 일치하지 않습니다.";
-            console.log("비밀번호 일치:" + this.formData.password === this.passwordCheck)
-        }
-
+                this.formData.password === this.formData.passwordCheck || "비밀번호가 일치하지 않습니다.";
+            console.log("비밀번호 일치:" + this.formData.password === this.formData.passwordCheck)
+        },
+        emailRules() {
+            return [
+                (v) => !!v || "e-mail을 입력해주세요.",
+                (v) => /.+@.+\..+/.test(v) || "e-mail 형식을 확인해주세요.",
+                () => {
+                    if (this.isEmailUnique === false) {
+                        return "이미 사용중인 e-mail 입니다.";
+                    }
+                    return true;
+                },
+            ];
+        },
+        nameRules() {
+            return [
+                (v) => !!v || "nickname을 입력해주세요.",
+                (v) => (v && v.length <= 12) || "열두글자 이하로 작성해주세요.",
+                () => {
+                    if (this.isNicknameUnique === false) {
+                        return "이미 사용중인 nickname 입니다.";
+                    }
+                    return true;
+                },
+            ];
+        },
     },
 
     methods: {
         goToMain() {
-            console.log("goToMain: 페이지 이동")
+            console.log("goToMain: login 페이지 이동")
             this.$router.push({
-                name: "login"
+                name: "Login"
             })
         }
         ,
@@ -126,7 +135,8 @@ export default {
             if ( // null, undefined, false, 빈문자열인 경우
                 !this.formData.email ||
                 !this.formData.nickname ||
-                !this.formData.password
+                !this.formData.password ||
+                !this.formData.passwordCheck
             ) { // 에러메시지
                 this.isError = true
                 this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요."
@@ -135,6 +145,7 @@ export default {
             // 폼이 모두 입력 되었고, vaild가 true면 제출
             this.$refs.form.validate().then((valid) => {
                 if (valid) {
+                    console.log("vaild:", valid)
                     this.axios.post("/users/register", RegisterObj)
                         .then(() => {
                             alert("회원가입이 완료되었습니다.")

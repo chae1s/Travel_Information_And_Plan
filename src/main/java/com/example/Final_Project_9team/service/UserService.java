@@ -40,10 +40,10 @@ public class UserService {
     // 회원등록
     @Transactional
     public void registerUser(UserSignupDto dto) {
-//        log.info("회원가입: 비밀번호 입력 확인");
-//        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-//            throw new CustomException(ErrorCode.INVALID_PASSWORD);
-//        }
+        log.info("회원가입: 비밀번호 입력 확인");
+        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
         log.info("회원가입: email 중복 확인 {}", dto.getEmail());
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_EXISTED_EMAIL);

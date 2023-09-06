@@ -109,7 +109,7 @@ public class UserController {
     }
 
     // nickname 중복확인
-    // POST /users/check-nickname
+    // POST /users/check-nickname/{nickname}
     @PostMapping("/check/nickname/{nickname}")
     public Boolean checkNickNameDuplicated(@PathVariable("nickname") String nickname) {
         return userService.checkNickNameDuplicated(nickname);

@@ -15,8 +15,8 @@ public class UserSignupDto {
     @Pattern(regexp="(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&])(?=\\S+$).{8,15}",
             message = "비밀번호는 8~15자 사이로 영문 대,소문자와 숫자, 특수기호(!@#$%^&)를 포함하여 작성해주세요.")
     private String password;
-//    @NotBlank(message = "비밀번호를 다시 한번 입력해주세요.")
-//    private String passwordCheck;
+    @NotBlank(message = "비밀번호를 다시 한번 입력해주세요.")
+    private String passwordCheck;
     @NotBlank
     @Size(max = 12, message = "닉네임은 한글자 이상 열두글자 이하로 작성해주세요.")
     private String nickname;
