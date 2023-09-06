@@ -11,7 +11,7 @@ public class ProfileDto {
 
     public static ProfileDto fromEntity(Profile profile){
         ProfileDto dto = new ProfileDto();
-        dto.setProfileImage("/static/" + profile.getProfileImage());
+        dto.setProfileImage("/media/" + profile.getProfileImage());
         dto.setContent(profile.getContent());
         dto.setLocation(profile.getLocation());
         return dto;
