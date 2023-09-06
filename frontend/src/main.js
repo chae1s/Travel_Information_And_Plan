@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from '@/router/router'
 import axios from 'axios'
 import '@/assets/css/fonts.css'
-import store from './store'
+import store from './store/store'
 import vuetify from './plugins/vuetify'
 import {loadFonts} from './plugins/webfontloader'
 
