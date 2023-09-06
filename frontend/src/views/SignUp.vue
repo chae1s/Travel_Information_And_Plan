@@ -6,10 +6,12 @@
                     {{ errorMsg }}
                 </v-alert>
                 <v-card>
-                    <v-toolbar flat color=#C4DFFF>
-                        <v-toolbar-title>회원가입</v-toolbar-title>
+                    <v-toolbar color=#C4DFFF style="text-align: center;">
+                        <v-toolbar-title style="text-align: center; font-size: 20px; color: #FFFFFF">
+                            회 원 가 입
+                        </v-toolbar-title>
                     </v-toolbar>
-                    <div class="pa-5">
+                    <div class="pa-5 mt-3">
                         <v-form ref="form" v-model="valid" lazy-validation style="min-width: 400px">
                             <v-text-field
                                     v-model="formData.email"
@@ -31,7 +33,6 @@
                                     v-model="formData.password"
                                     :type="show ? 'text' : 'password'"
                                     label="password"
-                                    hint="8자리 이상의 비밀번호를 입력해주세요."
                                     counter="8"
                                     :rules="[rules.required, rules.min, rules.password]"
                             ></v-text-field>
@@ -43,23 +44,37 @@
                                     counter="8"
                                     :rules="[passwordConfirmationRule]"
                             ></v-text-field>
-                            <div class="d-flex flex-row align-center">
-                                <v-icon
-                                        size="22"
-                                        color="blue"
-                                        :class="show ? 'mdi mdi-eye' : 'mdi mdi-eye-off'"
-                                        @click="show = !show"
-                                ></v-icon>
+                            <div class="d-flex flex-row align-center font-adjust">
+                                <div class="ml-2 flex-row align-center">
+                                    <v-icon
+                                            size="19"
+                                            color="grey"
+                                            :class="show ? 'mdi mdi-eye' : 'mdi mdi-eye-off'"
+                                            @click="show = !show"
+                                    ></v-icon>
+                                    <span class="ml-1">비밀번호 보기</span>
+                                </div>
+                                <div class="ml-auto mr-1">
+                                    <v-btn flat
+                                            depressed
+                                            large
+                                            block
+                                            class="mb-1"
+                                            @click="reset"
+                                    >지우기
+                                    </v-btn>
+                                </div>
                             </div>
-                            <div class="d-flex flex-row-reverse align-center">
-                                <v-btn
-                                        color="blue"
-                                        class="mr-4"
-                                        @click="register(formData)"
-                                >회원가입
-                                </v-btn>
-                                <v-btn color="pink" class="mr-4" @click="reset"> 지우기</v-btn>
-                            </div>
+                            <v-btn flat
+                                   color="#C4DFFF"
+                                   depressed
+                                   large
+                                   block
+                                   class="mt-4 mb-4"
+                                   @click="register(formData)"
+                                   style="font-size: 17px; color: #FFFFFF;"
+                            >가입하기
+                            </v-btn>
                         </v-form>
                     </div>
                 </v-card>
@@ -139,29 +154,28 @@ export default {
                 !this.formData.passwordCheck
             ) { // 에러메시지
                 this.isError = true
-                this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요."
+                this.errorMsg = "이메일, 닉네임, 비밀번호를 모두 입력해주세요."
                 return
             }
             // 폼이 모두 입력 되었고, vaild가 true면 제출
-            this.$refs.form.validate().then((valid) => {
-                if (valid) {
-                    console.log("vaild:", valid)
-                    this.axios.post("/users/register", RegisterObj)
-                        .then(() => {
-                            alert("회원가입이 완료되었습니다.")
-                            this.goToMain()
-                        })
-                        .catch((err) => {
-                            if (err.response) {
-                                this.isError = true
-                                this.errorMsg = err.response.data.message
-                            }
-                        })
-                }
-            });
+            this.validate()
+            if (this.valid) {
+                console.log("vaild:", this.valid)
+                this.axios.post("/users/register", RegisterObj)
+                    .then(() => {
+                        alert("회원가입이 완료되었습니다.")
+                        this.goToMain()
+                    })
+                    .catch((err) => {
+                        if (err.response) {
+                            this.isError = true
+                            this.errorMsg = err.response.data.message
+                        }
+                    });
+            }
         }
         ,
-        // 이메일 중복 확인
+// 이메일 중복 확인
         async checkDuplicateEmail() {
             try {
                 const response = await this.axios.post(`/users/check/email/${this.formData.email}`);
@@ -173,7 +187,7 @@ export default {
             console.log(`isEmailUnique: ${this.isEmailUnique}`);
         }
         ,
-        // 닉네임 중복 확인
+// 닉네임 중복 확인
         async checkDuplicateNickname() {
             try {
                 const response = await this.axios.post(`/users/check/nickname/${this.formData.nickname}`);
@@ -186,37 +200,37 @@ export default {
         }
         ,
         validate() {
-            this.$refs.form.validate()
+            this.$refs.form.validate().then((validation) => {
+                console.log("check Valid: " + "isEmailUnique: " + this.isEmailUnique + ", isNicknameUnique: " + this.isNicknameUnique)
+                console.log("validate:", validation)
+                if (validation && this.isEmailUnique && this.isNicknameUnique) {
+                    this.valid = true;
+                } else {
+                    this.valid = false;
+                }
+            });
         }
         ,
         reset() {
             this.$refs.form.reset()
             this.isError = false
         }
-        ,
-        resetValidation() {
-            this.$refs.form.resetValidation()
-        }
+        // ,
+        // resetValidation() {
+        //     this.$refs.form.resetValidation()
+        // }
     }
 }
 </script>
 <style>
-/*v-text-field {*/
-/*    background-color: white;*/
-/*}*/
 
 .align-center {
     align-items: center; /* 수직으로 중앙 정렬 */
 }
 
-.chkMessage {
-    font-size: 11.5px;
-    color: #B71C1C;
-
-}
-
-.flex-row-reverse { /* 폼 아이콘 간격 */
-    gap: 15px;
+.font-adjust {
+    font-size: 15px;
+    color: #455A64;
 }
 
 </style>
