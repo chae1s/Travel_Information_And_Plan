@@ -148,16 +148,21 @@ export default {
     methods: {
         selectDate(year, month, date) {
             let selected = year + '-' + month.toString().padStart(2, '0') + '-' + date.toString().padStart(2, '0');
-            let index = this.selectedDate.indexOf(selected)
-            if (index === -1) {
-                if (this.selectedDate.length === 2) this.selectedDate = []
-                this.selectedDate.push(selected)
+            let today = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
+            if (selected < today) {
+                alert("오늘 이후의 날짜를 선택해주세요.")
+            } else {
+                let index = this.selectedDate.indexOf(selected);
+                if (index === -1) {
+                    if (this.selectedDate.length === 2) this.selectedDate = []
+                    this.selectedDate.push(selected)
 
-            } else if (index !== -1){
-                this.selectedDate.splice(index, 1)
+                } else if (index !== -1){
+                    this.selectedDate.splice(index, 1)
 
+                }
+                this.checkDateInSelectedDate()
             }
-            this.checkDateInSelectedDate()
 
 
         },
