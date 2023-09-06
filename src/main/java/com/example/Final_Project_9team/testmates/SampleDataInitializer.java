@@ -1,8 +1,6 @@
 package com.example.Final_Project_9team.testmates;
 
-import com.example.Final_Project_9team.repository.MatesRepository;
-import com.example.Final_Project_9team.repository.ScheduleRepository;
-import com.example.Final_Project_9team.repository.UserRepository;
+import com.example.Final_Project_9team.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,6 +12,8 @@ public class SampleDataInitializer implements CommandLineRunner {
     private final MatesRepository matesRepository;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -50,8 +50,13 @@ public class SampleDataInitializer implements CommandLineRunner {
 //        userRepository.save(user4);
 //        matesRepository.deleteAll();
 //        for (Long i = 5L; i < 12L; i++) {
-//            userRepository.deleteById(i);
+//            matesRepository.deleteById(i);
 //        }
+//        matesRepository.deleteAll();
+//        chatRoomRepository.deleteAll();
+//        chatMessageRepository.deleteAll();
+//        scheduleRepository.deleteAll();
+//        userRepository.deleteAll();
 //
 //        Schedule schedule = Schedule.builder()
 //                .title("신나는 목포 여행")
