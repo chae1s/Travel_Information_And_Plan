@@ -74,8 +74,14 @@ public class MatesService {
         List<InvitationResponseDto> invitationResponseDtos = new ArrayList<>();
 
         for (Mates mates : matesList) {
-            String time = mates.getCreatedAt().toString().substring(0, 16).replace("T", " ").replaceAll("-", ".");
-
+            String time;
+            if (mates.getModifiedAt() == null) {
+                time = mates.getCreatedAt().toString().substring(0, 16).replace("T", " ").replaceAll("-", ".");
+            } else {
+                time = mates.getModifiedAt().toString().substring(0, 16).replace("T", " ").replaceAll("-", ".");
+            }
+            log.info("mates.id="+mates.getId());
+            log.info("time="+time);
             InvitationResponseDto invitationResponseDto = InvitationResponseDto.builder()
                     .scheduleHost(mates.getSchedule().getUser().getNickname())
                     .invitedTime(time)

@@ -21,10 +21,10 @@
         <td>{{ invitation.scheduleTitle }}</td>
         <td>{{ invitation.invitedTime }}</td>
         <td>
-          <button class="accept-button" @click="acceptInvitation(invitation)" v-if="!decision">수락</button>
-          <button class="reject-button" @click="rejectInvitation(invitation)" v-if="!decision">거절</button>
-          <div v-if="accepted && decision">수락 완료</div>
-          <div v-if="!accepted && decision">거절 완료</div>
+          <button class="accept-button" @click="acceptInvitation(invitation)" v-if="!invitation.decision">수락</button>
+          <button class="reject-button" @click="rejectInvitation(invitation)" v-if="!invitation.decision">거절</button>
+          <div v-if="invitation.accepted && invitation.decision">수락 완료</div>
+          <div v-if="!invitation.accepted && invitation.decision">거절 완료</div>
         </td>
       </tr>
       </tbody>
@@ -38,9 +38,12 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      invitations: [], // 초대 리스트 데이터를 저장할 배열
-      accepted: false,
-      decision: false
+      invitations: [ // 초대 리스트 데이터를 저장할 배열
+      {
+        accepted: false,
+        decision: false
+      }
+      ],
     };
   },
   mounted() {
@@ -52,7 +55,7 @@ export default {
     fetchInvitations() {
       // 서버로부터 초대 리스트 데이터를 가져오는 HTTP 요청을 보냅니다.
       // Controller의 GET 엔드포인트에 해당하는 URL을 사용합니다.
-      axios.get('/schedules/invited-users') // 이 부분은 실제 URL에 맞게 수정해야 합니다.
+      axios.get('/schedules/invited-users')
           .then((response) => {
             this.invitations = response.data;
           })
@@ -69,8 +72,8 @@ export default {
 
       axios.post(`/schedules/invited-users/${invitation.scheduleId}/acceptance/${invitation.matesId}`)
           .then((response) => {
-            this.accepted = true;
-            this.decision = true;
+            invitation.accepted = true;
+            invitation.decision = true;
           })
           .catch((error) => {
             console.error('초대 수락 중 오류 발생:', error);
@@ -82,8 +85,8 @@ export default {
       // Controller의 POST 엔드포인트에 해당하는 URL을 사용합니다.
       axios.post(`/schedules/invited-users/${invitation.scheduleId}/rejection/${invitation.matesId}`)
           .then((response) => {
-            this.accepted = false;
-            this.decision = true;
+            invitation.accepted = false;
+            invitation.decision = true;
           })
           .catch((error) => {
             console.error('초대 거절 중 오류 발생:', error);
@@ -102,7 +105,6 @@ export default {
   border-collapse: collapse;
   margin-left: 370px;
   margin-right: 400px;
-
 }
 
 th, td {
@@ -119,13 +121,12 @@ td{
   //text-align: left;
 }
 
-/* 초대시간 컬럼의 간격을 줄입니다 */
 td:nth-child(4) {
-  /* 필요한 간격으로 조절하세요 */
   width:200px;
 }
 button {
-  margin-right: 20px; /* 버튼 간의 간격 조절 */
+  margin-left: 10px;
+  margin-right: 10px; /* 버튼 간의 간격 조절 */
   width: 50px;
   height: 30px;
   //display: inline-block;
@@ -133,10 +134,13 @@ button {
   line-height: 23px;
   cursor: pointer;
   text-align: center;
-  border:none;
+  //border:none;
 }
 .accept-button{
   background-color: #FFE866;
   color: #616161;
+}
+.reject-button{
+  background-color: #EAEAEA;
 }
 </style>
