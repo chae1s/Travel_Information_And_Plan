@@ -34,7 +34,8 @@
 
 
 <script>
-import axios from 'axios';
+import { readInvitations, acceptInvitation, rejectInvitation } from '@/api/index.js';
+
 export default {
   data() {
     return {
@@ -53,9 +54,7 @@ export default {
   methods: {
     // 초대 리스트 가져오기
     fetchInvitations() {
-      // 서버로부터 초대 리스트 데이터를 가져오는 HTTP 요청을 보냅니다.
-      // Controller의 GET 엔드포인트에 해당하는 URL을 사용합니다.
-      axios.get('/schedules/invited-users')
+      readInvitations()
           .then((response) => {
             this.invitations = response.data;
           })
@@ -65,12 +64,7 @@ export default {
     },
     // 초대 수락 처리
     acceptInvitation(invitation) {
-      // 서버로 초대 수락 요청을 보냅니다.
-      // Controller의 POST 엔드포인트에 해당하는 URL을 사용합니다.
-      console.log("invitation.matesId=",invitation.matesId);
-      console.log("invitation.scheduleId=",invitation.scheduleId);
-
-      axios.post(`/schedules/invited-users/${invitation.scheduleId}/acceptance/${invitation.matesId}`)
+      acceptInvitation(invitation.scheduleId, invitation.matesId)
           .then((response) => {
             invitation.accepted = true;
             invitation.decision = true;
@@ -81,9 +75,7 @@ export default {
     },
     // 초대 거절 처리
     rejectInvitation(invitation) {
-      // 서버로 초대 거절 요청을 보냅니다.
-      // Controller의 POST 엔드포인트에 해당하는 URL을 사용합니다.
-      axios.post(`/schedules/invited-users/${invitation.scheduleId}/rejection/${invitation.matesId}`)
+      rejectInvitation(invitation.scheduleId, invitation.matesId)
           .then((response) => {
             invitation.accepted = false;
             invitation.decision = true;
