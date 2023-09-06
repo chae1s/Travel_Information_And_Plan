@@ -6,11 +6,11 @@
                     <router-link to="/">어디갈래?</router-link>
                 </div>
                 <div class="user_info">
-                    <router-link to="/">알림</router-link>
-                    <router-link to="/">마이페이지</router-link>
-                    <router-link to="/login">로그인</router-link>
-                    <router-link to="/">로그아웃</router-link>
-                    <router-link to="/sign-up">회원가입</router-link>
+                    <router-link to="/" v-if="isLogin">알림</router-link>
+                    <router-link to="/" v-if="isLogin">마이페이지</router-link>
+                    <router-link to="/login" v-if="!isLogin">로그인</router-link>
+                    <router-link to="/" v-if="isLogin">로그아웃</router-link>
+                    <router-link to="/sign-up" v-if="!isLogin">회원가입</router-link>
                 </div>
             </div>
         </div>
@@ -67,6 +67,9 @@ export default {
                 checked = true
             }
             return checked
+        },
+        isLogin() {
+            return this.$store.getters.isLogin
         },
     },
     methods: {
