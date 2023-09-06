@@ -76,7 +76,7 @@
 </template>
 
 <script>
-export default ({
+export default {
     name: "LocationCheckbox",
     props: [
         'homeChecked'
@@ -99,7 +99,7 @@ export default ({
             }
         },
     }
-})
+}
 </script>
 
 <style scoped>

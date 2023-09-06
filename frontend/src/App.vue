@@ -53,6 +53,8 @@ ul, li {
 
 html, body {
     width: 1903px;
+    overflow-x: scroll;
+    white-space: nowrap;
 }
 
 input:focus {

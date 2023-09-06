@@ -95,8 +95,8 @@ public class RestTestController {
                                 .sido((String) tmp.get("areacode"))
                                 .sigungu((String) tmp.get("sigungucode"))
                                 .upmyundong((String) tmp.get("addr2"))
-                                .latitude((String) tmp.get("mapx"))
-                                .longitude((String) tmp.get("mapy"))
+                                .latitude((String) tmp.get("mapy"))
+                                .longitude((String) tmp.get("mapx"))
                                 .fullAddress((String) tmp.get("addr1"))
                                 .mLevel((String) tmp.get("mlevel"))
                                 .build();
@@ -132,8 +132,8 @@ public class RestTestController {
                                 .sido((String) tmp.get("areacode"))
                                 .sigungu((String) tmp.get("sigungucode"))
                                 .upmyundong((String) tmp.get("addr2"))
-                                .latitude((String) tmp.get("mapx"))
-                                .longitude((String) tmp.get("mapy"))
+                                .latitude((String) tmp.get("mapy"))
+                                .longitude((String) tmp.get("mapx"))
                                 .fullAddress((String) tmp.get("addr1"))
                                 .mLevel((String) tmp.get("mlevel"))
                                 .build();
@@ -168,8 +168,8 @@ public class RestTestController {
                                 .sido((String) tmp.get("areacode"))
                                 .sigungu((String) tmp.get("sigungucode"))
                                 .upmyundong((String) tmp.get("addr2"))
-                                .latitude((String) tmp.get("mapx"))
-                                .longitude((String) tmp.get("mapy"))
+                                .latitude((String) tmp.get("mapy"))
+                                .longitude((String) tmp.get("mapx"))
                                 .fullAddress((String) tmp.get("addr1"))
                                 .mLevel((String) tmp.get("mlevel"))
                                 .build();
