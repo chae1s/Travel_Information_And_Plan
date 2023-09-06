@@ -25,15 +25,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MatesService {
     private final MatesRepository matesRepository;
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final UserUtils userUtils;
 
     // 유저가 다른 유저를 초대
     public ResponseEntity<ResponseDto> inviteUserToSchedule(String userEmail, String invitedUsername, Long scheduleId) {
-        User invitedUser = userUtils.getUser(invitedUsername);
-//        User invitedUser = userRepository.findByNickname(invitedUsername).orElseThrow(
-//                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("invitedUser"+invitedUsername);
+//        User invitedUser = userUtils.getUser(invitedUsername);
+        User invitedUser = userRepository.findByNickname(invitedUsername).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
@@ -69,11 +70,17 @@ public class MatesService {
         List<InvitationResponseDto> invitationResponseDtos = new ArrayList<>();
 
         for (Mates mates : matesList) {
+            String time = mates.getCreatedAt().toString().substring(0, 16).replace("T", " ").replaceAll("-", ".");
+
             InvitationResponseDto invitationResponseDto = InvitationResponseDto.builder()
-                    .invitingUser(mates.getSchedule().getUser().getNickname())
-                    .invitedTime(mates.getCreatedAt().toString())
+                    .scheduleHost(mates.getSchedule().getUser().getNickname())
+                    .invitedTime(time)
                     .scheduleTitle(mates.getSchedule().getTitle())
+                    .scheduleId(mates.getSchedule().getId())
+                    .matesId(mates.getId())
                     .build();
+            log.info("mates.getId()="+mates.getId());
+            log.info("mates.getSchedule().getId()="+mates.getSchedule().getId());
             invitationResponseDtos.add(invitationResponseDto);
         }
         if(invitationResponseDtos.isEmpty())

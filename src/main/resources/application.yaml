@@ -7,7 +7,7 @@ server:
 
 spring:
   mvc:
-    static-path-pattern: /static/**
+#    static-path-pattern: /static/** #이거 해제 하고 stomp.js파일 접근됨
     path match:
       matching-strategy: ant_path_matcher
   web:

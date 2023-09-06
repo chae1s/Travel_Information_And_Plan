@@ -4,7 +4,7 @@ import Home from "@/views/Home.vue";
 import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import LoginView from '@/views/LoginView.vue';
 import BoardCreate from '@/views/BoardCreate.vue'
-
+import MyPage from "@/views/MyPage.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -32,6 +32,11 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
+        },
+        {
+            path: '/myPage',
+            name: 'MyPage',
+            component: MyPage
         }
     ]
 })

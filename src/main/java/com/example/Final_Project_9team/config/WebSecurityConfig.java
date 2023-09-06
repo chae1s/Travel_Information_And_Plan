@@ -32,8 +32,9 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/users/register",
                                 "users/profile/**",
-                                "schedules/chat/**", "/static/**","/js/**","/css/**","/img/**","images/**",
-                                "/chatting","/error",
+                                "schedules/chat/**","/chatting",
+                                 "/js/**","/css/**","/img/**","images/**",
+                                "/error",
                                 "/schedules/write/**","/users/me/**","schedules/write","schedules/**",
                                 "/api/hello",
                                 "board-create"
@@ -44,7 +45,7 @@ public class WebSecurityConfig {
                         )
                         .anonymous()
 //                        .requestMatchers("/users/roleUser").hasRole("USER")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

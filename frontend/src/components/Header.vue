@@ -7,7 +7,7 @@
                 </div>
                 <div class="user_info">
                     <router-link to="/">알림</router-link>
-                    <router-link to="/">마이페이지</router-link>
+                    <router-link to="/mypage">마이페이지</router-link>
                     <router-link to="/login">로그인</router-link>
                     <router-link to="/">로그아웃</router-link>
                     <router-link to="/">회원가입</router-link>

@@ -6,8 +6,10 @@ import lombok.Data;
 @Data
 @Builder
 public class InvitationResponseDto {
-    private String invitingUser;
+    private String scheduleHost;
     private String scheduleTitle;
+    private Long scheduleId;
     private String invitedTime;
+    private Long matesId;
 
 }
