@@ -9,7 +9,7 @@
                             <div class="schedule_data_name">{{scheduleData.title}}</div>
                             <div class="schedule_data_mates">
                                 <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user" inline="true" width="33px" height="33px" class="rounded-circle"/>
-                                <v-img src="@/assets/images/icons/mates_add.png" width="33px" height="33px" class="rounded-circle my-auto mx-0" inline="true"/>
+                                <v-img src="@/assets/images/icons/mates_add.png" width="25px" height="25px" class="rounded-circle my-auto mx-0" inline="true"/>
                             </div>
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
