@@ -103,6 +103,7 @@
 import dayjs from 'dayjs'
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import Calendar from "@/components/Calendar.vue";
+import { createSchedule } from '@/api/index'
 
 export default {
     name: "MakeSchedule",
@@ -148,16 +149,21 @@ export default {
     methods: {
         selectDate(year, month, date) {
             let selected = year + '-' + month.toString().padStart(2, '0') + '-' + date.toString().padStart(2, '0');
-            let index = this.selectedDate.indexOf(selected)
-            if (index === -1) {
-                if (this.selectedDate.length === 2) this.selectedDate = []
-                this.selectedDate.push(selected)
+            let today = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
+            if (selected < today) {
+                alert("오늘 이후의 날짜를 선택해주세요.")
+            } else {
+                let index = this.selectedDate.indexOf(selected);
+                if (index === -1) {
+                    if (this.selectedDate.length === 2) this.selectedDate = []
+                    this.selectedDate.push(selected)
 
-            } else if (index !== -1){
-                this.selectedDate.splice(index, 1)
+                } else if (index !== -1){
+                    this.selectedDate.splice(index, 1)
 
+                }
+                this.checkDateInSelectedDate()
             }
-            this.checkDateInSelectedDate()
 
 
         },
@@ -252,28 +258,28 @@ export default {
         moveSchedule(id) {
             this.$router.push('/schedules/'+id+'/schedule-items')
         },
-        createSchedule() {
+        async createSchedule() {
+            try {
+                const scheduleData = {
+                    title: this.scheduleTitle,
+                    description: this.scheduleDescription,
+                    startDate: this.startDate,
+                    endDate: this.endDate,
+                    sido: this.scheduleSido
+                };
 
-            const scheduleData = {
-                title: this.scheduleTitle,
-                description: this.scheduleDescription,
-                startDate: this.startDate,
-                endDate: this.endDate,
-                sido: this.scheduleSido
-            };
+                if (this.scheduleTitle === '') alert("일정의 제목을 입력해주세요.")
+                else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
+                else if (this.scheduleSido === '') alert("여행갈 도시를 선택해주세요.")
+                else {
+                    const { data } = await createSchedule(scheduleData)
 
-            if (this.scheduleTitle === '') alert("일정의 제목을 입력해주세요.")
-            else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
-            else if (!this.scheduleSido) alert("여행갈 도시를 선택해주세요.")
-            else {
-                this.axios.post('/schedules', scheduleData)
-                    .then(res => {
-                        this.moveSchedule(res.data)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                    this.moveSchedule(data)
+                }
+            } catch (error) {
+                console.log(error.response.data)
             }
+
 
         }
     }
@@ -430,8 +436,8 @@ export default {
     }
 
     .schedule_location_input:deep(.form_checkbox_btn label) {
-        width: 32px;
-        height: 23px;
+        width: 64px;
+        height: 42px;
         padding: 9px 16px;
         display: inline-block;
         border-radius: 15px;
