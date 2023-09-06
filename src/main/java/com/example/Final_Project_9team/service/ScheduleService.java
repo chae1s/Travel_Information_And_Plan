@@ -108,10 +108,6 @@ public class ScheduleService {
     public List<ItemPathDto> createRouteInformation(Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        String start = "";
-        String goal = "";
-        String waypoints = "";
-
         return createRoutePosition(scheduleItemRequest.getItemIds());
     }
 
