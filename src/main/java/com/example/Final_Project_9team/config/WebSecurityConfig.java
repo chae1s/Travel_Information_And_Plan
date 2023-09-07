@@ -23,7 +23,7 @@ public class WebSecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers(
                         "/static/**", "/js/**", "/css/**", "/img/**",
-                        "media/**" // 외부 정적자원 접근 경로
+                        "/media/**" // 외부 정적자원 접근 경로
                         );
     }
 
