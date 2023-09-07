@@ -41,7 +41,7 @@ public class ScheduleController {
     @GetMapping("/{scheduleId:\\d+}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
-        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, "sampleUser1@gmail.com"));
+        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth.getName()));
     }
 
     // 세부 계획 저장하기
