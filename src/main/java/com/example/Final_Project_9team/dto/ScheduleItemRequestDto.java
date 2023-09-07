@@ -14,7 +14,7 @@ import java.util.List;
 public class ScheduleItemRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate tourDate;
-    private List<Long> itemIds = new ArrayList<>();
+    private List<ItemListResponseDto> tourDestination = new ArrayList<>();
 
     public ScheduleItem toEntity(int turn, Schedule schedule, Item item) {
         return ScheduleItem.builder()

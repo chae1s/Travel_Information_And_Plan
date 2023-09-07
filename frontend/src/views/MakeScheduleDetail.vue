@@ -20,7 +20,7 @@
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
                             <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
-                                <v-img src="@/assets/images/site_1.jpg" alt="" cover class="rounded-lg" height="80"/>
+                                <v-img :src="item.firstImage" alt="" cover class="rounded-lg" height="80"/>
                                 <div style="display: none" class="my_liked_item_id">{{ item.id }}</div>
                                 <div class="my_liked_item_name">{{ item.name }}</div>
                                 <div style="display: none" class="my_liked_item_address">{{ item.fullAddress }}</div>
@@ -100,7 +100,6 @@ export default {
             },
             tourRouteList: [],
             likedItemList: [],
-            requestTourList: [],
             selectedItem: null,
             selectedItemIndex: null,
             selectedPosition: {top: 0, left: 0},
@@ -175,10 +174,6 @@ export default {
                     tourDestination: []
                 })
 
-                this.requestTourList.push({
-                    tourDate: date,
-                    itemIds: []
-                })
 
                 firstDate.setDate(firstDate.getDate() + 1)
             }
@@ -199,7 +194,6 @@ export default {
                 alert("여행지는 최대 7개까지만 추가가 가능합니다.")
             }
             this.tourRouteList[dayIndex].tourDestination.push(item);
-            this.requestTourList[dayIndex].itemIds.push(item.id)
 
             this.likedItemList.splice(itemIndex, 1);
 
@@ -211,7 +205,6 @@ export default {
             const deleteItem = this.tourRouteList[i].tourDestination[index]
 
             this.tourRouteList[i].tourDestination.splice(index, 1)
-            this.requestTourList[i].itemIds.splice(index, 1)
 
             if (this.itemPath.length === 2) {
                 this.itemPath = []
@@ -225,10 +218,10 @@ export default {
         },
         async createRouteList(i) {
             try {
-                if (this.requestTourList[i].itemIds.length <= 1) {
+                if (this.tourRouteList[i].tourDestination.length <= 1) {
                     this.createItemMarkerAndPolyline(i);
                 } else {
-                    const { data } = await createRouteList(this.scheduleId, this.requestTourList[i])
+                    const { data } = await createRouteList(this.scheduleId, this.tourRouteList[i])
 
                     this.createItemMarkerAndPolyline(i)
                     this.itemPath = data
