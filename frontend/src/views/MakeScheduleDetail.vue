@@ -19,7 +19,7 @@
                         <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="prevPageLikedItem"/>
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
-                            <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
+                            <li v-for="(item, itemIndex) in likedItemList" :class="{'my_liked_item': true, 'selectedItem': checkedSelectedListInItemIndex(item)}" @click="selectedLikedItem(item, itemIndex, $event)">
                                 <v-img :src="item.firstImage" alt="" cover class="rounded-lg" height="80"/>
                                 <div style="display: none" class="my_liked_item_id">{{ item.id }}</div>
                                 <div class="my_liked_item_name">{{ item.name }}</div>
@@ -27,8 +27,8 @@
                                 <div class="my_liked_item_category">{{ item.category }}</div>
                             </li>
                         </ul>
-                        <div class="selected_tour_date" v-if="selectedItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
-                            <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.selectedItem, this.selectedItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
+                        <div class="selected_tour_date" v-if="clickItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
+                            <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.clickItem, this.clickItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
                         </div>
                         <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="nextPageLikedItem"/>
                     </div>
@@ -41,27 +41,27 @@
                         </div>
                     </div>
                     <div class="schedule_route">
-                        <div v-for="(tourRoute, i) in tourRouteList" :key="tourRoute"  class="schedule_daily_route" @click="createRouteList(i)">
+                        <div v-for="(tourRoute, dayIndex) in tourRouteList" :key="tourRoute"  class="schedule_daily_route" @click="createRouteList(dayIndex)">
                             <div class="daily_route_header">
-                                <div class="tour_day_num">Day{{i + 1}}</div>
+                                <div class="tour_day_num">Day{{dayIndex + 1}}</div>
                                 <div class="tour_date">{{tourRoute.tourDateWithoutYear}}</div>
                             </div>
                             <ul class="schedule_daily_item_list">
                                 <li v-if="tourRoute.tourDestination.length === 0" class="empty_item_list">일정을 채워주세요</li>
-                                <li v-for="(destination, index) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
-                                    <v-img :src="require('@/assets/images/icons/day' + (i + 1) + '/course_pin_' + (index + 1) + '.png')" alt="" width="26" height="26" inline class="my-auto mr-7"/>
+                                <li v-for="(destination, itemIndex) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
+                                    <v-img :src="require('@/assets/images/icons/day' + (dayIndex + 1) + '/course_pin_' + (itemIndex + 1) + '.png')" alt="" width="26" height="26" inline class="my-auto mr-7"/>
                                     <div class="daily_item_info">
                                         <div class="daily_item_info_name">{{ destination.name }}</div>
-                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)" inline width="12" height="12" class="ml-3 remove_item"/>
+                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(dayIndex, itemIndex)" inline width="12" height="12" class="ml-3 remove_item"/>
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
-                                    <div v-if="itemPath[i].tourPaths.length > 1 && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>이동시간 : {{itemPath[i].tourPaths[index].duration}}분</div>
-                                        <div>이동거리 : {{itemPath[i].tourPaths[index].distance}}km</div>
+                                    <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                        <div>이동시간 : {{itemPath[dayIndex].tourPaths[itemIndex].duration}}분</div>
+                                        <div>이동거리 : {{itemPath[dayIndex].tourPaths[itemIndex].distance}}km</div>
                                     </div>
-                                    <div v-if="itemPath[i].tourPaths.length > 1 && index === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>총 이동시간 : {{ itemPath[i].tourPaths[itemPath[i].tourPaths.length - 1].duration }}분</div>
-                                        <div>총 이동거리 : {{ itemPath[i].tourPaths[itemPath[i].tourPaths.length - 1].distance }}km</div>
+                                    <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                        <div>총 이동시간 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].duration }}분</div>
+                                        <div>총 이동거리 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].distance }}km</div>
                                     </div>
                                 </li>
                             </ul>
@@ -100,8 +100,9 @@ export default {
             },
             tourRouteList: [],
             likedItemList: [],
-            selectedItem: null,
-            selectedItemIndex: null,
+            selectedItemList: [],
+            clickItem: null,
+            clickItemIndex: null,
             selectedPosition: {top: 0, left: 0},
             itemPath: [],
             polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
@@ -158,7 +159,6 @@ export default {
 
                 this.likedItemList = data.content
                 this.likedItemTotalPage = data.totalPages
-                console.log(this.likedItemTotalPage)
             } catch (error) {
                 console.log(error)
             }
@@ -198,42 +198,45 @@ export default {
             }
         },
         selectedLikedItem(item, itemIndex, event) {
-            this.selectedItem = item
-            this.selectedItemIndex = itemIndex
+            this.clickItem = item
+            this.clickItemIndex = itemIndex
 
             this.selectedPosition = {
                 top: event.clientY + 'px',
                 left: event.clientX + 'px'
             }
 
-
         },
         addItemToTourRoute(dayIndex, item, itemIndex) {
-            if (this.tourRouteList[dayIndex].tourDestination.length === 7) {
-                alert("여행지는 최대 7개까지만 추가가 가능합니다.")
-            }
-            this.tourRouteList[dayIndex].tourDestination.push(item);
-            console.log(this.tourRouteList[dayIndex].tourDestination)
-            this.likedItemList.splice(itemIndex, 1);
+            if (this.selectedItemList.indexOf(item.id) < 0) {
+                if (this.tourRouteList[dayIndex].tourDestination.length === 7) {
+                    alert("여행지는 최대 7개까지만 추가가 가능합니다.")
+                }
+                this.tourRouteList[dayIndex].tourDestination.push(item);
+                this.selectedItemList.push(item.id)
 
-            this.selectedItem = null
-            this.selectedItemIndex = null
+                this.createRouteList(dayIndex)
+            }
+            this.clickItem = null
+            this.clickItemIndex = null
+        },
+        removeDestination(dayIndex, itemIndex) {
+            const deleteItem = this.tourRouteList[dayIndex].tourDestination[itemIndex]
+            const deleteItemIndex = this.selectedItemList.indexOf(deleteItem.id)
+
+            this.tourRouteList[dayIndex].tourDestination.splice(itemIndex, 1)
+
+            if (this.itemPath[dayIndex].tourPaths.length === 2) {
+                this.itemPath[dayIndex].tourPaths = []
+            } else {
+                this.itemPath[dayIndex].tourPaths.splice(itemIndex, 1)
+            }
+
+            this.selectedItemList.splice(deleteItemIndex, 1)
             this.createRouteList(dayIndex)
         },
-        removeDestination(i, index) {
-            const deleteItem = this.tourRouteList[i].tourDestination[index]
-
-            this.tourRouteList[i].tourDestination.splice(index, 1)
-
-            if (this.itemPath[i].tourPaths.length === 2) {
-                this.itemPath[i].tourPaths = []
-            } else {
-                this.itemPath[i].tourPaths.splice(index, 1)
-            }
-
-            this.likedItemList.push(deleteItem)
-
-            this.createRouteList(i)
+        checkedSelectedListInItemIndex(item) {
+            return this.selectedItemList.indexOf(item.id) >= 0
         },
         async createRouteList(i) {
             try {
@@ -241,10 +244,8 @@ export default {
                     this.createItemMarkerAndPolyline(i);
                 } else {
                     const { data } = await createRouteList(this.scheduleId, this.tourRouteList[i])
-                    console.log(data)
                     this.createItemMarkerAndPolyline(i)
                     this.itemPath[i].tourPaths = data
-                    console.log(this.itemPath[i].tourPaths[2].duration)
                 }
             } catch (error) {
                 console.log(error)
@@ -376,6 +377,11 @@ export default {
         height: 128px;
     }
 
+    .selectedItem {
+        font-weight: bolder;
+        color: #99C7FF;
+    }
+
     .empty_liked_item {
         width: 100%;
         text-align: center;
@@ -452,7 +458,7 @@ export default {
 
     .schedule_daily_route {
         display: inline-block;
-        margin: 0 0 44px 44px;
+        margin: 0 0 44px 42px;
         width: 360.67px;
     }
 
