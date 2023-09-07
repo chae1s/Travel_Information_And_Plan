@@ -5,6 +5,7 @@ import com.example.Final_Project_9team.entity.Mates;
 import lombok.Data;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
