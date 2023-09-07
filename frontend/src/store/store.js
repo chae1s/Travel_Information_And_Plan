@@ -4,7 +4,7 @@ import createPersistedState from 'vuex-persistedstate'
 export default new Vuex.Store({
   state: {
     //username: '',
-    token: null
+    token: ''
   },
   getters: {
     isLogin(state) {
@@ -14,7 +14,7 @@ export default new Vuex.Store({
   mutations: {
     logout(state, token) {
       localStorage.removeItem(token)
-      state.token = null
+      state.token = ''
     },
     // setUsername(state, username) {
     //   state.username = username;
