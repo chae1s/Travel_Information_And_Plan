@@ -5,9 +5,12 @@
                 <div class="content_title">일정 만들기</div>
                 <div class="schedule_input_section">
                     <div class="schedule_data_header">
-                        <div class="schedule_data_name">{{scheduleData.title}}</div>
-                        <div class="schedule_data_mates">
-                            <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user" inline width="26" height="26" class="rounded-circle"/>
+                        <div class="title_and_mates">
+                            <div class="schedule_data_name">{{scheduleData.title}}</div>
+                            <div class="schedule_data_mates">
+                                <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user" inline="true" width="33px" height="33px" class="rounded-circle"/>
+                                <v-img src="@/assets/images/icons/mates_add.png" width="25px" height="25px" class="rounded-circle my-auto mx-0" inline="true"/>
+                            </div>
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
@@ -300,18 +303,21 @@ export default {
         text-align: left;
     }
 
+    .title_and_mates {
+        display: flex;
+        gap: 10px;
+    }
+
     .schedule_data_name {
-        height: 25px;
-        display: inline-block;
         font-size: 22px;
-        line-height: 25px;
         font-weight: bold;
-        margin-right: 9px;
+        line-height: 33px;
     }
 
     .schedule_data_mates {
         display: inline-flex;
         gap: 5px;
+        height: 100%;
     }
 
     .schedule_data_mates img {
