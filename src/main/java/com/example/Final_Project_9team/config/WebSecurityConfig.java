@@ -33,18 +33,20 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
+                                // common
                                 "/index.html",
                                 "/", "/error",
+
                                 "/users/register", "users/check/**",
                                 "users/profile/**",
                                 "board-create",
-                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
-                                "/item-list/**"
-                                "schedules/chat/**", "/chatting","/mypage",
-                                "/schedules/write/**","/users/me/**","schedules/write","schedules/**",
-                                "/api/hello",
-                                "board-create"
-                        )
+                                "/item-list/**",
+                                "/schedules/write/**","/users/me/**","schedules/**",
+
+                                // yj
+                                "schedules/chat/**", "/chatting","/mypage","/chatting","schedules/chat/**"
+
+                                )
                         .permitAll()
                         .requestMatchers(
                                 "/users/login"

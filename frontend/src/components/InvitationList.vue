@@ -53,7 +53,6 @@ export default {
     };
   },
   mounted() {
-    // 페이지 로드 시 초대 리스트를 가져오는 메서드 호출
     this.fetchInvitations();
   },
   methods: {
