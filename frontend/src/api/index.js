@@ -2,7 +2,7 @@ import axiosInstance from '@/store/interceptor.js';
 
 
 function registerUser(userData) {
-  return axiosInstance.post('signup', userData);
+    return axiosInstance.post('users/register', userData);
 }
 
 function loginUser(userData) {
