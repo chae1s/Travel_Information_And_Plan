@@ -20,8 +20,9 @@ public class Profile {
     private Long id;
     @Builder.Default
     private String content = "'한마디'";
-    @Builder.Default
-    private String profileImage = "default-profile.png";
+//    @Builder.Default
+    private String profileImage;
+//    private String profileImage = "default-profile.png";
     @Builder.Default
     private String location = "'여행을 떠나고 돌아오는 곳'";
     @Builder.Default

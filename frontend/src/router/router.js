@@ -5,8 +5,10 @@ import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
+import MyPage from "@/views/MyPage.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
+import LogoutView from "@/views/LogoutView.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -31,6 +33,11 @@ const router = createRouter({
             component: SignUp
         },
         {
+            path: '/logout',
+            name: 'logout',
+            component: LogoutView
+        },
+        {
             path: '/items-list',
             name: "ItemList",
             component: ItemList
@@ -50,6 +57,11 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
+        },
+        {
+            path: '/myPage',
+            name: 'MyPage',
+            component: MyPage
         }
     ]
 })

@@ -2,7 +2,7 @@ import axiosInstance from '@/store/interceptor.js';
 
 
 function registerUser(userData) {
-  return axiosInstance.post('signup', userData);
+    return axiosInstance.post('users/register', userData);
 }
 
 function loginUser(userData) {
@@ -33,7 +33,18 @@ function createRouteList(scheduleId, tourList) {
     return axiosInstance.post('/schedules/' + scheduleId + '/schedule-items/route', tourList)
 }
 
+function readInvitations(){
+    return axiosInstance.get('/schedules/invited-users');
+}
+function acceptInvitation(scheduleId, matesId) {
+    return axiosInstance.post(`/schedules/invited-users/${scheduleId}/acceptance/${matesId}`);
+}
+function rejectInvitation(scheduleId, matesId) {
+    return axiosInstance.post(`/schedules/invited-users/${scheduleId}/rejection/${matesId}`);
+}
+
 export {
-    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList
+    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
+    readInvitations, acceptInvitation, rejectInvitation
 };
 

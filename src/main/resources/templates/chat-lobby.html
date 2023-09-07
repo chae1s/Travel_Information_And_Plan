@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Chatting</title>
+<!--  추가 -->
+  <link rel="icon" href="data:,">
+</head>
+<body onload="">
+<div>
+  <div>
+    <button id="connect" onclick="loadRooms()">방 찾기</button>
+    <br><br>
+    <input type="text" id="room-name" placeholder="Create Room">
+    <button id="create" onclick="createRoom()">생성</button>
+  </div>
+  <div id="room-list">
+  </div>
+</div>
+<script type="text/javascript">
+
+  async function loadRooms(){
+    const chatRooms = await (await fetch("/schedules/chat/rooms")).json();
+    const roomDiv = document.getElementById("room-list");
+    roomDiv.innerText = ""
+    chatRooms.forEach((chatRoomDto) => {
+      console.log(chatRoomDto)
+      const newRoom = document.createElement("div")
+      newRoom.innerHTML = `<a href="/schedules/chat/${chatRoomDto.id}">${chatRoomDto.roomName}</a>`;
+      roomDiv.appendChild(newRoom)
+    });
+  }
+
+  async function createRoom() {
+    const roomName = document.getElementById("room-name").value;
+    const response = await (await fetch(`/schedules/chat/rooms`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        roomName
+      })
+    })).json();
+    const roomId = response.id;
+    window.location.href = `/schedules/chat/${roomId}`;
+  }
+</script>
+</body>
+</html>

@@ -41,6 +41,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                     "ORDER BY ls.id DESC "
     )
     Page<Schedule> findAllLikedSchedulesByMe(@Param("email") String email, Pageable pageable);
+    List<Schedule> findAllByUserAndMatesIsAcceptedTrue(User user);
 
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
             "FROM Schedule s " +

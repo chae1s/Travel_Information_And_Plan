@@ -15,6 +15,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.example.Final_Project_9team.dto.ChatRoomDto;
+import com.example.Final_Project_9team.entity.ChatRoom;
+import com.example.Final_Project_9team.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,14 +54,18 @@ public class ScheduleService {
     @Value("${NAVER_MAP_CLIENT_SECRET}")
     private String clientKey;
 
+    private final ChatRoomRepository chatRoomRepository;
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto, String email) {
         // 로그인한 유저 정보 가져오기
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = dto.toEntity(user);
+        ChatRoom chatRoom = ChatRoomDto.toEntity(schedule); /*추가*/
         // 일정 등록
         schedule = scheduleRepository.save(schedule);
         log.info("User Email : {}", user.getEmail());
+
+        chatRoomRepository.save(chatRoom);       /*추가 schedule보다 뒤에 저장해야해서 여기 두었습니다. */
         // 일정의 작성자 등록
         Mates mates = createScheduleWriter(user, schedule);
 

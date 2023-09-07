@@ -49,6 +49,9 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule")
     private List<LikesSchedule> likesSchedules = new ArrayList<>();
 
+    @OneToOne(mappedBy = "schedule")
+    private ChatRoom chatRoom;
+
     public void updateDisplay() {
         this.display = !this.display;
     }
