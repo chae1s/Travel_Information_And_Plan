@@ -33,4 +33,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                     "ORDER BY li.id DESC "
     )
     Page<Item> findByLikedItemsBySido(@Param("email") String email, @Param("sido") String sido, Pageable pageable);
+    @Query("SELECT a FROM Item a WHERE a.location.sido = :sido")
+    Page<Item> findBySido(@Param("sido")String sido, Pageable pageable);
+    @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu")
+    Page<Item> findBySidoAndSigungu(@Param("sido")String sido, @Param("sigungu")String sigungu,Pageable pageable);
 }

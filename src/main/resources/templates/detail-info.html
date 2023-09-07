@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>상세지도 표시</title>
+</head>
+<body>
+
+<div id="app" class="section">
+
+    <div v-if="latitude !== '' && longitude !== ''">
+        <img :src="mapImageUrl" alt="Map Image">
+    </div>
+
+    <div v-else>
+        <p>Map data not available.</p>
+    </div>
+    <div>
+        <span th:text="${itemId}"></span>
+    </div>
+
+    <div>
+        <span th:text="${item.body}"></span>
+    </div>
+
+
+</div>
+
+<script>
+    const url = "http://localhost:8080/item-list/read/${itemId}";
+    new Vue({
+        el: '#app',
+        data: {
+            latitude: '',
+            longitude: '',
+            mapImageUrl: '',
+            itemId: '',
+            itemData: '',
+
+        },
+        created() {
+            this.itemId = document.getElementById('itemId').innerText;
+            this.fetchItemData(this.itemId);
+        },
+        methods: {
+            fetchItemData(itemId) {
+                axios.get(url)
+                    .then(response => {
+                        console.log('Response Data:', response.data);
+                        this.itemData = response.data.response.body.items.item[0];
+                        this.latitude = this.itemData.mapx;
+                        this.longitude = this.itemData.mapy;
+                        if (this.latitude !== '' && this.longitude !== '') {
+                            this.generateMapImage(this.latitude, this.longitude);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching latitude and longitude:', error);
+                    });
+            },
+            generateMapImage(latitude, longitude) {
+                const apiKey = 'pvpyjs42ed';
+                const mapUrl = `https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=300&h=300&center=${latitude},${longitude}&level=16&X-NCP-APIGW-API-KEY-ID=${apiKey}`;
+                this.mapImageUrl = mapUrl;
+            }
+        }
+    });
+</script>
+</body>
+</html>
