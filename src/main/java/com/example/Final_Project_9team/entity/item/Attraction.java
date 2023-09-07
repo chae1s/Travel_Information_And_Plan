@@ -7,7 +7,7 @@ import lombok.Data;
 //관광지(contentTypeId = 12)
 @Data
 @Entity
-//@DiscriminatorValue("Attraction")
+@DiscriminatorValue("Attraction")
 public class Attraction extends Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 이 부분을 추가합니다.

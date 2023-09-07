@@ -447,7 +447,7 @@ export default {
     }
 
     .schedule_location_input:deep(.form_checkbox_btn input[type=checkbox]:checked + label) {
-        background-color: #FFE866;
+        background-color: #C4DFFF;
         color: #fff;
     }
 

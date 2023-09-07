@@ -7,7 +7,7 @@ import lombok.Data;
 //39:음식점
 @Data
 @Entity
-//@DiscriminatorValue("Restaurant")
+@DiscriminatorValue("Restaurant")
 public class Restaurant extends Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 이 부분을 추가합니다.

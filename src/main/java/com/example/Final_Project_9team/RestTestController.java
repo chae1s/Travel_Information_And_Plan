@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -94,8 +95,8 @@ public class RestTestController {
                                 .sido((String) tmp.get("areacode"))
                                 .sigungu((String) tmp.get("sigungucode"))
                                 .upmyundong((String) tmp.get("addr2"))
-                                .latitude((String) tmp.get("mapx"))
-                                .longitude((String) tmp.get("mapy"))
+                                .latitude((String) tmp.get("mapy"))
+                                .longitude((String) tmp.get("mapx"))
                                 .fullAddress((String) tmp.get("addr1"))
                                 .mLevel((String) tmp.get("mlevel"))
                                 .build();
@@ -104,8 +105,8 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
                         // Attraction 엔티티에 설정
                         attraction.setCreatedAt(createdTime);
@@ -131,8 +132,8 @@ public class RestTestController {
                                 .sido((String) tmp.get("areacode"))
                                 .sigungu((String) tmp.get("sigungucode"))
                                 .upmyundong((String) tmp.get("addr2"))
-                                .latitude((String) tmp.get("mapx"))
-                                .longitude((String) tmp.get("mapy"))
+                                .latitude((String) tmp.get("mapy"))
+                                .longitude((String) tmp.get("mapx"))
                                 .fullAddress((String) tmp.get("addr1"))
                                 .mLevel((String) tmp.get("mlevel"))
                                 .build();
@@ -141,9 +142,10 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
+                        // accommodation 엔티티에 설정
                         accommodation.setCreatedAt(createdTime);
                         accommodation.setModifiedAt(modifiedTime);
                         accommodation.setContentId((String) tmp.get("contentid"));
@@ -166,8 +168,8 @@ public class RestTestController {
                                 .sido((String) tmp.get("areacode"))
                                 .sigungu((String) tmp.get("sigungucode"))
                                 .upmyundong((String) tmp.get("addr2"))
-                                .latitude((String) tmp.get("mapx"))
-                                .longitude((String) tmp.get("mapy"))
+                                .latitude((String) tmp.get("mapy"))
+                                .longitude((String) tmp.get("mapx"))
                                 .fullAddress((String) tmp.get("addr1"))
                                 .mLevel((String) tmp.get("mlevel"))
                                 .build();
@@ -176,9 +178,10 @@ public class RestTestController {
                         String modifiedTimeStr = (String) tmp.get("modifiedtime");
 
                         // 문자열을 LocalDateTime으로 변환
-                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                        LocalDateTime createdTime = LocalDateTime.parse(createdTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
+                        LocalDateTime modifiedTime = LocalDateTime.parse(modifiedTimeStr, DateTimeFormatter.ofPattern("yyyyMMddHH"));
 
+                        // restaurant 엔티티에 설정
                         restaurant.setCreatedAt(createdTime);
                         restaurant.setModifiedAt(modifiedTime);
                         restaurant.setContentId((String) tmp.get("contentid"));
