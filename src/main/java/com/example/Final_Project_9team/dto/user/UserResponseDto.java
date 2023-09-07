@@ -20,7 +20,13 @@ public class UserResponseDto {
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setNickname(user.getNickname());
-        dto.setProfileImage("/media/" + user.getProfile().getProfileImage()); // 차후 외부경로로 수정
+        if (user.getProfile().getProfileImage() == null) {
+            dto.setProfileImage("/img/default-profile.png");
+        }
+        else {
+            dto.setProfileImage("/media/" + user.getProfile().getProfileImage());
+        }
+//        dto.setProfileImage("/media/" + user.getProfile().getProfileImage()); // 차후 외부경로로 수정
         return dto;
     }
 
@@ -31,6 +37,12 @@ public class UserResponseDto {
         dto.setEmail(user.getEmail());
         dto.setNickname(user.getNickname());
         dto.setIsLikedByMe(isLiked);
+        if (user.getProfile().getProfileImage() == null) {
+            dto.setProfileImage("/img/default-profile.png");
+        }
+        else {
+            dto.setProfileImage("/media/" + user.getProfile().getProfileImage());
+        }
 
         return dto;
     }
