@@ -93,8 +93,8 @@ public class MatesService {
             log.info("mates.getSchedule().getId()="+mates.getSchedule().getId());
             invitationResponseDtos.add(invitationResponseDto);
         }
-        if(invitationResponseDtos.isEmpty())
-            throw new CustomException(ErrorCode.INVITATION_NOT_FOUND);
+//        if(invitationResponseDtos.isEmpty())
+//            throw new CustomException(ErrorCode.INVITATION_NOT_FOUND);
 
         return ResponseEntity.ok(invitationResponseDtos);
     }

@@ -38,11 +38,7 @@ public class WebSecurityConfig {
                                 "/users/register",
                                 "users/profile/**",
                                 "board-create",
-                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
-
-                                "schedules/chat/**","/chatting",
-                                 "/js/**","/css/**","/img/**","images/**",
-                                "/error",
+                                "schedules/chat/**", "/chatting","/mypage",
                                 "/schedules/write/**","/users/me/**","schedules/write","schedules/**",
                                 "/api/hello",
                                 "board-create"

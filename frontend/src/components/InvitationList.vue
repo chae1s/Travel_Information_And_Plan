@@ -4,7 +4,12 @@
       <strong>초대 리스트 조회</strong>
     </div>
     <br>
-    <table class="invitation-table">
+    <!-- 초대 리스트가 비어있을 때 메시지 표시 -->
+    <div v-if="invitations.length === 0">
+      현재 초대된 일정이 없습니다.
+    </div>
+    <!-- 초대 리스트가 비어있지 않을 때 초대 항목 표시 -->
+    <table class="invitation-table" v-else>
       <thead>
       <tr>
         <th></th>

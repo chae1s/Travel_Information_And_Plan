@@ -21,7 +21,7 @@ public class MatesController {
     // GET /schedules/invited-users
     @GetMapping // 초대 리스트 조회
     public ResponseEntity<List<InvitationResponseDto>> readInvitations(Authentication authentication) {
-        return matesService.readInvitations("sampleUser2@gmail.com"); //authentication.getName()v
+        return matesService.readInvitations(authentication.getName()); //authentication.getName()v
     }
 
     // POST /schedules/invited-users/{scheduleId}
