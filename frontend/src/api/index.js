@@ -25,8 +25,8 @@ function readSchedule(scheduleId) {
     return axiosInstance.get('/schedules/' + scheduleId)
 }
 
-function readLikedItemBySido(sido) {
-    return axiosInstance.get('/users/me/liked-items/' + sido)
+function readLikedItemBySido(sido, page) {
+    return axiosInstance.get(`/users/me/liked-items/${sido}?page=${page}`)
 }
 
 function createRouteList(scheduleId, tourList) {
