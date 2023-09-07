@@ -2,14 +2,14 @@
     <div class="month_calendar">
         <div class="calendar_header">
             <button class="month_button" type="button" @click="childClickPrevButton" >
-                <img src="../assets/images/icons/chevron-left.png" alt="" v-if="showPrevButton">
+                <v-img src="../assets/images/icons/chevron-left.png" alt="" v-if="showPrevButton"/>
             </button>
             <span class="calendar_year_month">
                 <span class="calendar_year" @click="">1</span>년
                 <span class="calendar_month">{{ calendarMonth }}</span>월
             </span>
             <button class="month_button" type="button" @click="childClickNextButton">
-                <img src="../assets/images/icons/chevron-right.png" alt="" v-if="showNextButton">
+                <v-img src="../assets/images/icons/chevron-right.png" alt="" v-if="showNextButton"/>
             </button>
         </div>
         <div class="calendar_main">

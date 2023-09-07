@@ -16,8 +16,8 @@ public class Location {
     private String sido;//areacode
     private String sigungu;//sigungucode
     private String upmyundong; //addr2
-    private String latitude;//위도 -> mapx 좌표를 위도로 변환해야함, 지도 api에서는 어떤 정보를 필요로 하는지 확인해야함
-    private String longitude;//경도 -> mapy 좌표를 경도로 변환해야함
+    private String latitude;//위도 -> mapy 좌표를 위도로 변환해야함, 지도 api에서는 어떤 정보를 필요로 하는지 확인해야함
+    private String longitude;//경도 -> mapx 좌표를 경도로 변환해야함
     private String fullAddress; //addr1의 예시 : 충청남도 부여군 규암면 백제문로 388
     private String mLevel;//Map Level 응답(필요한지는 잘 모르겠지만 일단 map 관련된 변수같아보여 위도 경도 변수와 같은 곳에 둠)
 

@@ -35,9 +35,11 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/index.html",
                                 "/", "/error",
-                                "/users/register",
+                                "/users/register", "users/check/**",
                                 "users/profile/**",
                                 "board-create",
+                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
+                                "/item-list/**"
                                 "schedules/chat/**", "/chatting","/mypage",
                                 "/schedules/write/**","/users/me/**","schedules/write","schedules/**",
                                 "/api/hello",

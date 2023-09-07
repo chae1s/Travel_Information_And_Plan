@@ -52,8 +52,8 @@ ul, li {
 }
 
 html, body {
-  overflow-x: scroll;
-  white-space: nowrap;
+    overflow-x: scroll;
+    white-space: nowrap;
 }
 
 input:focus {

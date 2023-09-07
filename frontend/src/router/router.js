@@ -6,6 +6,8 @@ import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
 import MyPage from "@/views/MyPage.vue";
+import ItemList from "@/views/ItemList.vue";
+import ItemDetail from "@/views/ItemDetail.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -30,8 +32,19 @@ const router = createRouter({
             component: SignUp
         },
         {
+            path: '/items-list',
+            name: "ItemList",
+            component: ItemList
+        },
+        {
+            path: '/item-detail/read/:id',
+            name: "ItemDetail",
+            component: ItemDetail,
+            props: true
+        },
+        {
             path: '/login',
-            name: 'LoginView',
+            name: 'Login',
             component: LoginView
         },
         {

@@ -1,157 +1,236 @@
 <template>
     <v-container class="signUp-container" style="max-width: 500px">
         <v-layout align-center row wrap>
-            <v-flex xs12>
+            <v-col cols="12" class="vertical-center">
                 <v-alert v-if="isError" type="error">
                     {{ errorMsg }}
                 </v-alert>
                 <v-card>
-                    <v-toolbar flat color=#C4DFFF>
-                        <v-toolbar-title
-                        ><span class="white--text">회원가입</span></v-toolbar-title
-                        >
+                    <v-toolbar color=#C4DFFF style="text-align: center;">
+                        <v-toolbar-title style="text-align: center; font-size: 20px; color: #FFFFFF">
+                            회 원 가 입
+                        </v-toolbar-title>
                     </v-toolbar>
-                    <div class="pa-5">
+                    <div class="pa-5 mt-3">
                         <v-form ref="form" v-model="valid" lazy-validation style="min-width: 400px">
                             <v-text-field
                                     v-model="formData.email"
-                                    :rules="emailRules"
                                     label="e-mail"
-                                    class="text-field"
+                                    :rules="emailRules"
                                     required
+                                    @input="checkDuplicateEmail"
                             ></v-text-field>
-
                             <v-text-field
                                     v-model="formData.nickname"
+                                    label="nickname"
                                     :counter="12"
                                     :rules="nameRules"
-                                    label="nickname"
-                                    class="text-field"
                                     required
+                                    @input="checkDuplicateNickname"
                             ></v-text-field>
 
                             <v-text-field
                                     v-model="formData.password"
-                                    :rules="[rules.required, rules.min, rules.valid]"
                                     :type="show ? 'text' : 'password'"
                                     label="password"
-                                    class="text-field"
-                                    hint="영문 대,소문자와 숫자, 특수기호(!@#$%^&)를 포함"
                                     counter="8"
-                                    :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                                    @click:append="show = !show"
+                                    :rules="[rules.required, rules.min, rules.password]"
                             ></v-text-field>
 
                             <v-text-field
-                                    v-model="chkPassword"
-                                    :rules="[rules.required, rules.check]"
+                                    v-model="formData.passwordCheck"
                                     :type="show ? 'text' : 'password'"
                                     label="password check"
-                                    class="text-field"
-                                    hint="비밀번호를 다시한번 입력해주세요."
                                     counter="8"
-                                    :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                                    @click:append="show = !show"
+                                    :rules="[passwordConfirmationRule]"
                             ></v-text-field>
-
-                            <h6 v-if="chkPassword && !sameChk(chkPassword)" class="mb-5 teal--text accent-3">
-                                비밀번호가 일치하지 않습니다.
-                            </h6>
-                            <div class="mt-3 d-flex flex-row-reverse">
-                                <v-btn
-                                        :disabled="!valid"
-                                        color="blue"
-                                        class="mr-4"
-                                        @click="register(formData)"
-                                >회원가입
-                                </v-btn>
-                                <v-btn color="pink" class="mr-4" @click="reset"> 지우기</v-btn>
+                            <div class="d-flex flex-row align-center font-adjust">
+                                <div class="ml-2 flex-row align-center">
+                                    <v-icon
+                                            size="19"
+                                            color="grey"
+                                            :class="show ? 'mdi mdi-eye' : 'mdi mdi-eye-off'"
+                                            @click="show = !show"
+                                    ></v-icon>
+                                    <span class="ml-1">비밀번호 보기</span>
+                                </div>
+                                <div class="ml-auto mr-1">
+                                    <v-btn flat
+                                            depressed
+                                            large
+                                            block
+                                            class="mb-1"
+                                            @click="reset"
+                                    >지우기
+                                    </v-btn>
+                                </div>
                             </div>
+                            <v-btn flat
+                                   color="#C4DFFF"
+                                   depressed
+                                   large
+                                   block
+                                   class="mt-4 mb-4"
+                                   @click="register(formData)"
+                                   style="font-size: 17px; color: #FFFFFF;"
+                            >가입하기
+                            </v-btn>
                         </v-form>
                     </div>
                 </v-card>
-            </v-flex>
+            </v-col>
         </v-layout>
     </v-container>
 </template>
 
 <script>
 import RegisterObj from "../models/registerObj"
-import axios from 'axios'
 
 export default {
-    name: 'signUp',
+    name: "signUp",
     data: () => ({
-            formData: new RegisterObj("", "", ""),
+            formData: new RegisterObj("", "", "", ""),
             valid: false,
-            chkPassword: undefined,
+            isEmailUnique: undefined,
+            isNicknameUnique: undefined,
             isError: false,
             errorMsg: "",
             show: false,
-            nameRules: [
-                (v) => !!v || "nickname을 입력해주세요.",
-                (v) => (v && v.length <= 12) || "열두글자 이하로 작성해주세요."
-            ],
             rules: {
                 required: (value) => !!value || "비밀번호를 입력해주세요.",
-                valid: v => !!(v || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[!@#$%^&])).+$/) ||
-                    "영문 대,소문자와 숫자, 특수기호(!@#$%^&)를 포함하여 작성해주세요.",
+                password: v => !!(v || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[!@#$%^&])).+$/) ||
+                    "영문 대소문자와 숫자, 특수기호(!@#$%^&)를 포함해주세요.",
                 min: (v) => v.length >= 8 || "8자리 이상으로 작성해주세요."
             }
         }
     ),
 
+    computed: {
+        passwordConfirmationRule() {
+            return () =>
+                this.formData.password === this.formData.passwordCheck || "비밀번호가 일치하지 않습니다.";
+            console.log("비밀번호 일치:" + this.formData.password === this.formData.passwordCheck)
+        },
+        emailRules() {
+            return [
+                (v) => !!v || "e-mail을 입력해주세요.",
+                (v) => /.+@.+\..+/.test(v) || "e-mail 형식을 확인해주세요.",
+                () => {
+                    if (this.isEmailUnique === false) {
+                        return "이미 사용중인 e-mail 입니다.";
+                    }
+                    return true;
+                },
+            ];
+        },
+        nameRules() {
+            return [
+                (v) => !!v || "nickname을 입력해주세요.",
+                (v) => (v && v.length <= 12) || "열두글자 이하로 작성해주세요.",
+                () => {
+                    if (this.isNicknameUnique === false) {
+                        return "이미 사용중인 nickname 입니다.";
+                    }
+                    return true;
+                },
+            ];
+        },
+    },
+
     methods: {
         goToMain() {
+            console.log("goToMain: login 페이지 이동")
             this.$router.push({
-                name: "login"
+                name: "Login"
             })
         }
         ,
-        // password와 check 입력 일치하는지 확인
-        sameChk(passwordChk) {
-            this.formData.password == passwordChk
-        }
-        ,
         register(RegisterObj) {
+            // 폼 입력 확인
             if ( // null, undefined, false, 빈문자열인 경우
                 !this.formData.email ||
                 !this.formData.nickname ||
-                !this.formData.password
+                !this.formData.password ||
+                !this.formData.passwordCheck
             ) { // 에러메시지
                 this.isError = true
-                this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요."
+                this.errorMsg = "이메일, 닉네임, 비밀번호를 모두 입력해주세요."
                 return
             }
-
-            // 폼이 모두 입력 되었다면 제출
-            axios
-                .post("/users/register", RegisterObj)
-                .then(() => {
-                    this.goToMain()
-                })
-                .catch((err) => {
-                    if (err.response) {
-                        this.isError = true
-                        this.errorMsg = err.response.data.message
-                    }
-                })
+            // 폼이 모두 입력 되었고, vaild가 true면 제출
+            this.validate()
+            if (this.valid) {
+                console.log("vaild:", this.valid)
+                this.axios.post("/users/register", RegisterObj)
+                    .then(() => {
+                        alert("회원가입이 완료되었습니다.")
+                        this.goToMain()
+                    })
+                    .catch((err) => {
+                        if (err.response) {
+                            this.isError = true
+                            this.errorMsg = err.response.data.message
+                        }
+                    });
+            }
+        }
+        ,
+// 이메일 중복 확인
+        async checkDuplicateEmail() {
+            try {
+                const response = await this.axios.post(`/users/check/email/${this.formData.email}`);
+                this.isEmailUnique = !response.data; // 중복시 true 반환, false일 때 unique
+                console.log(`이메일: ${this.formData.email}, 중복 여부: ${response.data ? '중복' : '고유'}`);
+            } catch (error) {
+                console.error("email 중복확인 오류: " + error);
+            }
+            console.log(`isEmailUnique: ${this.isEmailUnique}`);
+        }
+        ,
+// 닉네임 중복 확인
+        async checkDuplicateNickname() {
+            try {
+                const response = await this.axios.post(`/users/check/nickname/${this.formData.nickname}`);
+                this.isNicknameUnique = !response.data; // 중복시 true 반환, false일 때 unique
+                console.log(`nickname: ${this.formData.nickname}, 중복 여부: ${response.data ? '중복' : '고유'}`);
+            } catch (error) {
+                console.error("nickname 중복확인 오류: " + error);
+            }
+            console.log(`isNicknameUnique: ${this.isNicknameUnique}`);
         }
         ,
         validate() {
-            this.$refs.form.validate()
+            this.$refs.form.validate().then((validation) => {
+                console.log("check Valid: " + "isEmailUnique: " + this.isEmailUnique + ", isNicknameUnique: " + this.isNicknameUnique)
+                console.log("validate:", validation)
+                if (validation && this.isEmailUnique && this.isNicknameUnique) {
+                    this.valid = true;
+                } else {
+                    this.valid = false;
+                }
+            });
         }
         ,
         reset() {
             this.$refs.form.reset()
+            this.isError = false
         }
-        ,
-        resetValidation() {
-            this.$refs.form.resetValidation()
-        }
+        // ,
+        // resetValidation() {
+        //     this.$refs.form.resetValidation()
+        // }
     }
 }
 </script>
 <style>
+
+.align-center {
+    align-items: center; /* 수직으로 중앙 정렬 */
+}
+
+.font-adjust {
+    font-size: 15px;
+    color: #455A64;
+}
 
 </style>
