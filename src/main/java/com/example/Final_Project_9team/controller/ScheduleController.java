@@ -46,9 +46,9 @@ public class ScheduleController {
 
     // 세부 계획 저장하기
     @PostMapping("/{scheduleId}/schedule-items")
-    public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId, @RequestBody List<ScheduleItemRequestDto> scheduleItemRequests) {
+    public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
 
-        scheduleService.createScheduleItems(scheduleId, scheduleItemRequests);
+        scheduleService.createScheduleItems(scheduleId);
 
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
