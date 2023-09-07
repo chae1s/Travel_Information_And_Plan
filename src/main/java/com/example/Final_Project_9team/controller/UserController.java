@@ -96,9 +96,23 @@ public class UserController {
     // 비밀번호 인증
     // 현재 로그인한 유저의 비밀번호와 입력한 비밀번호가 맞는지 검증 후 boolean으로 반환
     // POST /users/me/verify-password
-    @PostMapping("/me/verify-password")
+    @PostMapping("/check/verify-password")
     private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.verifyPassword(dto, auth.getName()));
+    }
+
+    // email 중복확인
+    // POST /users/check-email/{email}
+    @PostMapping("/check/email/{email}")
+    public Boolean checkEmailDuplicated(@PathVariable("email")String email) {
+        return userService.checkEmailDuplicated(email);
+    }
+
+    // nickname 중복확인
+    // POST /users/check-nickname/{nickname}
+    @PostMapping("/check/nickname/{nickname}")
+    public Boolean checkNickNameDuplicated(@PathVariable("nickname") String nickname) {
+        return userService.checkNickNameDuplicated(nickname);
     }
 
 }

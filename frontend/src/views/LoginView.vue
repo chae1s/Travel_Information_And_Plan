@@ -34,10 +34,10 @@ export default {
         };
         const { data } = await loginUser(userData);
         this.token = data.token;
-        console.log(this.token)
+        console.log("token:",this.token)
         //this.$store.commit('setUsername', data.user.username);
         this.$store.commit('setToken', this.token); // 토큰 셋팅
-        console.log(this.$store.state)
+        console.log("$store.state:",this.$store.state)
         //this.$router.push('/');
       } catch (error) {
         // 에러 핸들링할 코드
