@@ -56,19 +56,19 @@
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
                                     <div v-if="itemPath[index] && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>이동시간 : {{itemPath[index].distance}}분</div>
-                                        <div>이동거리 : {{itemPath[index].duration}}km</div>
+                                        <div>이동시간 : {{itemPath[index].duration}}분</div>
+                                        <div>이동거리 : {{itemPath[index].distance}}km</div>
                                     </div>
                                     <div v-if="itemPath[index] && index === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>총 이동시간 : {{itemPath[index].distance}}분</div>
-                                        <div>총 이동거리 : {{itemPath[index].duration}}km</div>
+                                        <div>총 이동시간 : {{itemPath[index].duration}}분</div>
+                                        <div>총 이동거리 : {{itemPath[index].distance}}km</div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="schedule_button_wrap">
-                        <button class="schedule_button" type="button" @click="checkedEmptyDestination">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="createScheduleItems">일정 생성</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@ import Calendar from "@/components/Calendar.vue";
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
 import dayjs from 'dayjs';
-import {readSchedule, readLikedItemBySido, createRouteList} from "@/api/index";
+import {readSchedule, readLikedItemBySido, createRouteList, createScheduleItems} from "@/api/index";
 
 export default {
     name: "MakeScheduleDetail",
@@ -194,7 +194,7 @@ export default {
                 alert("여행지는 최대 7개까지만 추가가 가능합니다.")
             }
             this.tourRouteList[dayIndex].tourDestination.push(item);
-
+            console.log(this.tourRouteList[dayIndex].tourDestination)
             this.likedItemList.splice(itemIndex, 1);
 
             this.selectedItem = null
@@ -266,7 +266,7 @@ export default {
             for (let i = 0; i < this.tourRouteList.length; i++) {
                 checked = false
                 if (this.tourRouteList[i].tourDestination.length === 0) {
-                    alert(this.tourRouteList[i].tourDateWithoutYear + '에 갈 여행지를 골라주세요.')
+                    alert(this.tourRouteList[i].tourDateWithoutYear + '에 갈 여행지 두 곳 이상을 골라주세요.')
                     break
                 } else {
                     checked = true
@@ -275,9 +275,16 @@ export default {
 
             return checked
         },
-        createScheduleItems() {
-            if (this.checkedEmptyDestination()) {
-                this.axios.post()
+        async createScheduleItems() {
+            try {
+                if (this.checkedEmptyDestination()) {
+                    const { data } = await createScheduleItems(this.scheduleId);
+
+                    console.log(data)
+                }
+
+            } catch (error) {
+                console.log(error)
             }
         },
     },
@@ -374,6 +381,7 @@ export default {
         margin: 3px 0;
         font-size: 15px;
         font-weight: bold;
+        overflow: hidden;
     }
 
     .my_liked_item_category {

@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -48,6 +49,8 @@ public class ScheduleService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final ScheduleItemRepository scheduleItemRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+
 
     @Value("${NAVER_MAP_CLIENT_ID}")
     private String clientId;
@@ -99,23 +102,44 @@ public class ScheduleService {
     }
 
     // 여행 일정 기간동안의 계획 한 번에 저장
-    public List<ScheduleItemResponseDto> createScheduleItems(Long scheduleId, List<ScheduleItemRequestDto> scheduleItemRequests) {
+    public void createScheduleItems(Long scheduleId) {
 
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        LocalDate targetDate = schedule.getStartDate();
+        LocalDate endDate = schedule.getEndDate();
 
-        List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
-        for (ScheduleItemRequestDto scheduleItemRequest : scheduleItemRequests) {
-            createScheduleItemEach(schedule, scheduleItemResponses, scheduleItemRequest);
-            log.info("{} 계획 등록 완료", scheduleItemRequest.getTourDate());
+        while (targetDate.isBefore(endDate) || targetDate.isEqual(endDate)) {
+            String id = String.format("no%d%s", scheduleId, targetDate);
+            SchedulePathDto schedulePath = (SchedulePathDto) redisTemplate.opsForValue().get(id);
+            log.info(schedulePath.getScheduleItems().toString());
+
+            targetDate = targetDate.plusDays(1L);
         }
 
-        return scheduleItemResponses;
+
+
+//        List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
+//        for (ScheduleItemRequestDto scheduleItemRequest : scheduleItemRequests) {
+//            createScheduleItemEach(schedule, scheduleItemResponses, scheduleItemRequest);
+//            log.info("{} 계획 등록 완료", scheduleItemRequest.getTourDate());
+//        }
+
     }
 
     public List<ItemPathDto> createRouteInformation(Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        return createRoutePosition(scheduleItemRequest.getTourDestination());
+        List<ItemPathDto> itemPaths = createRoutePosition(scheduleItemRequest.getTourDestination());
+        LocalDate tourDate = scheduleItemRequest.getTourDate();
+
+        String id = String.format("no%d%s", scheduleId, tourDate);
+        redisTemplate.opsForValue().set(id, SchedulePathDto.builder()
+                .scheduleItems(scheduleItemRequest.getTourDestination())
+                .itemPaths(itemPaths)
+                .build());
+
+
+        return itemPaths;
     }
 
     // 여행지 상세 페이지에서 일정의 특정 날짜에 여행지 추가
@@ -152,6 +176,7 @@ public class ScheduleService {
         int turn = 1;
 
         log.info("{} 날짜에 저장될 여행지의 개수 : {}", scheduleItemRequest.getTourDate(), scheduleItemRequest.getTourDestination().size());
+
 
         for (ItemListResponseDto items : scheduleItemRequest.getTourDestination()) {
             Item item = itemRepository.findById(items.getId()).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
