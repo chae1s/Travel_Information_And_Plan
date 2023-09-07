@@ -7,7 +7,7 @@ server:
 
 spring:
   mvc:
-    static-path-pattern: /static/**
+#    static-path-pattern: /static/**
     path match:
       matching-strategy: ant_path_matcher
   web:
@@ -35,3 +35,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   accessExpirationTime: ${JWT_EXPIRATION}
+
+NAVER_MAP_CLIENT_ID : y14z3lfrdm
+NAVER_MAP_CLIENT_SECRET : Lmfd2ptFaQyXRKL8UERzx0klUwXMEl9x52TMhxGg
