@@ -5,6 +5,7 @@ import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
+import MyPage from "@/views/MyPage.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 const router = createRouter({
@@ -50,6 +51,11 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
+        },
+        {
+            path: '/myPage',
+            name: 'MyPage',
+            component: MyPage
         }
     ]
 })

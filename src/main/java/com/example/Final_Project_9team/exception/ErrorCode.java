@@ -33,7 +33,9 @@ public enum ErrorCode {
 
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
     MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),
+    USER_NOT_MATCHED_HOST(400,"ERR_BAD_REQUEST","채팅방의 호스트와 일치하지 않습니다."),
     INVALID_FILE(400,"ERR_BAD_REQUEST","첨부파일을 다시 확인해주세요."),
+    USER_NOT_INCLUDED_SCHEDULE(400,"ERR_BAD_REQUEST","해당 일정에 속하는 유저가 아닙니다."),
 
     // 403 FORBIDDEN 권한이 없는 경우
     USER_NO_AUTH(403, "ERR_FORBIDDEN", "해당 기능에 대해 권한이 없습니다."),
@@ -46,6 +48,8 @@ public enum ErrorCode {
     SCHEDULE_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 일정입니다."),
     ITEM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 관광상품입니다."),
     MATES_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 메이트입니다."),
+    CHATROOM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 채팅방입니다."),
+    INVITATION_NOT_FOUND(404, "ERR_NOT_FOUND", "초대받은 일정이 없습니다."),
 
     // 500 내부 서버 에러
     INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다."),

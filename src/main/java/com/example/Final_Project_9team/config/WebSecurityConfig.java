@@ -23,7 +23,7 @@ public class WebSecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers(
                         "/static/**", "/js/**", "/css/**", "/img/**",
-                        "/media/**" // 외부 정적자원 접근 경로
+                        "media/**" // 외부 정적자원 접근 경로
                         );
     }
 
@@ -33,14 +33,20 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
+                                // common
                                 "/index.html",
                                 "/", "/error",
+
                                 "/users/register", "users/check/**",
                                 "users/profile/**",
                                 "board-create",
-                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
-                                "/item-list/**"
-                        )
+                                "/item-list/**",
+                                "/schedules/write/**","/users/me/**","schedules/**",
+
+                                // yj
+                                "schedules/chat/**", "/chatting","/mypage","/chatting","schedules/chat/**"
+
+                                )
                         .permitAll()
                         .requestMatchers(
                                 "/users/login"
