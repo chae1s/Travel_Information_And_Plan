@@ -16,7 +16,7 @@
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
                     </div>
                     <div class="my_liked_items_sido">
-                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" />
+                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="prevPageLikedItem"/>
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
                             <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
@@ -30,7 +30,7 @@
                         <div class="selected_tour_date" v-if="selectedItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
                             <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.selectedItem, this.selectedItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
                         </div>
-                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button"/>
+                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="nextPageLikedItem"/>
                     </div>
                     <div class="schedule_view">
                         <div class="schedule_map" id="map">
@@ -105,7 +105,9 @@ export default {
             selectedPosition: {top: 0, left: 0},
             itemPath: [],
             polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
-            zoom: 11
+            zoom: 11,
+            likedItemPage: 1,
+            likedItemTotalPage: 0
         }
     },
     mounted() {
@@ -126,7 +128,7 @@ export default {
 
                 this.createMap(data.sido)
 
-                this.readLikedItem(this.scheduleData.sido)
+                this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
 
                 this.createTourDate()
             } catch (error) {
@@ -150,17 +152,29 @@ export default {
                 })
             }
         },
-        async readLikedItem(sido) {
+        async readLikedItem(sido, page) {
             try {
-                const { data } = await readLikedItemBySido(sido)
+                const { data } = await readLikedItemBySido(sido, page)
 
                 this.likedItemList = data.content
-
+                this.likedItemTotalPage = data.totalPages
+                console.log(this.likedItemTotalPage)
             } catch (error) {
                 console.log(error)
             }
 
-
+        },
+        prevPageLikedItem() {
+            if (this.likedItemPage > 1) {
+                this.likedItemPage--
+                this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
+            }
+        },
+        nextPageLikedItem() {
+            if (this.likedItemPage < this.likedItemTotalPage) {
+                this.likedItemPage++
+                this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
+            }
         },
         createTourDate() {
             let firstDate = new Date(this.scheduleData.startDate)
