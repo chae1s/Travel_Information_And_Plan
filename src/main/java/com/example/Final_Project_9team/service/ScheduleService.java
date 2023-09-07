@@ -115,7 +115,7 @@ public class ScheduleService {
     public List<ItemPathDto> createRouteInformation(Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        return createRoutePosition(scheduleItemRequest.getItemIds());
+        return createRoutePosition(scheduleItemRequest.getTourDestination());
     }
 
     // 여행지 상세 페이지에서 일정의 특정 날짜에 여행지 추가
@@ -151,10 +151,10 @@ public class ScheduleService {
     private void createScheduleItemEach(Schedule schedule, List<ScheduleItemResponseDto> scheduleItemResponses, ScheduleItemRequestDto scheduleItemRequest) {
         int turn = 1;
 
-        log.info("{} 날짜에 저장될 여행지의 개수 : {}", scheduleItemRequest.getTourDate(), scheduleItemRequest.getItemIds().size());
+        log.info("{} 날짜에 저장될 여행지의 개수 : {}", scheduleItemRequest.getTourDate(), scheduleItemRequest.getTourDestination().size());
 
-        for (Long itemId : scheduleItemRequest.getItemIds()) {
-            Item item = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
+        for (ItemListResponseDto items : scheduleItemRequest.getTourDestination()) {
+            Item item = itemRepository.findById(items.getId()).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
             ScheduleItem scheduleItem = scheduleItemRequest.toEntity(turn, schedule, item);
             scheduleItem = scheduleItemRepository.save(scheduleItem);
             scheduleItemResponses.add(ScheduleItemResponseDto.fromEntity(scheduleItem));
@@ -177,17 +177,17 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
 
-    private List<ItemPathDto> createRoutePosition(List<Long> itemIds) {
+    private List<ItemPathDto> createRoutePosition(List<ItemListResponseDto> tourDestination) {
         StringBuilder sb = new StringBuilder();
         String start = "";
         String goal = "";
-
-        for (int i = 0; i < itemIds.size(); i++) {
-            Item item = itemRepository.findById(itemIds.get(i)).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
+        log.info(tourDestination.toString());
+        for (int i = 0; i < tourDestination.size(); i++) {
+            Item item = itemRepository.findById(tourDestination.get(i).getId()).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
             if (i == 0) {
                 start = String.format("%s,%s", item.getLocation().getLatitude(), item.getLocation().getLongitude());
                 continue;
-            } else if (i == itemIds.size() - 1) {
+            } else if (i == tourDestination.size() - 1) {
                 goal = String.format("%s,%s", item.getLocation().getLatitude(), item.getLocation().getLongitude());
                 continue;
             } else {
@@ -201,10 +201,10 @@ public class ScheduleService {
 
         log.info("start : {}, goal : {}, waypoints : {}", start, goal, waypoints);
 
-        return createItemPathInformation(itemIds, start, goal, waypoints);
+        return createItemPathInformation(tourDestination, start, goal, waypoints);
     }
 
-    private List<ItemPathDto> createItemPathInformation(List<Long> itemIds, String start, String goal, String waypoints) {
+    private List<ItemPathDto> createItemPathInformation(List<ItemListResponseDto> tourDestination, String start, String goal, String waypoints) {
         String naverMapUrl = String.format("https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=%s&goal=%s&waypoints=%s", start, goal, waypoints);
 
         HttpHeaders headers = new HttpHeaders();
