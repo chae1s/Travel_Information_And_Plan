@@ -55,4 +55,9 @@ public class Schedule {
     public void updateDisplay() {
         this.display = !this.display;
     }
+
+    public void updateDurationAndDistance(Integer sumDuration, Integer sumDistance) {
+        this.sumDuration = sumDuration;
+        this.sumDistance = sumDistance;
+    }
 }

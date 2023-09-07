@@ -55,13 +55,13 @@
                                         <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)" inline width="12" height="12" class="ml-3 remove_item"/>
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
-                                    <div v-if="itemPath[index] && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>이동시간 : {{itemPath[index].duration}}분</div>
-                                        <div>이동거리 : {{itemPath[index].distance}}km</div>
+                                    <div v-if="itemPath[i].tourPaths.length > 1 && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                        <div>이동시간 : {{itemPath[i].tourPaths[index].duration}}분</div>
+                                        <div>이동거리 : {{itemPath[i].tourPaths[index].distance}}km</div>
                                     </div>
-                                    <div v-if="itemPath[index] && index === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>총 이동시간 : {{itemPath[index].duration}}분</div>
-                                        <div>총 이동거리 : {{itemPath[index].distance}}km</div>
+                                    <div v-if="itemPath[i].tourPaths.length > 1 && index === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                        <div>총 이동시간 : {{ itemPath[i].tourPaths[itemPath[i].tourPaths.length - 1].duration }}분</div>
+                                        <div>총 이동거리 : {{ itemPath[i].tourPaths[itemPath[i].tourPaths.length - 1].distance }}km</div>
                                     </div>
                                 </li>
                             </ul>
@@ -174,6 +174,11 @@ export default {
                     tourDestination: []
                 })
 
+                this.itemPath.push({
+                    tourDate: date,
+                    tourPaths: []
+                })
+
 
                 firstDate.setDate(firstDate.getDate() + 1)
             }
@@ -206,10 +211,10 @@ export default {
 
             this.tourRouteList[i].tourDestination.splice(index, 1)
 
-            if (this.itemPath.length === 2) {
-                this.itemPath = []
+            if (this.itemPath[i].tourPaths.length === 2) {
+                this.itemPath[i].tourPaths = []
             } else {
-                this.itemPath.splice(index, 1)
+                this.itemPath[i].tourPaths.splice(index, 1)
             }
 
             this.likedItemList.push(deleteItem)
@@ -222,9 +227,10 @@ export default {
                     this.createItemMarkerAndPolyline(i);
                 } else {
                     const { data } = await createRouteList(this.scheduleId, this.tourRouteList[i])
-
+                    console.log(data)
                     this.createItemMarkerAndPolyline(i)
-                    this.itemPath = data
+                    this.itemPath[i].tourPaths = data
+                    console.log(this.itemPath[i].tourPaths[2].duration)
                 }
             } catch (error) {
                 console.log(error)
@@ -432,7 +438,7 @@ export default {
 
     .schedule_daily_route {
         display: inline-block;
-        margin: 0 0 45px 44px;
+        margin: 0 0 44px 44px;
         width: 360.67px;
     }
 

@@ -2,10 +2,7 @@ package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.dto.*;
 import com.example.Final_Project_9team.dto.user.UserResponseDto;
-import com.example.Final_Project_9team.entity.Mates;
-import com.example.Final_Project_9team.entity.Schedule;
-import com.example.Final_Project_9team.entity.ScheduleItem;
-import com.example.Final_Project_9team.entity.User;
+import com.example.Final_Project_9team.entity.*;
 import com.example.Final_Project_9team.entity.enums.Role;
 import com.example.Final_Project_9team.entity.item.Item;
 import com.example.Final_Project_9team.exception.CustomException;
@@ -16,7 +13,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.example.Final_Project_9team.dto.ChatRoomDto;
-import com.example.Final_Project_9team.entity.ChatRoom;
 import com.example.Final_Project_9team.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +32,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -50,6 +48,7 @@ public class ScheduleService {
     private final ItemRepository itemRepository;
     private final ScheduleItemRepository scheduleItemRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ItemPathRepository itemPathRepository;
 
 
     @Value("${NAVER_MAP_CLIENT_ID}")
@@ -108,22 +107,27 @@ public class ScheduleService {
         LocalDate targetDate = schedule.getStartDate();
         LocalDate endDate = schedule.getEndDate();
 
+        int totalDistance = 0;
+        int totalDuration = 0;
+
         while (targetDate.isBefore(endDate) || targetDate.isEqual(endDate)) {
             String id = String.format("no%d%s", scheduleId, targetDate);
             SchedulePathDto schedulePath = (SchedulePathDto) redisTemplate.opsForValue().get(id);
-            log.info(schedulePath.getScheduleItems().toString());
+            // 에러 정리하기
+            if (schedulePath == null) throw new CustomException(ErrorCode.SCHEDULE_NOT_FOUND);
+            log.info("redis에 저장된 {} 날짜의 여행지 개수 : {}", targetDate, schedulePath.getScheduleItems().size());
+
+            Map<String, Integer> pathInfoMap = createItemPath(schedule, targetDate, schedulePath);
+            totalDistance += pathInfoMap.get("distance");
+            totalDuration += pathInfoMap.get("duration");
 
             targetDate = targetDate.plusDays(1L);
         }
 
+        log.info("{}의 총 이동시간 : {}, 총 이동거리 : {}", schedule.getTitle(), totalDuration, totalDistance);
 
-
-//        List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
-//        for (ScheduleItemRequestDto scheduleItemRequest : scheduleItemRequests) {
-//            createScheduleItemEach(schedule, scheduleItemResponses, scheduleItemRequest);
-//            log.info("{} 계획 등록 완료", scheduleItemRequest.getTourDate());
-//        }
-
+        schedule.updateDurationAndDistance(totalDuration, totalDistance);
+        scheduleRepository.save(schedule);
     }
 
     public List<ItemPathDto> createRouteInformation(Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
@@ -211,10 +215,8 @@ public class ScheduleService {
             Item item = itemRepository.findById(tourDestination.get(i).getId()).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
             if (i == 0) {
                 start = String.format("%s,%s", item.getLocation().getLatitude(), item.getLocation().getLongitude());
-                continue;
             } else if (i == tourDestination.size() - 1) {
                 goal = String.format("%s,%s", item.getLocation().getLatitude(), item.getLocation().getLongitude());
-                continue;
             } else {
                 if (i > 1) sb.append("|");
 
@@ -306,5 +308,54 @@ public class ScheduleService {
                 = pagedSchedules.map(schedule -> ScheduleListResponseDto.fromEntity(schedule));
         return PageDto.fromPage(pagedDto);
 
+    }
+
+    private Map<String, Integer> createItemPath(Schedule schedule, LocalDate tourDate, SchedulePathDto schedulePath) {
+        List<ItemListResponseDto> scheduleItems = schedulePath.getScheduleItems();
+        List<ItemPathDto> itemPaths = schedulePath.getItemPaths();
+
+        int itemTurn = 1;
+
+        ScheduleItem arrivalScheduleItem = createScheduleItem(schedule, scheduleItems.get(0).getId(), tourDate, itemTurn++);
+
+        for (int i = 0; i < itemPaths.size() - 1; i++) {
+            ScheduleItem departureScheduleItem = createScheduleItem(schedule, scheduleItems.get(i + 1).getId(), tourDate, itemTurn++);
+            log.info("출발 여행지 : {}, 도착 여행지 : {}", arrivalScheduleItem.getItem().getName(), departureScheduleItem.getItem().getName());
+            // itemPath db에 저장
+            ItemPath itemPath = ItemPath.builder()
+                    .schedule(schedule)
+                    .turn(i + 1)
+                    .distance(itemPaths.get(i).getDistance())
+                    .duration(itemPaths.get(i).getDuration())
+                    .arrivalScheduleItem(arrivalScheduleItem)
+                    .departureScheduleItem(departureScheduleItem)
+                    .build();
+            log.info(
+                    "{} - {} 이동 시간 : {}, 이동 거리 : {}", arrivalScheduleItem.getItem().getName(), departureScheduleItem.getItem().getName(),
+                    itemPaths.get(i).getDuration(), itemPaths.get(i).getDistance());
+            itemPathRepository.save(itemPath);
+            arrivalScheduleItem = departureScheduleItem;
+        }
+
+        Map<String, Integer> pathInfoMap = new HashMap<>();
+        pathInfoMap.put("distance", itemPaths.get(itemPaths.size() - 1).getDistance());
+        pathInfoMap.put("duration", itemPaths.get(itemPaths.size() - 1).getDuration());
+
+        return pathInfoMap;
+    }
+
+    private ScheduleItem createScheduleItem(Schedule schedule, Long itemId, LocalDate tourDate, int turn) {
+        // 여행지 정보 가져오기
+        Item arrivalItem = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
+
+        // tourDate 날짜에 등록할 db에 저장
+        ScheduleItem scheduleItem = ScheduleItem.builder()
+                .schedule(schedule)
+                .turn(turn)
+                .tourDate(tourDate)
+                .item(arrivalItem)
+                .build();
+
+        return scheduleItemRepository.save(scheduleItem);
     }
 }
