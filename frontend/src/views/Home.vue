@@ -1,7 +1,7 @@
 <template>
     <main>
         <div class="ad_image_section">
-            <img src="../assets/images/adImage.png" alt="" class="ad_image">
+            <v-img src="@/assets/images/adImage.png" alt="" class="ad_image" cover/>
         </div>
         <div class="content">
             <div class="home_content">
@@ -12,7 +12,7 @@
                     <ul class="item_list">
                         <li class="item" v-for="i in 4" >
                             <a @click="$router.push('/schedules')">
-                                <img src="../assets/images/site_1.jpg" alt="">
+                                <v-img src="@/assets/images/site_1.jpg" alt="" height="155px" width="277.5" class="rounded-lg" cover/>
                                 <div class="item_info">
                                     <div class="item_text">
                                         <div class="item_title">안반데기</div>
@@ -22,17 +22,17 @@
                                         <li>관심등록</li>
                                         <li>후기 1234</li>
                                     </ul>
-                                    <ul class="item_label_list">
-                                        <li class="item_label">강원도</li>
-                                        <li class="item_label">관광지</li>
-                                        <li class="item_label __label">추천</li>
-                                    </ul>
+                                    <div class="item_label_list">
+                                        <v-chip size="small" class="item_label">강원도</v-chip>
+                                        <v-chip size="small" class="item_label">관광지</v-chip>
+                                        <v-chip size="small" class="item_label">인기</v-chip>
+                                    </div>
                                 </div>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <div class="item_detail_info">
+                <div class="item_popular_section">
                     <div class="content_header">
                         <div>핫 플레이스</div>
                         <router-link to="/items-list">더보기</router-link>
@@ -208,11 +208,10 @@ export default {
     }
 
     .item_info {
-        padding: 0 10px;
+        margin-top: 10px;
     }
 
     .item_text {
-        margin-top: 14px;
         box-sizing: border-box;
     }
 
@@ -227,7 +226,6 @@ export default {
     .item_fullAddress {
         text-overflow: ellipsis;
         word-wrap: normal;
-        margin-top: 8px;
         font-size: 16px;
         text-align: left;
     }
@@ -235,7 +233,6 @@ export default {
     .item_count {
         display: flex;
         flex-wrap: wrap;
-        margin-top: 10px;
         font-size: 14px;
     }
 
@@ -246,23 +243,16 @@ export default {
     .item_label_list {
         display: flex;
         flex-wrap: wrap;
-        margin-top: 10px;
+        margin-top: 6px;
         height: 25px;
     }
 
     .item_label {
-        padding: 4px 8px;
-        margin-right: 8px;
-        border-radius: 4px;
+        margin-right: 4px;
         font-size: 13px;
-        background-color: #C4DFFF;
     }
 
-    .__label {
-        background-color: #FFE866;
-    }
-
-    .item_detail_info:deep(.location_checkbox) {
+    .item_popular_section:deep(.location_checkbox) {
         display: flex;
         justify-content: space-between;
         box-sizing: border-box;
@@ -271,18 +261,18 @@ export default {
         margin-bottom: 20px;
     }
 
-    .item_detail_info:deep(.form_checkbox_btn input[type=checkbox]) {
+    .item_popular_section:deep(.form_checkbox_btn input[type=checkbox]) {
         display: none;
     }
 
-    .item_detail_info:deep(.form_checkbox_btn label) {
+    .item_popular_section:deep(.form_checkbox_btn label) {
         width: 44px;
         border-radius: 14px;
         padding: 5px 8px;
         cursor: pointer;
     }
 
-    .item_detail_info:deep(.form_checkbox_btn input[type=checkbox]:checked + label) {
+    .item_popular_section:deep(.form_checkbox_btn input[type=checkbox]:checked + label) {
         background-color: #C4DFFF;
     }
 

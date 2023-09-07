@@ -32,7 +32,8 @@ public class LocalFileHandler implements FileHandler{
         String filenameWithExt = String.format("%s.%s", fileName, extension);
         log.info("파일 이름 : {}", filenameWithExt);
 
-        String fileDir = System.getProperty("user.dir") + File.separator + "media" + File.separator;
+//        String fileDir = System.getProperty("user.dir") + File.separator + "media" + File.separator;
+        String fileDir = System.getProperty("user.dir") + File.separator + "src\\main\\resources\\static\\media" + File.separator;
         String filePath = fileDir + filenameWithExt;
         log.info("저장 위치 : {}",filePath);
 
@@ -52,7 +53,8 @@ public class LocalFileHandler implements FileHandler{
     }
 
     public void deleteFile(String fileFilename) throws FileNotFoundException {
-        String path = System.getProperty("user.dir") + File.separator + "media" + File.separator + fileFilename;
+//        String path = System.getProperty("user.dir") + File.separator + "media" + File.separator + fileFilename;
+        String path = System.getProperty("user.dir") + File.separator + "src\\main\\resources\\static\\media" + File.separator + fileFilename;
 
         File file = ResourceUtils.getFile(path);
         log.info("지울 파일 경로 : {}", file.getPath());

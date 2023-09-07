@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.dto.*;
+import com.example.Final_Project_9team.dto.user.UserResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.ScheduleItem;
@@ -29,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,17 +75,19 @@ public class ScheduleService {
             throw new CustomException(ErrorCode.USER_NO_AUTH);
         }
 
-        // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 mates list
-        List<Mates> mates = matesRepository.findAllBySchedule(schedule);
+        Integer period = Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1;
 
-        List<MatesResponseDto> matesResponses = new ArrayList<>();
+        // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 userList
+        List<Mates> mates = matesRepository.findAllBySchedule(schedule);
+        List<UserResponseDto> userResponses = new ArrayList<>();
         for (Mates mate : mates) {
             if (mate.getIsAccepted()) {
-                matesResponses.add(MatesResponseDto.fromEntity(mate));
+                log.info("{} 일정 mates의 닉네임 : {}", schedule.getTitle(), mate.getUser().getNickname());
+                userResponses.add(UserResponseDto.fromEntity(mate.getUser()));
             }
         }
 
-        return ScheduleResponseDto.fromEntity(schedule, matesResponses);
+        return ScheduleResponseDto.fromEntity(schedule, userResponses, period);
 
     }
 
@@ -103,10 +107,6 @@ public class ScheduleService {
 
     public List<ItemPathDto> createRouteInformation(Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-
-        String start = "";
-        String goal = "";
-        String waypoints = "";
 
         return createRoutePosition(scheduleItemRequest.getItemIds());
     }

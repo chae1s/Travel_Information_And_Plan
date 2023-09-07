@@ -21,7 +21,10 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**");
+                .requestMatchers(
+                        "/static/**", "/js/**", "/css/**", "/img/**",
+                        "/media/**" // 외부 정적자원 접근 경로
+                        );
     }
 
     @Bean
@@ -30,14 +33,13 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers(
-                                "/users/register",
+                                "/index.html",
+                                "/", "/error",
+                                "/users/register", "users/check/**",
                                 "users/profile/**",
                                 "board-create",
-                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error",
-                                "schedules/write/**",
-                                "/item-list/**",
-                                "/**",
-                                "users/profile/**"
+                                "schedules/chat/**", "static/**", "/js/**", "/chatting", "/error"
+                                "/item-list/**"
                         )
                         .permitAll()
                         .requestMatchers(
