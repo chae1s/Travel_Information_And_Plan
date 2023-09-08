@@ -17,6 +17,10 @@ function readBoards() {
     return axiosInstance.get('/boards');
 }
 
+function uploadImage(image) {
+    return axiosInstance.post('/images', image);
+}
+
 function createSchedule(scheduleData) {
     return axiosInstance.post('/schedules', scheduleData)
 }

@@ -16,7 +16,6 @@ public class BoardResponseDto {
     private Integer viewCnt;
     private Integer likesCnt;
     private LocalDateTime createdAt;
-    private List<String> imageUrls;
     private PageDto<CommentResponseDto> comments;
 
 
@@ -28,9 +27,6 @@ public class BoardResponseDto {
         dto.setViewCnt(board.getViewCnt());
         dto.setLikesCnt(likesCnt);
         dto.setCreatedAt(board.getCreatedAt());
-        dto.setImageUrls(board.getAttachments().stream()
-                .map(attachments -> "/" + attachments.getPath())
-                .toList());
         dto.setComments(
                 PageDto.fromPage(
                         comments.map(CommentResponseDto::fromEntity)

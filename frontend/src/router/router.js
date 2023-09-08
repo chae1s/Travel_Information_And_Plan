@@ -5,14 +5,18 @@ import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
-import MyPage from "@/views/MyPageTest.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 import LogoutView from "@/components/Logout.vue";
 import InvitationList from "@/components/InvitationList.vue";
 import UserInfo from "@/components/UseInfo.vue";
 import UserInfoView from "@/views/UserInfoView.vue";
-
+import MyPageMain from "@/views/MyPageMain.vue";
+import MyPageEdit from "@/components/ProfileEdit.vue";
+import Password from "@/components/Password.vue";
+import MyPageDelete from "@/components/UserDelete.vue";
+import ProfileEdit from "@/components/ProfileEdit.vue";
+import UserDelete from "@/components/UserDelete.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -63,11 +67,6 @@ const router = createRouter({
             component: BoardCreate
         },
         {
-            path: '/mypage',
-            name: 'MyPage',
-            component: MyPage,
-        },
-        {
             path: '/my-info',
             name: 'MyInfoView',
             component: UserInfoView,
@@ -87,7 +86,16 @@ const router = createRouter({
         {
             path: '/mate-invitation', name: 'InvitationList', component: InvitationList
         },
-
+        {
+            path: '/myPage/main',
+            name: 'MyPageMain',
+            component: MyPageMain,
+            children: [
+                {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
+                {path: 'password', name: 'Password', component: Password},
+                {path: 'delete', name: 'UserDelete', component: UserDelete}
+            ]
+        },
     ]
 })
 
