@@ -4,7 +4,7 @@
             {{ sidebarTitle }}
         </div>
         <div class="sidebar_menu">
-            <router-link :to="sidebarRouter[i]" v-for="(subTitle, i) in sidebarList" :key="subTitle" :class="{'selected': sidebarActive[i]}">{{ subTitle }}</router-link>
+            <router-link :to="sidebarRouter[i]" v-for="(subTitle, i) in sidebarList" :key="subTitle" active-class="selected">{{ subTitle }}</router-link>
         </div>
     </div>
 </template>

@@ -13,9 +13,11 @@ import InvitationList from "@/components/InvitationList.vue";
 import UserInfo from "@/components/UseInfo.vue";
 import UserInfoView from "@/views/UserInfoView.vue";
 import MyPageMain from "@/views/MyPageMain.vue";
-import MyPageEdit from "@/views/MyPageEdit.vue";
-import MyPagePassword from "@/views/MyPagePassword.vue";
-import MyPageDelete from "@/views/MyPageDelete.vue";
+import MyPageEdit from "@/components/ProfileEdit.vue";
+import Password from "@/components/Password.vue";
+import MyPageDelete from "@/components/UserDelete.vue";
+import ProfileEdit from "@/components/ProfileEdit.vue";
+import UserDelete from "@/components/UserDelete.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -73,9 +75,9 @@ const router = createRouter({
         {
             path: '/my-info',
             name: 'MyInfoView',
-            component: UserInfoView, // myPage/main
+            component: UserInfoView,
             children: [
-                {path: 'update', name: 'update', component: UserInfo},      // myPage edit
+                {path: 'update', name: 'update', component: UserInfo},
             ]
         },
         // { // 나중에 메이트 보기 리스트 있으면 이렇게
@@ -92,23 +94,13 @@ const router = createRouter({
         {
             path: '/myPage/main',
             name: 'MyPageMain',
-            component: MyPageMain
+            component: MyPageMain,
+            children: [
+                {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
+                {path: 'password', name: 'Password', component: Password},
+                {path: 'delete', name: 'UserDelete', component: UserDelete}
+            ]
         },
-        {
-            path: '/myPage/edit',
-            name: 'MyPageEdit',
-            component: MyPageEdit
-        },
-        {
-            path: '/myPage/password',
-            name: 'MyPagePassword',
-            component: MyPagePassword
-        },
-        {
-            path: '/myPage/delete',
-            name: 'MyPageDelete',
-            component: MyPageDelete
-        }
     ]
 })
 
