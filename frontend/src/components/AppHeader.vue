@@ -6,7 +6,7 @@
                     <router-link to="/">어디갈래?</router-link>
                 </div>
                 <div class="user_info">
-                    <router-link to="/" v-if="isLogin">알림</router-link>
+                    <router-link to="/mypage/main" v-if="isLogin">알림</router-link>
                     <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>
                     <router-link to="/login" v-if="!isLogin">로그인</router-link>
                     <router-link to="/logout"  v-if="isLogin">로그아웃</router-link>

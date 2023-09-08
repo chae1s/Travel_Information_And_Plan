@@ -9,6 +9,10 @@ import MyPage from "@/views/MyPage.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 import LogoutView from "@/views/LogoutView.vue";
+import MyPageMain from "@/views/MyPageMain.vue";
+import MyPageEdit from "@/views/MyPageEdit.vue";
+import MyPagePassword from "@/views/MyPagePassword.vue";
+import MyPageDelete from "@/views/MyPageDelete.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -62,6 +66,26 @@ const router = createRouter({
             path: '/myPage',
             name: 'MyPage',
             component: MyPage
+        },
+        {
+            path: '/myPage/main',
+            name: 'MyPageMain',
+            component: MyPageMain
+        },
+        {
+            path: '/myPage/edit',
+            name: 'MyPageEdit',
+            component: MyPageEdit
+        },
+        {
+            path: '/myPage/password',
+            name: 'MyPagePassword',
+            component: MyPagePassword
+        },
+        {
+            path: '/myPage/delete',
+            name: 'MyPageDelete',
+            component: MyPageDelete
         }
     ]
 })
