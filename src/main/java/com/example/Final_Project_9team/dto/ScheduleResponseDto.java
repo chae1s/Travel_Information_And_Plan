@@ -86,6 +86,7 @@ public class ScheduleResponseDto {
         dto.setSumDistance(schedule.getSumDistance());
         dto.setSumDuration(schedule.getSumDuration());
         dto.setDisplay(schedule.getDisplay());
+        dto.setUserResponses(userResponses);
         dto.setPeriod(Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1);
         dto.setScheduleItemResponses(scheduleItemResponses);
 

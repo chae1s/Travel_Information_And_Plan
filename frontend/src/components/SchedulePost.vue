@@ -9,7 +9,7 @@
             <div class="schedule_mates">
                 <span v-for="user in scheduleData.users" :key="user">{{ user.nickname }}</span>
             </div>
-            <div class="show_schedule">공유하기</div>
+            <div class="show_schedule" v-if="!scheduleData.isDisplay">공유하기</div>
         </div>
         <div class="schedule_contents">
             <div id="map" class="schedule_map">
@@ -17,25 +17,29 @@
             </div>
             <div class="schedule_description">{{ scheduleData.description }}</div>
             <div class="schedule_item_header">
-                <span v-for="i in scheduleData.period">Day {{ i }}</span>
+                <span v-for="i in scheduleData.period" @click="changedDefaultDate(i)" :class="{'selected':checkedDefaultDate(i)}">Day {{ i }}</span>
             </div>
             <div class="schedule_item_images">
                 <div class="image_list">
-                    <div v-for="i in 7">
-                        <v-img src="@/assets/images/site_1.jpg" width="112px" height="112px" cover="true" class="rounded-lg"/>
+                    <div v-for="item in tourRouteList[defaultDate - 1]" :key="item">
+                        <v-img :src="item.firstImage" width="112px" height="112px" cover="true" class="rounded-lg"/>
                     </div>
                 </div>
             </div>
             <div class="schedule_destination_list">
                 <ul>
-                    <li v-for="i in 7" class="schedule_item">
+                    <li v-for="(item, i) in tourRouteList[defaultDate - 1]" :key="item" class="schedule_item">
                         <div>
-                            <v-img :src="require('@/assets/images/icons/day/route_' + (i) + '.png')" width="24px" height="24px" inline="true"/>
+                            <v-img :src="require('@/assets/images/icons/day/route_' + (i + 1) + '.png')" width="24px" height="24px" inline="true"/>
                         </div>
                         <div>
-                            <div class="destination_title">여행지 이름</div>
-                            <div class="destination_address">여행지 주소</div>
-                            <div class="destination_information">여행지 정보</div>
+                            <div class="destination_title">{{ item.name }}</div>
+                            <div class="destination_address">{{ item.fullAddress }}</div>
+                            <div class="destination_information">{{ item.category }}</div>
+                            <div v-if="i < itemPathList[defaultDate - 1].length" class="schedule_route_info">
+                                <div>이동시간 : {{ itemPathList[defaultDate - 1][i].duration }}</div>
+                                <div>이동시간 : {{ itemPathList[defaultDate - 1][i].distance }}</div>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -61,8 +65,12 @@ export default {
                 startDate: '',
                 endDate: '',
                 period: 0,
+                isDisplay: '',
                 users: [{}]
             },
+            tourRouteList: [],
+            itemPathList: [],
+            defaultDate: 1
         }
     },
     mounted() {
@@ -78,12 +86,29 @@ export default {
                 this.scheduleData.startDate = dayjs(data.startDate).format("YYYY.MM.DD")
                 this.scheduleData.endDate = dayjs(data.endDate).format("YYYY.MM.DD")
                 this.scheduleData.period = data.period
+                this.scheduleData.isDisplay = data.isDisplay
                 this.scheduleData.users = data.userResponses
-
                 console.log(data)
+                let scheduleItems = data.scheduleItemResponses
+
+
+                for (let i = 0; i < scheduleItems.length; i++) {
+
+                    this.tourRouteList.push(scheduleItems[i].itemListResponses)
+                    this.itemPathList.push(scheduleItems[i].itemPaths)
+                }
+
+                console.log(this.itemPathList)
+
             } catch (error) {
                 console.log(error)
             }
+        },
+        changedDefaultDate(i) {
+            this.defaultDate = i
+        },
+        checkedDefaultDate(i) {
+            return this.defaultDate === i
         },
     }
 }
@@ -146,7 +171,6 @@ export default {
     }
 
     .schedule_item_header span {
-        font-weight: bold;
         margin-right: 24px;
         cursor: pointer;
     }
@@ -167,13 +191,14 @@ export default {
 
     .schedule_destination_list {
         width: 789px;
-        margin: 20px auto 0;
+        margin: 20px auto 80px;
     }
 
     .schedule_item {
         display: flex;
         gap: 9px;
         margin-bottom: 10px;
+        text-align: left;
     }
 
     .destination_title {
@@ -185,6 +210,23 @@ export default {
 
     .destination_information, .destination_address {
         font-size: 14px;
+    }
+
+    .selected {
+        font-weight: bold;
+        color: #99C7FF;
+    }
+
+    .schedule_route_info {
+        min-width: 210px;
+        font-size: 14px;
+        margin: 8px 0;
+    }
+
+    .schedule_route_info div {
+        display: inline-block;
+        width: 50%;
+        text-align: left;
     }
 
 

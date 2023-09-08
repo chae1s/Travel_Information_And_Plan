@@ -70,9 +70,17 @@ function readAllSchedules() {
     return axiosInstance.get('/users/me/schedules')
 }
 
+function readMySchedule(scheduleId) {
+    return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
+}
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
+<<<<<<< HEAD
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
     bookmarkItem, readAllSchedules
+=======
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllSchedules, readMySchedule
+>>>>>>> 0666ccf (refactor : 작성한 일정의 세부 계획, 동선 출력)
 };
 
