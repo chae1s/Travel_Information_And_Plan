@@ -27,6 +27,8 @@ import MyItemReviewList from "@/components/MyItemReviewList.vue";
 import MyCommentList from "@/components/MyCommentList.vue";
 import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
 import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
+import ScheduleList from "@/components/ScheduleList.vue";
+import SchedulePost from "@/components/SchedulePost.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -78,12 +80,37 @@ const router = createRouter({
         },
 
         {
+            path: '/mypage',
+            name: 'MyPage',
+            component: MyPage,
+        },
+        {
+            path: '/my-info',
+            name: 'MyInfoView',
+            component: UserInfoView,
+            children: [
+                {path: 'update', name: 'update', component: UserInfo},
+            ]
+        },
+        // { // 나중에 메이트 보기 리스트 있으면 이렇게
+        //     path: '/mate',
+        //     name: 'mage',
+        //     component: Mate,
+        //     children: [
+        //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
+        //     ]
+        // },
+        {
+            path: '/mate-invitation', name: 'InvitationList', component: InvitationList
+        },
+        {
             path: '/my-page',
             name: 'MyPageMain',
             component: MyPageMain,
             children: [
                 {path: 'my-info', name: 'MyInformation', children: [
                         {path: 'edit', name: 'UserInfoEdit', component: UserInfoEdit},
+                        {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
                         {path: 'password', name: 'Password', component: Password},
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
@@ -106,6 +133,10 @@ const router = createRouter({
                         {path: 'boards', name: 'MyBoardList', component: MyBoardList},
                         {path: 'review', name: 'MyItemReviewList', component: MyItemReviewList},
                         {path: 'comments', name: 'MyCommentList', component: MyCommentList}
+                        {path: 'schedules', name: 'ScheduleList', component: ScheduleList, children: [
+                            {path: ':id', name: 'SchedulePost', component: SchedulePost}]
+                        },
+                        {path: 'boards', name: 'BoardList'},
                     ]
                 }
 

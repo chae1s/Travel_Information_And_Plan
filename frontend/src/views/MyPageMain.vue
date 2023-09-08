@@ -4,6 +4,7 @@
             <div class="sidebar_content">
                 <div class="my_page_main_sidebar">
                     <div class="profile_information">
+<<<<<<< HEAD
                         <Profile/>
                         <v-btn flat @click="goToInfo()">내 정보</v-btn>
                     </div>
@@ -14,6 +15,13 @@
                                  :sidebar-router="sidebar.sidebarRouter"
                                  :sidebar-active="sidebar.sidebarActive" class="mt-3"/>
 =======
+=======
+                        <div class="">프로필</div>
+                        <!-- 프로필 사진 등 프로필 정보 -->
+                        <router-link to="/my-page/my-info/edit">내 정보</router-link>
+                    </div>
+                    <AppSideMenu v-for="sidebar in sidebarData" :key="sidebar"
+>>>>>>> 20b278c (feat : 작성한 일정 리스트 내용 출력)
                         :sidebar-title="sidebar.sidebarTitle"
                         :sidebar-list="sidebar.sidebarList"
                         :sidebar-router="sidebar.sidebarRouter" class="mt-3"/>
@@ -55,16 +63,24 @@ export default {
                 {
                     sidebarTitle: '나의 여행',
                     sidebarList: ['메이트 초대 리스트', '관심등록 여행지'],
+<<<<<<< HEAD
                     sidebarRouter: ['/my-page/my-trip/mate-invitation', '/my-page/my-trip/liked-items']
+=======
+                    sidebarRouter: ['/my-page/my-trip/mate-invitation', '/']
+>>>>>>> 20b278c (feat : 작성한 일정 리스트 내용 출력)
                 },
                 {
                     sidebarTitle: '나의 포스트',
                     sidebarList: ['내가 쓴 일정', '내가 쓴 게시글', '내가 쓴 후기', '내가 쓴 댓글'],
 <<<<<<< HEAD
+<<<<<<< HEAD
                     sidebarRouter: ['/', '/', '/', '/']
 =======
                     sidebarRouter: ['/my-page/my-post/schedules', '/my-page/my-post/boards', '/my-page/my-post/review', '/my-page/my-post/comments']
 >>>>>>> 0114ba9 (refactor : 커뮤니티게시판 스케줄 목록, 세부 일정 출력, my page의 기타 페이지 html, css)
+=======
+                    sidebarRouter: ['/my-page/my-post/schedules', '/', '/', '/']
+>>>>>>> 20b278c (feat : 작성한 일정 리스트 내용 출력)
                 }
             ],
         }
