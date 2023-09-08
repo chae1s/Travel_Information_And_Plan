@@ -145,6 +145,7 @@ export default {
             document.head.appendChild(script)
 
             if (this.scheduleData.sido === '0') this.zoom = 8
+            else if (this.scheduleData.sido === '2') this.zoom = 10
 
             script.onload = () => {
                 new window.naver.maps.Map("map", {
@@ -253,8 +254,8 @@ export default {
         },
         createItemMarkerAndPolyline(i) {
             const map = new naver.maps.Map("map", {
-                center: new window.naver.maps.LatLng(37.5670135, 126.9783740),
-                zoom: 11
+                center: new window.naver.maps.LatLng(locations[this.scheduleData.sido].lat, locations[this.scheduleData.sido].lng),
+                zoom: this.zoom
             })
 
             let polylinePath = []
