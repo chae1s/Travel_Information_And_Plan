@@ -25,8 +25,8 @@ function readSchedule(scheduleId) {
     return axiosInstance.get('/schedules/' + scheduleId)
 }
 
-function readLikedItemBySido(sido) {
-    return axiosInstance.get('/users/me/liked-items/' + sido)
+function readLikedItemBySido(sido, page) {
+    return axiosInstance.get(`/users/me/liked-items/${sido}?page=${page}`)
 }
 
 function createRouteList(scheduleId, tourList) {
@@ -43,8 +43,12 @@ function rejectInvitation(scheduleId, matesId) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}/rejection/${matesId}`);
 }
 
+function createScheduleItems(scheduleId) {
+    return axiosInstance.post(`/schedules/${scheduleId}/schedule-items`)
+}
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems
 };
 

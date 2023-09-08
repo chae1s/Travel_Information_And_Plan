@@ -7,6 +7,7 @@ import com.example.Final_Project_9team.service.MyActivityService;
 import com.example.Final_Project_9team.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -113,10 +114,10 @@ public class MyActivityController {
     }
 
     @GetMapping("liked-items/{sido}")
-    public ResponseEntity<PageDto<ItemListResponseDto>> readLikedItemsBySido(Authentication auth,
-                                                                             @PathVariable("sido") String sido,
-                                                                             @RequestParam(value = "page", defaultValue = "1") int page,
-                                                                             @RequestParam(value = "size", defaultValue = "8") int size) {
+    public ResponseEntity<Page<ItemListResponseDto>> readLikedItemsBySido(Authentication auth,
+                                                                          @PathVariable("sido") String sido,
+                                                                          @RequestParam(value = "page", defaultValue = "1") int page,
+                                                                          @RequestParam(value = "size", defaultValue = "7") int size) {
 
         return ResponseEntity.ok(myActivityService.readLikedItemsBySido(auth.getName(), sido, page, size));
     }
