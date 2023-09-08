@@ -203,7 +203,7 @@ public class MyActivityService {
         // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 userList
         List<Mates> mates = matesRepository.findAllBySchedule(schedule);
         List<UserResponseDto> userResponses = readUserWriteSchedule(mates, schedule);
-
+        log.info("일정 메이트 수 : {}", userResponses.size());
 
         LocalDate targetDate = schedule.getStartDate();
         LocalDate endDate = schedule.getEndDate();

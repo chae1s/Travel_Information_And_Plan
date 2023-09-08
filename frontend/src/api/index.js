@@ -55,8 +55,12 @@ function readAllSchedules() {
     return axiosInstance.get('/users/me/schedules')
 }
 
+function readMySchedule(scheduleId) {
+    return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
+}
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllSchedules
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllSchedules, readMySchedule
 };
 
