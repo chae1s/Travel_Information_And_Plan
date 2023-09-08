@@ -8,6 +8,11 @@ import BoardCreate from "@/views/BoardCreate.vue";
 import MyPage from "@/views/MyPage.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
+import LogoutView from "@/components/Logout.vue";
+import InvitationList from "@/components/InvitationList.vue";
+import UserInfo from "@/components/UseInfo.vue";
+import UserInfoView from "@/views/UserInfoView.vue";
+
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -32,6 +37,11 @@ const router = createRouter({
             component: SignUp
         },
         {
+            path: '/logout',
+            name: 'logout',
+            component: LogoutView
+        },
+        {
             path: '/items-list',
             name: "ItemList",
             component: ItemList
@@ -53,11 +63,43 @@ const router = createRouter({
             component: BoardCreate
         },
         {
-            path: '/myPage',
+            path: '/mypage',
             name: 'MyPage',
-            component: MyPage
-        }
+            component: MyPage,
+        },
+        {
+            path: '/my-info',
+            name: 'MyInfoView',
+            component: UserInfoView,
+            children: [
+                {path: 'update', name: 'update', component: UserInfo}
+            ]
+        },
+        // { // 나중에 메이트 보기 리스트 있으면 이렇게
+        //     path: '/mate',
+        //     name: 'mage',
+        //     component: Mate,
+        //     children: [
+        //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
+        //     ]
+        // },
+        {
+            path: '/mate-invitation', name: 'InvitationList', component: InvitationList
+        },
+
     ]
 })
 
 export default router
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.auth)) {
+        if (this.$store.state.token != '') {
+            next();
+        } else {
+            alert("로그인이 필요한 페이지입니다.")
+            router.push({path: '/login'})
+        }
+    } else {
+        next();
+    }
+})
