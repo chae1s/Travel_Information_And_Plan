@@ -44,7 +44,8 @@ public class WebSecurityConfig {
                                 "/schedules/write/**","/users/me/**","schedules/**",
 
                                 // yj
-                                "schedules/chat/**", "/chatting","/mypage","/chatting","schedules/chat/**"
+                                "schedules/chat/**", "/chatting","/mypage","/chatting","schedules/chat/**",
+                                "api/user/search/**","/users"
 
                                 )
                         .permitAll()

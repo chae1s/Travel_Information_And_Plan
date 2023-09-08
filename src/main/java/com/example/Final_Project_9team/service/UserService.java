@@ -95,24 +95,21 @@ public class UserService {
     // 회원 검색
     // keyword가 포함된 email, nickname으로 회원 검색, 탈퇴회원 및 본인을 제외하고 반환
     // 결과가 없을 경우 빈 결과로 페이지 반환한
-    public Page<UserResponseDto> findUser(String keyword, Integer pageNumber, Integer pageSize, String email) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("nickname"));
+    public List<UserResponseDto> findUser(String keyword, String userEmail) {
         log.info("user 검색");
-        List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
-        List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, email);
+        List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
+        List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
         List<User> mergedList = new ArrayList<>();
         mergedList.addAll(findByEmail);
         mergedList.addAll(findByNickname);
 
         // 중복제거 후 닉네임 기준으로 정렬
-        List<User> distinctAndSorted = mergedList.stream()
+        List<UserResponseDto> userResponseDtoList = mergedList.stream()
                 .distinct()
                 .sorted(Comparator.comparing(User::getNickname))
+                .map(UserResponseDto::fromEntity)
                 .collect(Collectors.toList());
-        // paging 후 page<dto>로 변환
-        Page<User> userPaged = new PageImpl<>(distinctAndSorted, pageable, distinctAndSorted.size());
-        Page<UserResponseDto> userPagedResponseDto = userPaged.map(user -> UserResponseDto.fromEntity(user));
-        return userPagedResponseDto;
+        return userResponseDtoList;
     }
 
     // 회원정보 수정

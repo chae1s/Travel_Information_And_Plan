@@ -42,9 +42,11 @@ function acceptInvitation(scheduleId, matesId) {
 function rejectInvitation(scheduleId, matesId) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}/rejection/${matesId}`);
 }
-
+function findUser(keyword) {
+    return axiosInstance.get(`/users?q=${keyword}`)
+}
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation
+    readInvitations, acceptInvitation, rejectInvitation,findUser
 };
 
