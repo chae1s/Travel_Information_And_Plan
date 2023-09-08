@@ -18,6 +18,8 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import ScheduleList from "@/components/ScheduleList.vue";
+import SchedulePost from "@/components/SchedulePost.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -92,13 +94,32 @@ const router = createRouter({
             path: '/mate-invitation', name: 'InvitationList', component: InvitationList
         },
         {
-            path: '/myPage/main',
+            path: '/my-page',
             name: 'MyPageMain',
             component: MyPageMain,
             children: [
-                {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
-                {path: 'password', name: 'Password', component: Password},
-                {path: 'delete', name: 'UserDelete', component: UserDelete}
+                {path: 'my-info', name: 'MyInformation', children: [
+                        {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
+                        {path: 'password', name: 'Password', component: Password},
+                        {path: 'delete', name: 'UserDelete', component: UserDelete},
+                    ]
+                },
+                {path: 'my-trip', name: 'MyTrip', children: [
+                        {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
+
+                    ]
+                },
+                {
+                    path: 'my-post',
+                    name: 'MyPost',
+                    children: [
+                        {path: 'schedules', name: 'ScheduleList', component: ScheduleList, children: [
+                            {path: ':id', name: 'SchedulePost', component: SchedulePost}]
+                        },
+                        {path: 'boards', name: 'BoardList'},
+                    ]
+                }
+
             ]
         },
     ]
