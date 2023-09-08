@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 
 @Slf4j
@@ -57,13 +58,13 @@ public class UserController {
     // 회원 검색
     // GET /users?q=keyword
     @GetMapping
-    public ResponseEntity<Page<UserResponseDto>> findUser(
+    public ResponseEntity<List<UserResponseDto>> findUser(
             @RequestParam("q") String keyword,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+//            @RequestParam(value = "page", defaultValue = "0") Integer page,
+//            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
             Authentication auth) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, page, limit, auth.getName()));
-
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, auth.getName()));
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, page, limit, auth.getName()));
     }
 
     // 회원정보 수정
