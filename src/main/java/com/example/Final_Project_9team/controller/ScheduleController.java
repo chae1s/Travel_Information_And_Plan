@@ -41,14 +41,14 @@ public class ScheduleController {
     @GetMapping("/{scheduleId:\\d+}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
-        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, "sampleUser1@gmail.com"));
+        return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth.getName()));
     }
 
     // 세부 계획 저장하기
     @PostMapping("/{scheduleId}/schedule-items")
-    public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId, @RequestBody List<ScheduleItemRequestDto> scheduleItemRequests) {
+    public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
 
-        scheduleService.createScheduleItems(scheduleId, scheduleItemRequests);
+        scheduleService.createScheduleItems(scheduleId);
 
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
