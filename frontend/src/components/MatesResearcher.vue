@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>유저 검색</h3>
+    <h3>일정메이트 검색</h3>
     <!-- 검색 폼 -->
     <form @submit.prevent="searchUsers">
       <input v-model="keyword" type="text" placeholder="닉네임 또는 이메일 입력">
@@ -11,7 +11,7 @@
 
     <!-- 검색 결과 컨테이너 -->
     <div class="search-results-container">
-      <table  class="search-results" v-show="showTable">
+      <table  class="search-results" v-show="showResultTable">
         <thead>
         <tr v-show="showTableHeader">
           <th>닉네임</th>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import {  findUser  } from '@/api/index.js';
+import {  findInvitationList  } from '@/api/index.js';
 
 export default {
   data() {
@@ -49,14 +49,14 @@ export default {
     };
   },
   computed:{
-    showTable(){
+    showResultTable(){
       return this.searchResults.length > 0 || this.isLoading;
     },
   },
   methods: {
     async searchUsers() {
       try {
-        const response = await findUser(this.keyword);
+        const response = await findInvitationList(this.keyword);
         this.searchResults = response.data;
         this.isLoading = false;
 

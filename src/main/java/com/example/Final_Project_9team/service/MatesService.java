@@ -2,6 +2,7 @@ package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.dto.InvitationResponseDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
+import com.example.Final_Project_9team.dto.user.UserResponseDto;
 import com.example.Final_Project_9team.entity.Mates;
 import com.example.Final_Project_9team.entity.Schedule;
 import com.example.Final_Project_9team.entity.User;
@@ -17,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -65,7 +68,38 @@ public class MatesService {
 
         return ResponseEntity.ok(ResponseDto.getMessage("초대가 정상적으로 되었습니다."));
     }
-    // 초대 리스트 조회(수락대기중인 리스트)
+    // 메이트에 추가로 초대할 리스트 조회(기존 메이트 제외)
+    public List<UserResponseDto> findInvitationList(String keyword, String userEmail, Long scheduleId) {
+        User user = userUtils.getUser(userEmail);
+
+        List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
+        List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
+        List<User> mergedList = new ArrayList<>();
+
+        mergedList.addAll(findByEmail);
+        mergedList.addAll(findByNickname);
+        //추가
+        // 내가 속한 일정의 멤버들 조회하여 리스트에서 제외하기
+        List<Mates> matesList = matesRepository.findAllByScheduleIdAndIsAcceptedTrue(scheduleId);
+        for (Mates mates : matesList) {
+//            log.info("mates.getuserid="+mates.getUser().getId());
+            User matesUser = userRepository.findById(mates.getUser().getId()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            while (mergedList.contains(matesUser)) { // 닉네임과 이메일이 중복되는 경우 모두 제거
+                mergedList.remove(matesUser);
+            }
+        }
+
+        // 중복제거 후 닉네임 기준으로 정렬
+        List<UserResponseDto> userResponseDtoList = mergedList.stream()
+                .distinct()
+                .sorted(Comparator.comparing(User::getNickname))
+                .map(UserResponseDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return userResponseDtoList;
+    }
+
+    // 초대받은 리스트 조회(수락대기중인 리스트)
     public ResponseEntity<List<InvitationResponseDto>> readInvitations(String userEmail) {
         User user = userUtils.getUser(userEmail);
 
