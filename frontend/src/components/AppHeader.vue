@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="content">
+        <div class="content mb-3">
             <nav>
                 <div class="nav_content">
                     <router-link to="/items-list" :class="{'selected': isItemPage}">여행정보</router-link>
@@ -86,8 +86,8 @@ export default {
 
 <style scoped>
   header {
-      background-color: #fff;
       padding: 16px 0 12px;
+      /*background-color: #99C7FF;*/
   }
 
   .header_content {

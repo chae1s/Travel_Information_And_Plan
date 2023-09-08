@@ -1,15 +1,17 @@
 <template>
-
-    <Header />
-    <router-view></router-view>
-
-    <Footer />
-
+    <v-app>
+        <Header/>
+        <div class="app-container">
+            <router-view></router-view>
+        </div>
+        <Footer/>
+    </v-app>
 </template>
 
 <script>
 import Header from "@/components/AppHeader.vue";
 import Footer from "@/components/AppFooter.vue";
+
 export default {
     name: 'App',
     components: {
@@ -52,11 +54,12 @@ ul, li {
 }
 
 html, body {
-    overflow-x: scroll;
+    overflow-x: auto;
     white-space: nowrap;
 }
 
 input:focus {
     outline: none;
 }
+
 </style>
