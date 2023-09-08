@@ -7,7 +7,8 @@
                 </div>
                 <div class="user_info">
                     <router-link to="/" v-if="isLogin">알림</router-link>
-                    <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>
+                    <router-link to="/mypage" >마이페이지</router-link>
+<!--                    <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>-->
                     <router-link to="/login" v-if="!isLogin">로그인</router-link>
                     <router-link to="/" v-if="isLogin">로그아웃</router-link>
                     <router-link to="/sign-up" v-if="!isLogin">회원가입</router-link>
@@ -23,7 +24,7 @@
                     <router-link to="/" >여행지도</router-link>
                 </div>
                 <div>
-                    <div class="totalSearch">
+                    <div class="usersSearch">
                         <form>
                             <input type="text" id="header_keyword">
                             <!-- 검색 버튼 -->
@@ -123,7 +124,7 @@ export default {
       line-height: 36px;
   }
 
-  .totalSearch {
+  .usersSearch {
       width: 420px;
       height: 36px;
       border: 1px solid #F2F2F2;
@@ -131,11 +132,11 @@ export default {
       border-radius: 18px;
   }
 
-  .totalSearch:focus-within {
+  .usersSearch:focus-within {
       background-color: white;
   }
 
-  .totalSearch form {
+  .usersSearch form {
       display: flex;
       align-items: center;
       box-sizing: border-box;
@@ -144,7 +145,7 @@ export default {
       justify-content: space-between;
   }
 
-  .totalSearch input {
+  .usersSearch input {
       width: 338px;
       height: 22px;
       padding: 0 8px;
@@ -153,7 +154,7 @@ export default {
       border: none;
   }
 
-  .totalSearch button {
+  .usersSearch button {
       width: 23px;
       height: 23px;
       border: none;
@@ -164,7 +165,7 @@ export default {
       cursor: pointer;
   }
 
-  .totalSearch button img {
+  .usersSearch button img {
       width: 100%;
       height: 100%;
   }
