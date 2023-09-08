@@ -14,7 +14,7 @@ export default {
     name: "AppSideMenu",
     props: [
         'sidebarTitle', 'sidebarList', 'sidebarRouter', 'sidebarActive'
-    ]
+    ],
 
 }
 </script>
