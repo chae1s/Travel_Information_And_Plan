@@ -6,9 +6,8 @@
                     <router-link to="/">어디갈래?</router-link>
                 </div>
                 <div class="user_info">
-                    <router-link to="/" v-if="isLogin">알림</router-link>
-                    <router-link to="/mypage" >마이페이지</router-link>
-<!--                    <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>-->
+                    <router-link to="/mypage/main" v-if="isLogin">알림</router-link>
+                    <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>
                     <router-link to="/login" v-if="!isLogin">로그인</router-link>
                     <router-link to="/logout"  v-if="isLogin">로그아웃</router-link>
                     <router-link to="/sign-up" v-if="!isLogin">회원가입</router-link>
@@ -24,7 +23,7 @@
                     <router-link to="/" >여행지도</router-link>
                 </div>
                 <div>
-                    <div class="usersSearch">
+                    <div class="totalSearch">
                         <form>
                             <input type="text" id="header_keyword">
                             <!-- 검색 버튼 -->
@@ -129,7 +128,7 @@ export default {
       line-height: 36px;
   }
 
-  .usersSearch {
+  .totalSearch {
       width: 420px;
       height: 36px;
       border: 1px solid #F2F2F2;
@@ -137,11 +136,11 @@ export default {
       border-radius: 18px;
   }
 
-  .usersSearch:focus-within {
+  .totalSearch:focus-within {
       background-color: white;
   }
 
-  .usersSearch form {
+  .totalSearch form {
       display: flex;
       align-items: center;
       box-sizing: border-box;
@@ -150,7 +149,7 @@ export default {
       justify-content: space-between;
   }
 
-  .usersSearch input {
+  .totalSearch input {
       width: 338px;
       height: 22px;
       padding: 0 8px;
@@ -159,7 +158,7 @@ export default {
       border: none;
   }
 
-  .usersSearch button {
+  .totalSearch button {
       width: 23px;
       height: 23px;
       border: none;
@@ -170,7 +169,7 @@ export default {
       cursor: pointer;
   }
 
-  .usersSearch button img {
+  .totalSearch button img {
       width: 100%;
       height: 100%;
   }
