@@ -62,13 +62,14 @@ export default {
         async fetchSchedules() {
             try {
                 const {data} = await readAllSchedules()
+                console.log(data)
                 this.scheduleList = data.content.map(schedule => ({
                     id: schedule.id,
                     title: schedule.title,
                     sido: locations[parseInt(schedule.sido)].name,
                     writer: schedule.userResponse.nickname,
-                    startDate: dayjs(data.startDate).format("YYYY.MM.DD"),
-                    endDate: dayjs(data.endDate).format("YYYY.MM.DD")
+                    startDate: dayjs(schedule.startDate).format("YYYY.MM.DD"),
+                    endDate: dayjs(schedule.endDate).format("YYYY.MM.DD")
                 }))
 
             } catch (error) {
