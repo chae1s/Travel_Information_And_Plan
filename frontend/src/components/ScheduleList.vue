@@ -33,6 +33,7 @@
 <script>
 import {readAllSchedules} from "@/api/index";
 import locations from "@/assets/locations";
+import dayjs from "dayjs";
 
 export default {
     name: "MyScheduleList",
@@ -66,8 +67,8 @@ export default {
                     title: schedule.title,
                     sido: locations[parseInt(schedule.sido)].name,
                     writer: schedule.userResponse.nickname,
-                    startDate: schedule.startDate,
-                    endDate: schedule.endDate
+                    startDate: dayjs(data.startDate).format("YYYY.MM.DD"),
+                    endDate: dayjs(data.endDate).format("YYYY.MM.DD")
                 }))
 
             } catch (error) {

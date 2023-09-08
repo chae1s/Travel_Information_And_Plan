@@ -327,6 +327,7 @@ public class ScheduleService {
                     .turn(i + 1)
                     .distance(itemPaths.get(i).getDistance())
                     .duration(itemPaths.get(i).getDuration())
+                    .tourDate(tourDate)
                     .arrivalScheduleItem(arrivalScheduleItem)
                     .departureScheduleItem(departureScheduleItem)
                     .build();
@@ -358,4 +359,5 @@ public class ScheduleService {
 
         return scheduleItemRepository.save(scheduleItem);
     }
+
 }
