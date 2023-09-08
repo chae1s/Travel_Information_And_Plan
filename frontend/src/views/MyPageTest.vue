@@ -3,8 +3,9 @@
         <div class="content">
             <div class="mypage-container">
                 <div class="left-content">
-                    <div class="profile"> 프로필</div>
-                    <div class="myinfo clickable" @click="goToInfo()">회원정보</div>
+                    <div class="profile-container">
+                        <Profile/>
+                    </div>
                     <nav>
                         <div class="nav_content mt-5">
                             <h4>나의 여행</h4>
@@ -29,20 +30,17 @@
 
 <script>
 import InvitationList from "@/components/InvitationList.vue";
+import Profile from "@/components/Profile.vue";
 
 export default {
     components: {
+        Profile,
         InvitationList
     },
     methods: {
-        goToInfo() {
-            console.log("내 정보 조회로 이동")
-            this.$router.push({name:'MyInfoView'})
-        },
         goToInvitation() {
             console.log("메이트 초대 리스트로 이동")
-            this.$router.push({name:'InvitationList'})
-
+            this.$router.push({name: 'InvitationList'})
         }
     }
 }
@@ -60,19 +58,21 @@ h4 {
     flex-direction: row;
 }
 
-.profile {
-    height: 200px;
-}
-
 .left-content {
     flex: 0 0 300px;
     flex-direction: column;
     background-color: #f2f2f2;
+    justify-content: center;
     align-items: center;
 }
-.nav_content{
+.profile-container{
+    margin: 15px;
+}
+
+
+.nav_content {
     text-align: left;
-    margin-left: 30px;
+    margin-left: 10%;
 }
 
 .right-content {
@@ -81,10 +81,12 @@ h4 {
     flex-direction: column;
     background-color: #cccccc;
 }
+
 .clickable {
     cursor: pointer; /* 손가락 모양으로 커서 설정 */
     font-size: 14px;
 }
+
 
 
 </style>

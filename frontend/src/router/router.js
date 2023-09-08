@@ -5,7 +5,7 @@ import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
-import MyPage from "@/views/MyPage.vue";
+import MyPage from "@/views/MyPageTest.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 import LogoutView from "@/components/Logout.vue";
@@ -72,7 +72,8 @@ const router = createRouter({
             name: 'MyInfoView',
             component: UserInfoView,
             children: [
-                {path: 'update', name: 'update', component: UserInfo}
+                {path: 'update', name: 'update', component: UserInfo},
+                {path: 'pw-update', name: 'pw-update', component: UserInfoPw}
             ]
         },
         // { // 나중에 메이트 보기 리스트 있으면 이렇게

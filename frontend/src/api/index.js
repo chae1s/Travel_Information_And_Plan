@@ -47,8 +47,17 @@ function createScheduleItems(scheduleId) {
     return axiosInstance.post(`/schedules/${scheduleId}/schedule-items`)
 }
 
+function findUser(keyword) {
+    return axiosInstance.get(`/users?q=${keyword}`)
+}
+
+function readUserInfo(userData){
+    return axiosInstance.get('/users/me')
+
+}
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, readUserInfo
 };
 

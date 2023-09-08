@@ -225,7 +225,7 @@ export default {
 <style>
 
 .align-center {
-    align-items: center; /* 수직으로 중앙 정렬 */
+    align-items: center;
 }
 
 .font-adjust {
