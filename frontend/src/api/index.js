@@ -1,4 +1,5 @@
 import axiosInstance from '@/store/interceptor.js';
+import {callOrReturn} from "@tiptap/core";
 
 
 function registerUser(userData) {
@@ -15,6 +16,10 @@ function createBoard(boardData) {
 
 function readBoards() {
     return axiosInstance.get('/boards');
+}
+
+function uploadImage(image) {
+    return axiosInstance.post('/images', image);
 }
 
 function createSchedule(scheduleData) {
@@ -45,6 +50,6 @@ function rejectInvitation(scheduleId, matesId) {
 
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation
+    readInvitations, acceptInvitation, rejectInvitation, uploadImage
 };
 
