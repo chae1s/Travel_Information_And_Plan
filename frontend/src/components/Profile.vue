@@ -1,43 +1,49 @@
-<!--mypage에 노출될 프로필-->
 <template>
     <div class="profile">
         <div class="profile-image">
             <v-img :src="profileImage" alt="프로필 이미지"/>
         </div>
-        <h6 class="mb-2">{{ nickname }}</h6>
-        <v-btn flat @click="goToInfo()">회원정보 조회</v-btn>
+        <h5 class="mt-2 mb-2">{{ nickname }}</h5>
+        <div class="profile-content">{{ content }}</div>
+        <div class="profile-content">{{ location }}</div>
     </div>
 </template>
 
 <script>
+import {readUserProfile} from "@/api";
+
 export default {
     name: "Profile",
-    data() {
-        return {
-            id: '',
-            email: '',
-            nickname: '닉네임 표시될 것',
-            profileImage: '/img/default-profile.png',
-            // isLikedByme:''
+    async created() {
+        try {
+            const {data} = await readUserProfile();
+            console.log(data)
+            this.nickname = data.nickname;
+            this.content = data.content;
+            this.location = data.location;
+            this.profileImage = data.profileImage;
+        } catch (error) {
+            console.log("조회 에러:", error.response.data)
         }
     },
-    methods: {
-        goToInfo() {
-            console.log("내 정보 조회로 이동")
-            this.$router.push({name: 'MyInfoView'})
-        },
+    data() {
+        return {
+            nickname: 'nickname',
+            content:'',
+            location:'',
+            profileImage: '/img/default-profile.png',
+            // isLikedByMe:''
+        }
     }
 }
 </script>
 
 <style scoped>
-.profile {
-    flex-direction: row;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 15px;
-    min-height: 200px;
+.profile-content{
+    font-size: 12px;
+    margin: 2px;
 }
+
 /*.profile-image {*/
 /*    !*width: 150px; !* 원의 지름 크기 설정 *!*!*/
 /*    !*height: 150px; !* 원의 지름 크기 설정 *!*!*/
