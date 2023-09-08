@@ -83,12 +83,15 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
+function readAllSchedules() {
+    return axiosInstance.get('/users/me/schedules')
+}
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
+    readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule, readAllSchedules,
     bookmarkItem
 };
 
