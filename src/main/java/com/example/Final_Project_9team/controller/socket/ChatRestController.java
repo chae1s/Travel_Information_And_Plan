@@ -20,9 +20,8 @@ public class ChatRestController {
     private final ChatService chatService;
 
     @GetMapping("/rooms")
-    public ResponseEntity<List<ChatRoomDto>> getChatRooms( /*Authentication authentication*/
-    ){
-        return ResponseEntity.ok(chatService.getChatRooms("authentication.getName()")); //authentication.getName()
+    public ResponseEntity<List<ChatRoomDto>> getChatRooms(Authentication authentication){
+        return ResponseEntity.ok(chatService.getChatRooms(authentication.getName()));
     }
 
 //    @PostMapping("rooms")

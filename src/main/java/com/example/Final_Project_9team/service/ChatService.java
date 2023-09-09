@@ -36,7 +36,7 @@ public class ChatService {
 
     // (리스트조회) 내가 속한 메이트의 채팅방 리스트 조회하기
     public List<ChatRoomDto> getChatRooms(String userEmail) {
-        userEmail ="sampleUser2@gmail.com"; // 화면테스트 위해 임시 데이터 설정
+//        userEmail = "sampleUser@gmail.com";
         User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
         List<Mates> matesList = matesRepository.findAllByUserIdAndIsAcceptedTrue(user.getId());
@@ -46,18 +46,23 @@ public class ChatService {
             log.info("mates.getSchedule()="+mates.getSchedule().getId());
             ChatRoom chatRoom = chatRoomRepository.findBySchedule(mates.getSchedule()).orElseThrow(()->
                     new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
-            chatRoomDtoList.add(ChatRoomDto.fromEntity(chatRoom));
+            ChatMessage latestMessage = chatMessageRepository.findTop1ByChatRoomOrderByIdDesc(chatRoom)
+                    .orElse(ChatMessage.builder()
+                            .chatRoom(chatRoom)
+                            .message("메시지가 없습니다.")
+                            .build());
+            chatRoomDtoList.add(ChatRoomDto.fromEntity(chatRoom,latestMessage.getMessage()));
         }
 
         return chatRoomDtoList;
     }
-    public ChatRoomDto createChatRoom(ChatRoomDto chatRoomDto) {
-        ChatRoom chatRoom = ChatRoom.builder()
-                .roomName(chatRoomDto.getRoomName())
-                .build();
-
-        return ChatRoomDto.fromEntity(chatRoomRepository.save(chatRoom));
-    }
+//    public ChatRoomDto createChatRoom(ChatRoomDto chatRoomDto) {
+//        ChatRoom chatRoom = ChatRoom.builder()
+//                .roomName(chatRoomDto.getRoomName())
+//                .build();
+//
+//        return ChatRoomDto.fromEntity(chatRoomRepository.save(chatRoom));
+//    }
     // 채팅방 클릭 시
     public ChatRoomDto findRoomById(Long id) {
         ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
