@@ -30,14 +30,14 @@ public class MatesController {
     public ResponseEntity<List<UserResponseDto>> findInvitationList(@RequestParam("q") String keyword,
                                                                     @PathVariable("scheduleId") Long scheduleId,
                                                                     Authentication auth) {
-        return ResponseEntity.status(HttpStatus.OK).body(matesService.findInvitationList(keyword, auth.getName(),1L));
+        return ResponseEntity.status(HttpStatus.OK).body(matesService.findInvitationList(keyword, auth.getName(),scheduleId));
     }
 
     // POST /schedules/invited-users/{scheduleId}
     @PostMapping("/{scheduleId}")
     public ResponseEntity<ResponseDto> inviteUserToSchedule(Authentication authentication,
                                                             @PathVariable("scheduleId") Long scheduleId,
-                                                            @RequestParam("invitedUsername") String invitedUsername) {
+                                                            @RequestParam("q") String invitedUsername) {
         return matesService.inviteUserToSchedule(authentication.getName(), invitedUsername, scheduleId);
     }
 
@@ -53,7 +53,7 @@ public class MatesController {
     public ResponseEntity<ResponseDto> rejectInvitation(Authentication authentication,
                                                    @PathVariable("scheduleId") Long scheduleId,
                                                    @PathVariable Long matesId) {
-        return matesService.rejectInvitation("sampleUser2@gmail.com", scheduleId, matesId);//authentication.getName()
+        return matesService.rejectInvitation(authentication.getName(), scheduleId, matesId);//authentication.getName()
     }
     // POST /schedules/invited-users/{scheduleId}/drop/{matesId}
     @PostMapping("/{scheduleId}/drop/{matesId}") // 중간에 일정(메이트) 탈퇴

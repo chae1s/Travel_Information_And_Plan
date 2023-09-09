@@ -96,6 +96,15 @@ public class MatesService {
                 .map(UserResponseDto::fromEntity)
                 .collect(Collectors.toList());
 
+        // 초대된 이력이 있는 메이트의 dto 정보에 초대 정보 넣기.
+//        List<Mates> invitedMates = matesRepository.findAllByUserIdAndIsAcceptedFalseAndIsDeletedFalse(scheduleId);
+//        for (Mates invitedMate : invitedMates) {
+//            for (UserResponseDto userResponseDto : userResponseDtoList) {
+//                if (invitedMate.getUser().getNickname().equals(userResponseDto.getNickname())) {
+//                    userResponseDto.setIsInvited(true);
+//                }
+//            }
+//        }
         return userResponseDtoList;
     }
 

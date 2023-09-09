@@ -11,7 +11,7 @@
 
     <!-- 검색 결과 컨테이너 -->
     <div class="search-results-container">
-      <table  class="search-results" v-show="showTable">
+      <table  class="search-results" v-show="showResultTable">
         <thead>
         <tr v-show="showTableHeader">
           <th>닉네임</th>
@@ -49,7 +49,7 @@ export default {
     };
   },
   computed:{
-    showTable(){
+    showResultTable(){
       return this.searchResults.length > 0 || this.isLoading;
     },
   },
@@ -62,8 +62,8 @@ export default {
 
         this.showTableHeader = this.searchResults.length > 0;
       } catch (error) {
-        console.error("검색 오류:", error);
         alert("검색 결과가 없습니다. 검색어를 다시 확인해주세요.");
+        console.error("검색 오류:", error);
         this.isLoading = false;
       }
     },

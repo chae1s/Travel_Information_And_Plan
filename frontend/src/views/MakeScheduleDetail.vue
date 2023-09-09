@@ -18,7 +18,7 @@
                   <!--   메이트 추가     /-->
                     <div v-if="showMatesInvitationComponent">
                       <br>
-                      <UserResearcher></UserResearcher>
+                      <MatesResearcher v-bind:scheduleId="scheduleId"></MatesResearcher>
                     </div>
                     <div class="my_liked_items_sido">
                         <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="prevPageLikedItem"/>
@@ -85,13 +85,13 @@
 import Calendar from "@/components/Calendar.vue";
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
-import UserResearcher from '@/components/UserResearcher.vue';
+import MatesResearcher from '@/components/MatesResearcher.vue';
 import dayjs from 'dayjs';
 import {readSchedule, readLikedItemBySido, createRouteList, createScheduleItems} from "@/api/index";
 
 export default {
     name: "MakeScheduleDetail",
-    components: {LocationCheckbox, Calendar, UserResearcher},
+    components: {LocationCheckbox, Calendar, MatesResearcher},
     data() {
         return {
             scheduleId : this.$route.params.id,

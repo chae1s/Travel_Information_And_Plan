@@ -12,6 +12,7 @@ public class UserResponseDto {
     private String nickname;
     private String profileImage;
     private Boolean isLikedByMe;
+    private Boolean isInvited;
 
 
     // 회원 정보 조회

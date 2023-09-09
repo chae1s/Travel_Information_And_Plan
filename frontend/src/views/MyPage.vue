@@ -29,10 +29,9 @@
 
 <script>
 import InvitationList from "@/components/InvitationList.vue";
-
 export default {
     components: {
-        InvitationList
+        InvitationList,
     },
     methods: {
         goToInfo() {

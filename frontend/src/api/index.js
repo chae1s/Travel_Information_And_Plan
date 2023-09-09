@@ -54,8 +54,17 @@ function createScheduleItems(scheduleId) {
 function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
+
+function findInvitationList(scheduleId,keyword) {
+    // return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
+    return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
+}
+
+function inviteUserToSchedule(scheduleId,invitedUsername) {
+    return axiosInstance.post(`/schedules/invited-users/${scheduleId}?q=${invitedUsername}`)
+}
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule
 };
 
