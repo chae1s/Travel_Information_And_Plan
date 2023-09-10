@@ -67,6 +67,10 @@ public class ChatService {
     public ChatRoomDto findRoomById(Long id) {
         ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
                 ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+        Long count = matesRepository.countMatesByScheduleAndIsAcceptedTrue(chatRoom.getSchedule());
+        log.info("count="+count);
+        chatRoom.setMemberCount(count);
+        chatRoomRepository.save(chatRoom);
         return ChatRoomDto.fromEntity(chatRoom);
     }
 

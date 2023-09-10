@@ -13,12 +13,15 @@ public class ChatRoomDto {
     private Long id;
     private String roomName;
     private String latestMessage;
+    private Long count;
 
     public static ChatRoomDto fromEntity(ChatRoom entity) {
+
         return new ChatRoomDto(
                 entity.getId(),
                 entity.getRoomName(),
-                null
+                null,
+                entity.getMemberCount()
         );
     }
 
@@ -26,7 +29,8 @@ public class ChatRoomDto {
         return new ChatRoomDto(
                 entity.getId(),
                 entity.getRoomName(),
-                latestMessage
+                latestMessage,
+                null
         );
     }
 

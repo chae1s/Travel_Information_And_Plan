@@ -24,7 +24,12 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
+    private Long memberCount;
+
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+    public void setMemberCount(Long count) {
+        this.memberCount = count;
     }
 }

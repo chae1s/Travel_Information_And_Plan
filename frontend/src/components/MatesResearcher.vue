@@ -151,7 +151,7 @@ th, td {
   font-size: 14px;
   color: #2F3438;
   width: 40px;
-  height: 27px;
+  height: 28px;
   display: inline-block;
   border-radius: 10px;
   line-height: 30px;

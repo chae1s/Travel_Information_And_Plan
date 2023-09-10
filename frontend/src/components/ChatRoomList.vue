@@ -1,11 +1,11 @@
 <template>
-  <div class="schedule_chat">
+  <div class="chatRoom-list-container">
     <h2>일정 채팅룸</h2>
     <div>
       <ul>
         <li v-for="(room, index) in chatRooms" :key="room.id">
           <router-link :to="'/chat/' + room.id">
-            <div class="chatRoom-data">
+            <div class="chatRoom-data-container">
               <div class="chatRoom-data-image"></div>
               <div class="chatRoom-data-text">
                 <span class="room-name">{{ room.roomName }}</span>
@@ -58,14 +58,27 @@ h2 {
   margin-left: 10px;
   text-align: left;
 }
-.schedule_chat {
+.chatRoom-list-container {
   margin-left: 100px; /* 위치 수정 예정*/
   width: 370px;
   height: 626px;
   border-radius: 10px;
   background-color: #E5F1FF;
+  overflow-y: scroll;
 }
-.chatRoom-data {
+.chatRoom-list-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chatRoom-list-container::-webkit-scrollbar-thumb {
+  background-color: #DADADA; /* 스크롤 막대의 색상 */
+  border-radius: 10px;
+}
+.chatRoom-list-container::-webkit-scrollbar-track {
+  background-color: #E5F1FF; /* 스크롤 트랙의 색상 */
+  border-radius: 10px;
+}
+.chatRoom-data-container {
   display: flex;
   align-items: center;
 }
