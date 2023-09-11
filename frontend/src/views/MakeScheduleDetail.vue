@@ -9,11 +9,16 @@
                             <div class="schedule_data_name">{{scheduleData.title}}</div>
                             <div class="schedule_data_mates">
                                 <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user" inline="true" width="33px" height="33px" class="rounded-circle"/>
-                                <v-img src="@/assets/images/icons/mates_add.png" width="25px" height="25px" class="rounded-circle my-auto mx-0" inline="true"/>
+                                <v-img src="@/assets/images/icons/mates_add.png" width="25px" height="25px" class="rounded-circle my-auto mx-0" inline="true"  @click="showMatesInvitation"/>
                             </div>
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
+                    </div>
+                  <!--   메이트 추가     /-->
+                    <div v-if="showMatesInvitationComponent">
+                      <br>
+                      <MatesResearcher v-bind:scheduleId="scheduleId"></MatesResearcher>
                     </div>
                     <div class="my_liked_items_sido">
                         <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="prevPageLikedItem"/>
@@ -80,12 +85,13 @@
 import Calendar from "@/components/Calendar.vue";
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
+import MatesResearcher from '@/components/MatesResearcher.vue';
 import dayjs from 'dayjs';
 import {readSchedule, readLikedItemBySido, createRouteList, createScheduleItems} from "@/api/index";
 
 export default {
     name: "MakeScheduleDetail",
-    components: {LocationCheckbox, Calendar},
+    components: {LocationCheckbox, Calendar, MatesResearcher},
     data() {
         return {
             scheduleId : this.$route.params.id,
@@ -108,7 +114,9 @@ export default {
             polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
             zoom: 11,
             likedItemPage: 1,
-            likedItemTotalPage: 0
+            likedItemTotalPage: 0,
+            showMatesInvitationComponent: false, // UserResearcher.vue 컴포넌트를 표시 여부를 관리하는 데이터
+
         }
     },
     mounted() {
@@ -308,6 +316,9 @@ export default {
                 console.log(error)
             }
         },
+      showMatesInvitation() {
+        this.showMatesInvitationComponent = !this.showMatesInvitationComponent;
+      },
     },
 }
 </script>

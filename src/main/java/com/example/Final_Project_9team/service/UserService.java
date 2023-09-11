@@ -96,8 +96,6 @@ public class UserService {
     // keyword가 포함된 email, nickname으로 회원 검색, 탈퇴회원 및 본인을 제외하고 반환
     // 결과가 없을 경우 빈 결과로 페이지 반환한
     public List<UserResponseDto> findUser(String keyword, String userEmail) {
-//    public List<UserResponseDto> findUser(String keyword, Integer pageNumber, Integer pageSize, String userEmail) {
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("nickname"));
         log.info("user 검색");
         List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
         List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
@@ -111,16 +109,7 @@ public class UserService {
                 .sorted(Comparator.comparing(User::getNickname))
                 .map(UserResponseDto::fromEntity)
                 .collect(Collectors.toList());
-
-//        List<User> distinctAndSorted = mergedList.stream()
-//                .distinct()
-//                .sorted(Comparator.comparing(User::getNickname))
-//                .collect(Collectors.toList());
-        // paging 후 page<dto>로 변환
-//        Page<User> userPaged = new PageImpl<>(distinctAndSorted, pageable, distinctAndSorted.size());
-//        Page<UserResponseDto> userPagedResponseDto = userPaged.map(user -> UserResponseDto.fromEntity(user));
         return userResponseDtoList;
-//        return userPagedResponseDto;
     }
 
     // 회원정보 수정

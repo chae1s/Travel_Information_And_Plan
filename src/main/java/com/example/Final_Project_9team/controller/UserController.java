@@ -60,11 +60,8 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> findUser(
             @RequestParam("q") String keyword,
-//            @RequestParam(value = "page", defaultValue = "0") Integer page,
-//            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
             Authentication auth) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, auth.getName()));
-//        return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(keyword, page, limit, auth.getName()));
     }
 
     // 회원정보 수정
