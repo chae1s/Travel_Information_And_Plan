@@ -49,7 +49,15 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule")
     private List<LikesSchedule> likesSchedules = new ArrayList<>();
 
+    @OneToOne(mappedBy = "schedule")
+    private ChatRoom chatRoom;
+
     public void updateDisplay() {
         this.display = !this.display;
+    }
+
+    public void updateDurationAndDistance(Integer sumDuration, Integer sumDistance) {
+        this.sumDuration = sumDuration;
+        this.sumDistance = sumDistance;
     }
 }

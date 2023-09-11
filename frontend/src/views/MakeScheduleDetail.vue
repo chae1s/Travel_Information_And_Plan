@@ -16,21 +16,21 @@
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
                     </div>
                     <div class="my_liked_items_sido">
-                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" />
+                        <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="prevPageLikedItem"/>
                         <ul class="my_liked_item_list">
                             <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
-                            <li v-for="(item, itemIndex) in likedItemList" class="my_liked_item" @click="selectedLikedItem(item, itemIndex, $event)">
-                                <v-img src="@/assets/images/site_1.jpg" alt="" cover class="rounded-lg" height="80"/>
+                            <li v-for="(item, itemIndex) in likedItemList" :class="{'my_liked_item': true, 'selectedItem': checkedSelectedListInItemIndex(item)}" @click="selectedLikedItem(item, itemIndex, $event)">
+                                <v-img :src="item.firstImage" alt="" cover class="rounded-lg" height="80"/>
                                 <div style="display: none" class="my_liked_item_id">{{ item.id }}</div>
                                 <div class="my_liked_item_name">{{ item.name }}</div>
                                 <div style="display: none" class="my_liked_item_address">{{ item.fullAddress }}</div>
                                 <div class="my_liked_item_category">{{ item.category }}</div>
                             </li>
                         </ul>
-                        <div class="selected_tour_date" v-if="selectedItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
-                            <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.selectedItem, this.selectedItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
+                        <div class="selected_tour_date" v-if="clickItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
+                            <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.clickItem, this.clickItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
                         </div>
-                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button"/>
+                        <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="nextPageLikedItem"/>
                     </div>
                     <div class="schedule_view">
                         <div class="items_map" id="map">
@@ -41,34 +41,34 @@
                         </div>
                     </div>
                     <div class="schedule_route">
-                        <div v-for="(tourRoute, i) in tourRouteList" :key="tourRoute"  class="schedule_daily_route" @click="createRouteList(i)">
+                        <div v-for="(tourRoute, dayIndex) in tourRouteList" :key="tourRoute"  class="schedule_daily_route" @click="createRouteList(dayIndex)">
                             <div class="daily_route_header">
-                                <div class="tour_day_num">Day{{i + 1}}</div>
+                                <div class="tour_day_num">Day{{dayIndex + 1}}</div>
                                 <div class="tour_date">{{tourRoute.tourDateWithoutYear}}</div>
                             </div>
                             <ul class="schedule_daily_item_list">
                                 <li v-if="tourRoute.tourDestination.length === 0" class="empty_item_list">일정을 채워주세요</li>
-                                <li v-for="(destination, index) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
-                                    <v-img :src="require('@/assets/images/icons/day' + (i + 1) + '/course_pin_' + (index + 1) + '.png')" alt="" width="26" height="26" inline class="my-auto mr-7"/>
+                                <li v-for="(destination, itemIndex) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
+                                    <v-img :src="require('@/assets/images/icons/day' + (dayIndex + 1) + '/course_pin_' + (itemIndex + 1) + '.png')" alt="" width="26" height="26" inline class="my-auto mr-7"/>
                                     <div class="daily_item_info">
                                         <div class="daily_item_info_name">{{ destination.name }}</div>
-                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(i, index)" inline width="12" height="12" class="ml-3 remove_item"/>
+                                        <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(dayIndex, itemIndex)" inline width="12" height="12" class="ml-3 remove_item"/>
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
-                                    <div v-if="itemPath[index] && index < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>이동시간 : {{itemPath[index].distance}}분</div>
-                                        <div>이동거리 : {{itemPath[index].duration}}km</div>
+                                    <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                        <div>이동시간 : {{itemPath[dayIndex].tourPaths[itemIndex].duration}}분</div>
+                                        <div>이동거리 : {{itemPath[dayIndex].tourPaths[itemIndex].distance}}km</div>
                                     </div>
-                                    <div v-if="itemPath[index] && index === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>총 이동시간 : {{itemPath[index].distance}}분</div>
-                                        <div>총 이동거리 : {{itemPath[index].duration}}km</div>
+                                    <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                        <div>총 이동시간 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].duration }}분</div>
+                                        <div>총 이동거리 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].distance }}km</div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="schedule_button_wrap">
-                        <button class="schedule_button" type="button" @click="checkedEmptyDestination">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="createScheduleItems">일정 생성</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@ import Calendar from "@/components/Calendar.vue";
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
 import dayjs from 'dayjs';
-import {readSchedule, readLikedItemBySido, createRouteList} from "@/api/index";
+import {readSchedule, readLikedItemBySido, createRouteList, createScheduleItems} from "@/api/index";
 
 export default {
     name: "MakeScheduleDetail",
@@ -100,13 +100,15 @@ export default {
             },
             tourRouteList: [],
             likedItemList: [],
-            requestTourList: [],
-            selectedItem: null,
-            selectedItemIndex: null,
+            selectedItemList: [],
+            clickItem: null,
+            clickItemIndex: null,
             selectedPosition: {top: 0, left: 0},
             itemPath: [],
             polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
-            zoom: 11
+            zoom: 11,
+            likedItemPage: 1,
+            likedItemTotalPage: 0
         }
     },
     mounted() {
@@ -127,7 +129,7 @@ export default {
 
                 this.createMap(data.sido)
 
-                this.readLikedItem(this.scheduleData.sido)
+                this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
 
                 this.createTourDate()
             } catch (error) {
@@ -151,17 +153,28 @@ export default {
                 })
             }
         },
-        async readLikedItem(sido) {
+        async readLikedItem(sido, page) {
             try {
-                const { data } = await readLikedItemBySido(sido)
+                const { data } = await readLikedItemBySido(sido, page)
 
                 this.likedItemList = data.content
-
+                this.likedItemTotalPage = data.totalPages
             } catch (error) {
                 console.log(error)
             }
 
-
+        },
+        prevPageLikedItem() {
+            if (this.likedItemPage > 1) {
+                this.likedItemPage--
+                this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
+            }
+        },
+        nextPageLikedItem() {
+            if (this.likedItemPage < this.likedItemTotalPage) {
+                this.likedItemPage++
+                this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
+            }
         },
         createTourDate() {
             let firstDate = new Date(this.scheduleData.startDate)
@@ -175,63 +188,64 @@ export default {
                     tourDestination: []
                 })
 
-                this.requestTourList.push({
+                this.itemPath.push({
                     tourDate: date,
-                    itemIds: []
+                    tourPaths: []
                 })
+
 
                 firstDate.setDate(firstDate.getDate() + 1)
             }
         },
         selectedLikedItem(item, itemIndex, event) {
-            this.selectedItem = item
-            this.selectedItemIndex = itemIndex
+            this.clickItem = item
+            this.clickItemIndex = itemIndex
 
             this.selectedPosition = {
                 top: event.clientY + 'px',
                 left: event.clientX + 'px'
             }
 
-
         },
         addItemToTourRoute(dayIndex, item, itemIndex) {
-            if (this.tourRouteList[dayIndex].tourDestination.length === 7) {
-                alert("여행지는 최대 7개까지만 추가가 가능합니다.")
+            if (this.selectedItemList.indexOf(item.id) < 0) {
+                if (this.tourRouteList[dayIndex].tourDestination.length === 7) {
+                    alert("여행지는 최대 7개까지만 추가가 가능합니다.")
+                }
+                this.tourRouteList[dayIndex].tourDestination.push(item);
+                this.selectedItemList.push(item.id)
+
+                this.createRouteList(dayIndex)
             }
-            this.tourRouteList[dayIndex].tourDestination.push(item);
-            this.requestTourList[dayIndex].itemIds.push(item.id)
+            this.clickItem = null
+            this.clickItemIndex = null
+        },
+        removeDestination(dayIndex, itemIndex) {
+            const deleteItem = this.tourRouteList[dayIndex].tourDestination[itemIndex]
+            const deleteItemIndex = this.selectedItemList.indexOf(deleteItem.id)
 
-            this.likedItemList.splice(itemIndex, 1);
+            this.tourRouteList[dayIndex].tourDestination.splice(itemIndex, 1)
 
-            this.selectedItem = null
-            this.selectedItemIndex = null
+            if (this.itemPath[dayIndex].tourPaths.length === 2) {
+                this.itemPath[dayIndex].tourPaths = []
+            } else {
+                this.itemPath[dayIndex].tourPaths.splice(itemIndex, 1)
+            }
+
+            this.selectedItemList.splice(deleteItemIndex, 1)
             this.createRouteList(dayIndex)
         },
-        removeDestination(i, index) {
-            const deleteItem = this.tourRouteList[i].tourDestination[index]
-
-            this.tourRouteList[i].tourDestination.splice(index, 1)
-            this.requestTourList[i].itemIds.splice(index, 1)
-
-            if (this.itemPath.length === 2) {
-                this.itemPath = []
-            } else {
-                this.itemPath.splice(index, 1)
-            }
-
-            this.likedItemList.push(deleteItem)
-
-            this.createRouteList(i)
+        checkedSelectedListInItemIndex(item) {
+            return this.selectedItemList.indexOf(item.id) >= 0
         },
         async createRouteList(i) {
             try {
-                if (this.requestTourList[i].itemIds.length <= 1) {
+                if (this.tourRouteList[i].tourDestination.length <= 1) {
                     this.createItemMarkerAndPolyline(i);
                 } else {
-                    const { data } = await createRouteList(this.scheduleId, this.requestTourList[i])
-
+                    const { data } = await createRouteList(this.scheduleId, this.tourRouteList[i])
                     this.createItemMarkerAndPolyline(i)
-                    this.itemPath = data
+                    this.itemPath[i].tourPaths = data
                 }
             } catch (error) {
                 console.log(error)
@@ -273,7 +287,7 @@ export default {
             for (let i = 0; i < this.tourRouteList.length; i++) {
                 checked = false
                 if (this.tourRouteList[i].tourDestination.length === 0) {
-                    alert(this.tourRouteList[i].tourDateWithoutYear + '에 갈 여행지를 골라주세요.')
+                    alert(this.tourRouteList[i].tourDateWithoutYear + '에 갈 여행지 두 곳 이상을 골라주세요.')
                     break
                 } else {
                     checked = true
@@ -282,9 +296,16 @@ export default {
 
             return checked
         },
-        createScheduleItems() {
-            if (this.checkedEmptyDestination()) {
-                this.axios.post()
+        async createScheduleItems() {
+            try {
+                if (this.checkedEmptyDestination()) {
+                    const { data } = await createScheduleItems(this.scheduleId);
+
+                    console.log(data)
+                }
+
+            } catch (error) {
+                console.log(error)
             }
         },
     },
@@ -356,6 +377,11 @@ export default {
         height: 128px;
     }
 
+    .selectedItem {
+        font-weight: bolder;
+        color: #99C7FF;
+    }
+
     .empty_liked_item {
         width: 100%;
         text-align: center;
@@ -381,6 +407,7 @@ export default {
         margin: 3px 0;
         font-size: 15px;
         font-weight: bold;
+        overflow: hidden;
     }
 
     .my_liked_item_category {
@@ -431,7 +458,7 @@ export default {
 
     .schedule_daily_route {
         display: inline-block;
-        margin: 0 0 45px 44px;
+        margin: 0 0 44px 42px;
         width: 360.67px;
     }
 

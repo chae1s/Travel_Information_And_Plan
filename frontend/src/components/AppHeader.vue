@@ -6,15 +6,15 @@
                     <router-link to="/">어디갈래?</router-link>
                 </div>
                 <div class="user_info">
-                    <router-link to="/" v-if="isLogin">알림</router-link>
-                    <router-link to="/" v-if="isLogin">마이페이지</router-link>
+                    <router-link to="/mypage/main" v-if="isLogin">알림</router-link>
+                    <router-link to="/mypage" v-if="isLogin">마이페이지</router-link>
                     <router-link to="/login" v-if="!isLogin">로그인</router-link>
-                    <router-link to="/" v-if="isLogin">로그아웃</router-link>
+                    <router-link to="/logout"  v-if="isLogin">로그아웃</router-link>
                     <router-link to="/sign-up" v-if="!isLogin">회원가입</router-link>
                 </div>
             </div>
         </div>
-        <div class="content">
+        <div class="content mb-3">
             <nav>
                 <div class="nav_content">
                     <router-link to="/items-list" :class="{'selected': isItemPage}">여행정보</router-link>
@@ -73,6 +73,11 @@ export default {
         },
     },
     methods: {
+        logout() {
+            this.$store.commit('logout');
+            console.log("logout", this.$store.get(state.token))
+            this.$router.push('/');
+        }
 
     },
 
@@ -81,8 +86,8 @@ export default {
 
 <style scoped>
   header {
-      background-color: #fff;
       padding: 16px 0 12px;
+      /*background-color: #99C7FF;*/
   }
 
   .header_content {

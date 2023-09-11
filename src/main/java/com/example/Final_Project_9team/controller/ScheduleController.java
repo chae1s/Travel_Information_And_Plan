@@ -24,7 +24,8 @@ public class ScheduleController {
         log.info("schedule Title : {}, schedule StartDate : {}, schedule Sido : {}", requestDto.getTitle(), requestDto.getStartDate(), requestDto.getSido());
 //        scheduleService.createSchedule(requestDto, "testUser@gmail.com");
 //        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
-        return ResponseEntity.ok(scheduleService.createSchedule(requestDto, auth.getName()).getId());
+//        return ResponseEntity.ok(scheduleService.createSchedule(requestDto, "testUser@gmail.com").getId()); //auth.getName()).getId()
+        return ResponseEntity.ok(scheduleService.createSchedule(requestDto, auth.getName()).getId()); //auth.getName()).getId()
     }
 
     // display true인 schedule 페이지 단위 조회
@@ -45,9 +46,9 @@ public class ScheduleController {
 
     // 세부 계획 저장하기
     @PostMapping("/{scheduleId}/schedule-items")
-    public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId, @RequestBody List<ScheduleItemRequestDto> scheduleItemRequests) {
+    public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
 
-        scheduleService.createScheduleItems(scheduleId, scheduleItemRequests);
+        scheduleService.createScheduleItems(scheduleId);
 
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }

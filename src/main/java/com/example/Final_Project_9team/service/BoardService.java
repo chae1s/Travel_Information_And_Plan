@@ -26,45 +26,20 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final AttachmentsRepository attachmentsRepository;
     private final LikesBoardRepository likesBoardRepository;
-    private final FileHandler fileHandler;
 
     @Transactional
-    public void create(String email, BoardRequestDto dto, List<MultipartFile> images) {
+    public void create(String email, BoardRequestDto dto) {
         User writer = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Board newBoard = Board.builder()
+        boardRepository.save(Board.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .user(writer)
                 .viewCnt(0)
                 .isDeleted(false)
-                .build();
-
-        //이미지 있으면 저장
-        if (!images.isEmpty()) {
-            FileDto imageDto;
-            List<Attachments> attachmentsList = new ArrayList<>();
-
-            for (MultipartFile image : images) {
-                imageDto = fileHandler.saveFile(image);
-
-                attachmentsList.add(
-                        Attachments.builder()
-                                .board(newBoard)
-                                .isDeleted(false)
-                                .path(imageDto.getPath())
-                                .size(imageDto.getSize())
-                                .extension(imageDto.getExtension())
-                                .build()
-                );
-            }
-            attachmentsRepository.saveAll(attachmentsList);
-        }
-
-        boardRepository.save(newBoard);
+                .build());
     }
 
 
@@ -99,7 +74,7 @@ public class BoardService {
 
     @Transactional
     // board 수정
-    public void update(String email, Long boardId, BoardRequestDto dto, List<MultipartFile> images) throws FileNotFoundException {
+    public void update(String email, Long boardId, BoardRequestDto dto) {
         User writer = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -113,39 +88,11 @@ public class BoardService {
         board.updateTitle(dto.getTitle());
         board.updateContent(dto.getContent());
 
-        // 현재 저장된 이미지 전체 삭제(파일 물리 삭제, 엔티티 논리 삭제)
-        List<Attachments> previosAttachmentsList = board.getAttachments();
-        for (Attachments image :
-                previosAttachmentsList) {
-            fileHandler.deleteFile(image.getPath());
-            image.delete();
-        }
-
-        // 이미지 있으면 저장
-        if (!images.isEmpty()) {
-            List<Attachments> newAttachmentsList = new ArrayList<>();
-            FileDto imageDto;
-            for (MultipartFile image : images) {
-                imageDto = fileHandler.saveFile(image);
-
-                newAttachmentsList.add(
-                        Attachments.builder()
-                                .board(board)
-                                .isDeleted(false)
-                                .path(imageDto.getPath())
-                                .size(imageDto.getSize())
-                                .extension(imageDto.getExtension())
-                                .build()
-                );
-            }
-            attachmentsRepository.saveAll(newAttachmentsList);
-        }
-        attachmentsRepository.saveAll(previosAttachmentsList);
         boardRepository.save(board);
     }
 
     @Transactional
-    public void delete(String email, Long boardId) throws FileNotFoundException {
+    public void delete(String email, Long boardId) {
         User writer = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -155,14 +102,6 @@ public class BoardService {
         if (!writer.equals(board.getUser())) {
             throw new CustomException(ErrorCode.USER_NO_AUTH);
         }
-
-        // 이미지 파일 물리삭제, 엔티티 논리삭제
-        List<Attachments> attachmentsList = board.getAttachments();
-        for (Attachments image : attachmentsList) {
-            fileHandler.deleteFile(image.getPath());
-            image.delete();
-        }
-        attachmentsRepository.saveAll(attachmentsList);
 
         // board에 작성된 comment 전체 논리 삭제
         List<Comment> commentList = board.getComments();

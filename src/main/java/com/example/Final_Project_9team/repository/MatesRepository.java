@@ -14,6 +14,8 @@ public interface MatesRepository extends JpaRepository<Mates, Long> {
     Optional<Mates> findByScheduleIdAndUserId(Long scheduleId, Long userId);
     List<Mates> findAllByUserIdAndIsDeletedIsFalse(Long userId);
 
+    List<Mates> findAllByUserIdAndIsAcceptedTrue(Long userId);
 
+    List<Mates> findAllByUserIdAndIsAcceptedFalseAndIsDeletedFalse(Long userId);
 
 }

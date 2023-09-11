@@ -20,15 +20,12 @@ public class BoardController {
     private final BoardService boardService;
 
     // board 작성
-    @PostMapping(
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
+    @PostMapping
     public ResponseEntity<ResponseDto> create(
             Authentication auth,
-            @RequestPart(value = "dto") BoardRequestDto dto,
-            @RequestParam(value = "images", required = false) List<MultipartFile> images
+            @RequestBody BoardRequestDto dto
     ) {
-        boardService.create(auth.getName(), dto, images);
+        boardService.create(auth.getName(), dto);
         return ResponseEntity.ok(
                 ResponseDto.getMessage(SuccessCode.CREATED.getMessage())
         );
@@ -62,10 +59,9 @@ public class BoardController {
     public ResponseEntity<ResponseDto> update(
             Authentication auth,
             @PathVariable("boardId") Long boardId,
-            @RequestPart(value = "dto") BoardRequestDto dto,
-            @RequestParam(value = "images", required = false) List<MultipartFile> images
+            @RequestPart(value = "dto") BoardRequestDto dto
     ) throws FileNotFoundException {
-        boardService.update(auth.getName(), boardId, dto, images);
+        boardService.update(auth.getName(), boardId, dto);
         return ResponseEntity.ok(
                 ResponseDto.getMessage(SuccessCode.SUCCESS.getMessage())
         );
