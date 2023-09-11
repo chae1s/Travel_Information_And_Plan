@@ -66,9 +66,12 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function getChatRooms(){
     return axiosInstance.get(`/schedules/chat/rooms`)
 }
+function getChatRoomData(roomId){
+    return axiosInstance.get(`/schedules/chat/rooms/${roomId}`)
+}
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
-    getChatRooms
+    getChatRooms,getChatRoomData
 };
 

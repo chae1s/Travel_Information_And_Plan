@@ -18,6 +18,9 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import ChatRoom from "@/components/ChatRoom.vue";
+import ChatRoomList from "@/components/ChatRoomList.vue";
+
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -100,6 +103,12 @@ const router = createRouter({
                 {path: 'password', name: 'Password', component: Password},
                 {path: 'delete', name: 'UserDelete', component: UserDelete}
             ]
+        },
+        {
+            path: '/chat/:id', name: 'ChatRoom', component:ChatRoom, props:true
+        },
+        {
+            path: '/chat-room-list', name:'ChatRoomList', component: ChatRoomList
         },
     ]
 })

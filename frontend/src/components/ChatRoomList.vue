@@ -83,10 +83,10 @@ h2 {
   align-items: center;
 }
 .chatRoom-data-image {
-  margin-left: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 20px;
+  margin-left: 25px;
+  width: 57px;
+  height: 57px;
+  border-radius: 25px;
   background-color: #FAED7D;
 }
 .chatRoom-data-text {
