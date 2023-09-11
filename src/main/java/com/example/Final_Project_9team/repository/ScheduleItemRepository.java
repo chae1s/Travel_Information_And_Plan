@@ -13,4 +13,5 @@ public interface ScheduleItemRepository extends JpaRepository<ScheduleItem, Long
     Integer countScheduleItemByScheduleAndTourDate(Schedule schedule, LocalDate tourDate);
 
     List<ScheduleItem> findAllByScheduleAndTourDateOrderByTurnAsc(Schedule schedule, LocalDate tourDate);
+
 }

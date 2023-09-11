@@ -26,7 +26,7 @@ function createSchedule(scheduleData) {
 }
 
 function readSchedule(scheduleId) {
-    return axiosInstance.get('/schedules/' + scheduleId)
+    return axiosInstance.get('/schedules/write/' + scheduleId)
 }
 
 function readLikedItemBySido(sido, page) {
@@ -51,6 +51,7 @@ function createScheduleItems(scheduleId) {
     return axiosInstance.post(`/schedules/${scheduleId}/schedule-items`)
 }
 
+<<<<<<< HEAD
 function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
@@ -67,6 +68,9 @@ function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
 function readAllSchedules() {
+=======
+function readAllMySchedules() {
+>>>>>>> 6677a0e (refactor : 커뮤니티게시판 스케줄 목록, 세부 일정 출력, my page의 기타 페이지 html, css)
     return axiosInstance.get('/users/me/schedules')
 }
 
@@ -74,13 +78,26 @@ function readMySchedule(scheduleId) {
     return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
 }
 
+function readAllSchedules() {
+    return axiosInstance.get('/schedules')
+}
+
+function readBoardSchedule(scheduleId) {
+    return axiosInstance.get(`/schedules/${scheduleId}`)
+}
+
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
+<<<<<<< HEAD
 <<<<<<< HEAD
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
     bookmarkItem, readAllSchedules
 =======
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllSchedules, readMySchedule
 >>>>>>> 0666ccf (refactor : 작성한 일정의 세부 계획, 동선 출력)
+=======
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllMySchedules, readMySchedule, readAllSchedules, readBoardSchedule
+>>>>>>> 6677a0e (refactor : 커뮤니티게시판 스케줄 목록, 세부 일정 출력, my page의 기타 페이지 html, css)
 };
 

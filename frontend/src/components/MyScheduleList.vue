@@ -1,41 +1,41 @@
 <template>
     <div class="sidebar_main">
-        <div class="main_title">여행 일정 게시판</div>
+        <div class="main_title">내가 쓴 일정</div>
         <table class="schedule_table">
             <thead>
-            <tr>
-                <th class="schedule_head_id"></th>
-                <th class="schedule_head_title">일정 제목</th>
-                <th class="schedule_head_mates">여행 메이트</th>
-                <th class="schedule_head_tourDate">여행 날짜</th>
-            </tr>
+                <tr>
+                    <th class="schedule_head_id"></th>
+                    <th class="schedule_head_title">일정 제목</th>
+                    <th class="schedule_head_mates">여행 메이트</th>
+                    <th class="schedule_head_tourDate">여행 날짜</th>
+                </tr>
             </thead>
             <tbody>
-            <tr v-for="schedule in scheduleList" :key="schedule">
-                <td class="schedule_id" >{{ schedule.id }}</td>
-                <td class="schedule_title" @click="moveSchedulePost(schedule.id)">
-                    <span>[{{ schedule.sido }}]</span>
-                    {{ schedule.title }}
-                </td>
-                <td class="schedule_mates">
-                    <div>{{ schedule.writer }}</div>
-                </td>
-                <td class="schedule_tourDate">
-                    <span>{{ schedule.startDate }}</span> - <span>{{ schedule.endDate }}</span>
-                </td>
-            </tr>
+                <tr v-for="schedule in scheduleList" :key="schedule">
+                    <td class="schedule_id" >{{ schedule.id }}</td>
+                    <td class="schedule_title" @click="moveSchedulePost(schedule.id)">
+                        <span>[{{ schedule.sido }}]</span>
+                        {{ schedule.title }}
+                    </td>
+                    <td class="schedule_mates">
+                        <div>{{ schedule.writer }}</div>
+                    </td>
+                    <td class="schedule_tourDate">
+                        <span>{{ schedule.startDate }}</span> - <span>{{ schedule.endDate }}</span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 </template>
 
 <script>
-import {readAllSchedules} from "@/api";
+import {readAllMySchedules} from "@/api/index";
 import locations from "@/assets/locations";
 import dayjs from "dayjs";
 
 export default {
-    name: "ScheduleList",
+    name: "MyScheduleList",
     data() {
         return {
             showSchedulePost: false,
@@ -55,11 +55,12 @@ export default {
     },
     methods: {
         moveSchedulePost(id) {
-            this.$router.push(`/schedule-details/${id}`);
+            this.$router.push(`/my-page/my-post/schedules/${id}`);
+            this.showSchedulePost = true
         },
         async fetchSchedules() {
             try {
-                const {data} = await readAllSchedules()
+                const {data} = await readAllMySchedules()
                 console.log(data)
                 this.scheduleList = data.content.map(schedule => ({
                     id: schedule.id,
@@ -124,20 +125,20 @@ export default {
     .schedule_title span {
         color: #959595;
     }
-    /*
-        메이트 같이 표시
-        .schedule_mates {
-            width: 297px;
-            white-space: normal;
-            text-align: left;
-        }
+/*
+    메이트 같이 표시
+    .schedule_mates {
+        width: 297px;
+        white-space: normal;
+        text-align: left;
+    }
 
-        .schedule_mates div {
-            font-size: 14px;
-            padding: 4px 10px;
-            display: inline-block;
-        }
-    */
+    .schedule_mates div {
+        font-size: 14px;
+        padding: 4px 10px;
+        display: inline-block;
+    }
+*/
     .schedule_tourDate {
         width: 215px;
     }
