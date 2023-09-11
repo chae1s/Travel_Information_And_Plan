@@ -18,6 +18,8 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import ItemReview from "@/views/ItemReview.vue";
+import TravelMap from "@/views/TravelMap.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -101,6 +103,11 @@ const router = createRouter({
                 {path: 'delete', name: 'UserDelete', component: UserDelete}
             ]
         },
+        {
+            path: '/map',
+            name:'TravelMap',
+            component: TravelMap
+        }
     ]
 })
 

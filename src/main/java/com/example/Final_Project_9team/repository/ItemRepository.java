@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
@@ -35,6 +37,15 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findByLikedItemsBySido(@Param("email") String email, @Param("sido") String sido, Pageable pageable);
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido")
     Page<Item> findBySido(@Param("sido")String sido, Pageable pageable);
+    @Query("SELECT a FROM Item a WHERE a.location.sido = :sido")
+    List<Item> findAllBySido(@Param("sido")String sido);
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu")
-    Page<Item> findBySidoAndSigungu(@Param("sido")String sido, @Param("sigungu")String sigungu,Pageable pageable);
+    Page<Item> findBySidoAndSigunguPage(@Param("sido")String sido, @Param("sigungu")String sigungu,Pageable pageable);
+
+    @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu")
+    List<Item> findBySidoAndSigungu(@Param("sido")String sido, @Param("sigungu")String sigungu);
+
+    @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu AND a.contentTypeId = :contentTypeId")
+    Page<Item> findBySidoAndSigunguAndContentTypePage(@Param("sido")String sido, @Param("sigungu")String sigungu, @Param("contentTypeId") String contentTypeId, Pageable pageable);
+
 }

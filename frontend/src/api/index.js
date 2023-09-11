@@ -63,8 +63,13 @@ function findInvitationList(scheduleId,keyword) {
 function inviteUserToSchedule(scheduleId,invitedUsername) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}?q=${invitedUsername}`)
 }
+function bookmarkItem(itemId) {
+    return axiosInstance.post(`item-list/add/${itemId}`)
+}
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
+    bookmarkItem
 };
 

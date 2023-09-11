@@ -33,9 +33,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -59,66 +57,35 @@ public class ItemListService {
 
         return itemPage.map(ItemPartResponseDto::fromEntity);
     }
+    public List<ItemPartResponseDto> readAllItemSidoPaged(String sido) {
+        List<Item> items = itemRepository.findAllBySido(sido);
+        List<ItemPartResponseDto> itemPartResponseDtos = new ArrayList<>();
+
+        for (Item item : items) {
+            itemPartResponseDtos.add(ItemPartResponseDto.fromEntity(item));
+        }
+
+        return itemPartResponseDtos;
+    }
+    public List<ItemPartResponseDto> readAllItemSidoSigunguPaged(String sido, String sigungu) {
+        List<Item> items = itemRepository.findBySidoAndSigungu(sido, sigungu);
+        List<ItemPartResponseDto> itemPartResponseDtos = new ArrayList<>();
+
+        for (Item item : items) {
+            itemPartResponseDtos.add(ItemPartResponseDto.fromEntity(item));
+        }
+
+        return itemPartResponseDtos;
+    }
     //TODO : 시 + 구 별 아이템 조회
     public Page<ItemPartResponseDto> readItemSidoAndSigungu(int page, String sido, String sigungu) {
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id"));
-        Page<Item> itemPage = itemRepository.findBySidoAndSigungu(sido, sigungu, pageable);
+        Page<Item> itemPage = itemRepository.findBySidoAndSigunguPage(sido, sigungu, pageable);
 
         return itemPage.map(ItemPartResponseDto::fromEntity);
     }
     //TODO: 상세정보 조회
-//    public ResponseEntity<?> readItem(Long itemId) throws IOException {
-//        Optional<Item> optionalItem = itemRepository.findById(itemId);
-//
-//        if (optionalItem.isPresent()) {
-//            Item item = optionalItem.get();
-//            String contentTypeId = item.getContentTypeId();
-//
-//            switch (contentTypeId) {
-//                case "12", "14", "32", "39" -> {
-//                    String baseUrl = "https://apis.data.go.kr/B551011/KorService1/detailIntro1?";
-//                    String apiKey = "vqoXwkq9RMCWANTOOUUOJVPQ%2FDtls8Z099FreqNacdFobJPBCviYv10hegz5KtPrVxci7OYYwEBNv%2ByS7hZ9%2Fw%3D%3D";
-//                    String contentId = item.getContentId();
-//                    String urlStr = baseUrl +
-//                            "serviceKey=" + apiKey +
-//                            "&MobileOS=ETC" +
-//                            "&MobileApp=AppTest" +
-//                            "&_type=json" +
-//                            "&contentId=" + contentId +
-//                            "&contentTypeId=" + contentTypeId + //12, 14, 32, 39
-//                            "&numOfRows=10" +
-//                            "&pageNo=1";
-//
-//                    URL url = new URL(urlStr);
-//                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//                    urlConnection.setRequestMethod("GET");
-//
-//                    int responseCode = urlConnection.getResponseCode();
-//                    if (responseCode == HttpURLConnection.HTTP_OK) {
-//                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-//                        StringBuilder resultBuilder = new StringBuilder();
-//                        String line;
-//                        while ((line = br.readLine()) != null) {
-//                            resultBuilder.append(line).append("\n");
-//                        }
-//                        br.close();
-//
-//                        String resultData = resultBuilder.toString();
-//
-//                        return ResponseEntity.ok(resultData);
-//                    } else {
-//
-//                        throw new CustomException(ErrorCode.ERROR_NOT_FOUND);
-//                    }
-//                }
-//                default -> throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-//            }
-//        } else {
-//            throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-//        }
-//    }
-
-    public ResponseEntity<?> readItem(Long itemId) throws IOException, ParseException, URISyntaxException {
+    public ResponseEntity<?> readItem(Long itemId, int reviewPage, int reviewSize) throws IOException, ParseException, URISyntaxException {
         HashMap<String, Object> results = new HashMap<String, Object>();
         String result = "";
         Optional<Item> optionalItem = itemRepository.findById(itemId);
@@ -158,5 +125,11 @@ public class ItemListService {
             }
 
         } else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    }
+    public Page<ItemPartResponseDto> readItemSidoAndSigunguAndContentType(int page, String sido, String sigungu, String contentTypeId) {
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id"));
+        Page<Item> itemPage = itemRepository.findBySidoAndSigunguAndContentTypePage(sido, sigungu, contentTypeId, pageable);
+
+        return itemPage.map(ItemPartResponseDto::fromEntity);
     }
 }

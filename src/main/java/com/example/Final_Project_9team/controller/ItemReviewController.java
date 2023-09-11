@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/read/{itemId}/review")
+@RequestMapping("/item-detail/read/{itemId}")
 @RequiredArgsConstructor
 public class ItemReviewController {
     private final ItemReviewService itemReviewService;
