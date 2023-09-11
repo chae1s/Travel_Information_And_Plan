@@ -54,11 +54,11 @@
 
 <script>
 import locations from "@/assets/locations";
-import {readBoardSchedule} from "@/api/index";
+import {readMySchedule} from "@/api/index";
 import dayjs from "dayjs";
 
 export default {
-    name: "SchedulePost",
+    name: "MySchedulePost",
     data() {
         return {
             scheduleId: this.$route.params.id,
@@ -88,7 +88,7 @@ export default {
     methods: {
         async readSchedule(id) {
             try {
-                const {data} = await readBoardSchedule(id)
+                const {data} = await readMySchedule(id)
                 this.scheduleData.title = data.title
                 this.scheduleData.description = data.description
                 this.scheduleData.sido = locations[data.sido].name
@@ -186,118 +186,120 @@ export default {
 </script>
 
 <style scoped>
-.sidebar_main {
-    width: 937px;
-}
+    .sidebar_main {
+        width: 937px;
+    }
 
-.schedule_header {
-    border-bottom: 1px solid #DADADA;
-    height: 122px;
-}
+    .schedule_header {
+        border-bottom: 1px solid #DADADA;
+        height: 122px;
+    }
 
-.schedule_title {
-    font-size: 22px;
-    font-weight: bold;
-}
+    .schedule_title {
+        font-size: 22px;
+        font-weight: bold;
+    }
 
-.schedule_sido {
-    margin-top: 4px;
-}
+    .schedule_sido {
+        margin-top: 4px;
+    }
 
-.schedule_mates span {
-    display: inline-block;
-    margin-right: 22px;
-}
-.schedule_mates span:last-child {
-    margin-right: 0;
-}
+    .schedule_mates span {
+        display: inline-block;
+        margin-right: 22px;
+    }
+    .schedule_mates span:last-child {
+        margin-right: 0;
+    }
 
-.show_schedule {
-    margin-right: 14px;
-    font-size: 14px;
-    color: #565656;
-    margin-bottom: 9px;
-    margin-top: -16px;
-    cursor: pointer;
-    display: inline-block;
-    float: right;
-}
+    .show_schedule {
+        margin-right: 14px;
+        font-size: 14px;
+        color: #565656;
+        margin-bottom: 9px;
+        margin-top: -16px;
+        cursor: pointer;
+        display: inline-block;
+        float: right;
+    }
 
-.schedule_map {
-    width: 789px;
-    height: 445px;
-    margin: 19px auto;
-    background-color: #C4DFFF;
-}
+    .schedule_map {
+        width: 789px;
+        height: 445px;
+        margin: 19px auto;
+        background-color: #C4DFFF;
+    }
 
-.schedule_description {
-    width: 789px;
-    text-align: left;
-    margin: 0 auto 17px;
-}
+    .schedule_description {
+        width: 789px;
+        text-align: left;
+        margin: 0 auto 17px;
+    }
 
-.schedule_item_header {
-    width: 789px;
-    margin: 0 auto;
-}
+    .schedule_item_header {
+        width: 789px;
+        margin: 0 auto;
+    }
 
-.schedule_item_header span {
-    margin-right: 24px;
-    cursor: pointer;
-}
+    .schedule_item_header span {
+        margin-right: 24px;
+        cursor: pointer;
+    }
 
-.schedule_item_header span:last-child {
-    margin-right: 0;
-}
+    .schedule_item_header span:last-child {
+        margin-right: 0;
+    }
 
-.schedule_item_images {
-    display: inline-block;
-    margin: 10px auto;
-}
+    .schedule_item_images {
+        display: inline-block;
+        margin: 10px auto;
+    }
 
-.image_list {
-    display: flex;
-    gap: 24px;
-}
+    .image_list {
+        display: flex;
+        gap: 24px;
+    }
 
-.schedule_destination_list {
-    width: 789px;
-    margin: 20px auto 80px;
-}
+    .schedule_destination_list {
+        width: 789px;
+        margin: 20px auto 80px;
+    }
 
-.schedule_item {
-    display: flex;
-    gap: 9px;
-    margin-bottom: 10px;
-    text-align: left;
-}
+    .schedule_item {
+        display: flex;
+        gap: 9px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
 
-.destination_title {
-    font-size: 16px;
-    font-weight: bold;
-    height: 24px;
-    line-height: 24px;
-}
+    .destination_title {
+        font-size: 16px;
+        font-weight: bold;
+        height: 24px;
+        line-height: 24px;
+    }
 
-.destination_information, .destination_address {
-    font-size: 14px;
-}
+    .destination_information, .destination_address {
+        font-size: 14px;
+    }
 
-.selected {
-    font-weight: bold;
-    color: #99C7FF;
-}
+    .selected {
+        font-weight: bold;
+        color: #99C7FF;
+    }
 
-.schedule_route_info {
-    min-width: 210px;
-    font-size: 14px;
-    margin: 8px 0;
-}
+    .schedule_route_info {
+        min-width: 210px;
+        font-size: 14px;
+        margin: 8px 0;
+    }
 
-.schedule_route_info div {
-    display: inline-block;
-    width: 50%;
-    text-align: left;
-}
+    .schedule_route_info div {
+        display: inline-block;
+        width: 50%;
+        text-align: left;
+    }
+
+
 
 </style>

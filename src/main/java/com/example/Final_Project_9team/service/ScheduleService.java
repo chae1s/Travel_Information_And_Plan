@@ -88,13 +88,7 @@ public class ScheduleService {
 
         // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 userList
         List<Mates> mates = matesRepository.findAllBySchedule(schedule);
-        List<UserResponseDto> userResponses = new ArrayList<>();
-        for (Mates mate : mates) {
-            if (mate.getIsAccepted()) {
-                log.info("{} 일정 mates의 닉네임 : {}", schedule.getTitle(), mate.getUser().getNickname());
-                userResponses.add(UserResponseDto.fromEntity(mate.getUser()));
-            }
-        }
+        List<UserResponseDto> userResponses = readUserWriteSchedule(mates, schedule);
 
         return ScheduleResponseDto.fromEntity(schedule, userResponses, period);
 
@@ -300,7 +294,8 @@ public class ScheduleService {
 
     // display true인 schedule 전체 조회
     public PageDto<ScheduleListResponseDto> readAll(int page, int size) {
-        Page<Schedule> pagedSchedules = scheduleRepository.findAllByDisplayTrueAndIsDeletedFalseOrderByIdDesc(
+        Page<Schedule> pagedSchedules = scheduleRepository.findAllByDisplayAndIsDeletedOrderByIdDesc(
+                true, false,
                 PageRequest.of(page - 1, size)
         );
 
@@ -360,4 +355,54 @@ public class ScheduleService {
         return scheduleItemRepository.save(scheduleItem);
     }
 
+    public ScheduleResponseDto readScheduleByDisplay(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        Integer period = Period.between(schedule.getStartDate(), schedule.getEndDate()).getDays() + 1;
+
+        // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 userList
+        List<Mates> mates = matesRepository.findAllBySchedule(schedule);
+        List<UserResponseDto> userResponses = readUserWriteSchedule(mates, schedule);
+
+        LocalDate targetDate = schedule.getStartDate();
+        LocalDate endDate = schedule.getEndDate();
+
+        List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
+
+        while (targetDate.isBefore(endDate) || targetDate.isEqual(endDate)) {
+            scheduleItemResponses.add(readScheduleItemsAndItemPath(schedule, targetDate));
+
+            targetDate = targetDate.plusDays(1L);
+        }
+
+        return ScheduleResponseDto.fromEntity(schedule, userResponses, scheduleItemResponses);
+
+    }
+
+    private List<UserResponseDto> readUserWriteSchedule(List<Mates> mates, Schedule schedule) {
+        List<UserResponseDto> userResponses = new ArrayList<>();
+        for (Mates mate : mates) {
+            if (mate.getIsAccepted()) {
+                log.info("{} 일정 mates의 닉네임 : {}", schedule.getTitle(), mate.getUser().getNickname());
+                userResponses.add(UserResponseDto.fromEntity(mate.getUser()));
+            }
+        }
+
+        return userResponses;
+    }
+
+    private ScheduleItemResponseDto readScheduleItemsAndItemPath(Schedule schedule, LocalDate tourDate) {
+        List<ScheduleItem> scheduleItems = scheduleItemRepository.findAllByScheduleAndTourDateOrderByTurnAsc(schedule, tourDate);
+        List<ItemPath> itemPaths = itemPathRepository.findAllByScheduleAndTourDateOrderByTurn(schedule, tourDate);
+
+        List<ItemListResponseDto> itemListResponses = new ArrayList<>();
+        for (ScheduleItem scheduleItem : scheduleItems) {
+            itemListResponses.add(ItemListResponseDto.fromEntity(scheduleItem.getItem()));
+        }
+
+        List<ItemPathDto> itemPathDtos = itemPaths.stream().map(itemPath -> ItemPathDto.getItemPath(itemPath.getDistance(), itemPath.getDuration()))
+                .collect(Collectors.toList());
+
+        return ScheduleItemResponseDto.fromEntity(tourDate, itemListResponses, itemPathDtos);
+    }
 }

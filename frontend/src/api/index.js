@@ -33,7 +33,7 @@ function createSchedule(scheduleData) {
 }
 
 function readSchedule(scheduleId) {
-    return axiosInstance.get('/schedules/' + scheduleId)
+    return axiosInstance.get('/schedules/write/' + scheduleId)
 }
 
 function readLikedItemBySido(sido, page) {
@@ -83,7 +83,7 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
-function readAllSchedules() {
+function readAllMySchedules() {
     return axiosInstance.get('/users/me/schedules')
 }
 
@@ -91,12 +91,20 @@ function readMySchedule(scheduleId) {
     return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
 }
 
+function readAllSchedules() {
+    return axiosInstance.get('/schedules')
+}
+
+function readBoardSchedule(scheduleId) {
+    return axiosInstance.get(`/schedules/${scheduleId}`)
+}
+
+
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     createBoard, readBoards, uploadImage,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem
-
 };
 
