@@ -9,7 +9,7 @@ function loginUser(userData) {
   return axiosInstance.post('/users/login', userData);
 }
 
-export function updateUserInfo(userData) {
+function updateUserInfo(userData) {
     const headers = {
         'Content-Type': 'multipart/form-data'
     };
@@ -83,8 +83,10 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}?q=${invitedUsername}`)
 }
 export {
-    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule
-    readUserInfo, uploadImage
+    registerUser, loginUser, readUserInfo, updateUserInfo,
+    createBoard, readBoards, uploadImage,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
+    readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
+    findUser
 };
 
