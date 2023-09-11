@@ -62,6 +62,10 @@ function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
 
+function likeUser(toUserId) {
+    return axiosInstance.post(`/users/me/liked-user/${toUserId}`)
+}
+
 // 현재 회원의 모든 정보 조회
 function readUserInfo(userData) {
     return axiosInstance.get('/users/me')
@@ -85,7 +89,7 @@ function bookmarkItem(itemId) {
 }
 
 export {
-    registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
+    registerUser, loginUser, readUserInfo, updateUserInfo, findUser, likeUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,

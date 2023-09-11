@@ -15,8 +15,10 @@ import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
 import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
-import UserInfoPw from "@/components/UserInfoPw.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
+import TestVue from "@/components/TestVue.vue";
+import MatesResearcher from "@/components/MatesResearcher.vue";
+import LikesUser from "@/components/LikesUser.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -78,12 +80,12 @@ const router = createRouter({
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
                 },
+                {path: 'likes-user', name: 'LikesUser', component: LikesUser},
                 {path: 'my-trip', name: 'MyTrip', children: [
                         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
                         // {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
                     ]
                 }
-
             ]
         },
         {
