@@ -7,6 +7,8 @@ import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
+import ItemReview from "@/views/ItemReview.vue";
+import TravelMap from "@/views/TravelMap.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -50,6 +52,11 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
+        },
+        {
+            path: '/map',
+            name:'TravelMap',
+            component: TravelMap
         }
     ]
 })

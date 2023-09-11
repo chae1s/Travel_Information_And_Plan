@@ -3,7 +3,7 @@
         <div class="content_header">
             <div>여행지 리스트</div>
         </div>
-        <LocationCheckbox @checkedClick="fetchItems" :homeChecked="homeChecked"></LocationCheckbox>
+        <LocationCheckbox @checkedClick="handleLocationChange" :homeChecked="homeChecked"></LocationCheckbox>
         <ul class="item_list">
             <li class="item" v-for="(item, index) in items" :key=childChecked[0]>
                 <router-link :to="'/item-detail/read/' + item.id">
@@ -57,7 +57,7 @@ export default {
         }
     },
     methods: {
-        fetchItems(checked, page = this.page) {
+        fetchItems(checked, page) {
             this.childChecked = checked
             if (this.childChecked.length > 1) {
                 this.childChecked.shift()
@@ -83,6 +83,10 @@ export default {
                 .catch(error => {
                     console.error('API 호출 오류', error);
                 });
+        },
+        handleLocationChange(checked) {
+            this.page = 1
+            this.fetchItems(checked, this.page); // 페이지를 1로 설정하여 새로운 지역 선택 시 1페이지로 리셋
         },
         goToPage(newPage) {
             // 페이지 번호를 변경하면 해당 페이지의 아이템을 가져오도록 메서드 설정
