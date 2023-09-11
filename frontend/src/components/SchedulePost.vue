@@ -162,9 +162,9 @@ export default {
             })
 
             const polyline = new naver.maps.Polyline({
-                map: map,
+                map : map,
                 path: polylinePath,
-                strokeColor: this.polylineHex[this.defaultDate - 1],
+                strokeColor : this.polylineHex[this.defaultDate - 1],
                 strokeOpacity: 0.8,
                 strokeWeight: 6
             })
@@ -183,7 +183,6 @@ export default {
         },
     }
 }
-
 </script>
 
 <style scoped>
@@ -300,7 +299,5 @@ export default {
     width: 50%;
     text-align: left;
 }
-=======
->>>>>>> 20b278c (feat : 작성한 일정 리스트 내용 출력)
 
 </style>

@@ -15,10 +15,7 @@ import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
 import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
-import UserInfoPw from "@/components/UserInfoPw.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
-import ScheduleList from "@/components/ScheduleList.vue";
-import SchedulePost from "@/components/SchedulePost.vue";
 import MyScheduleList from "@/components/MyScheduleList.vue";
 import MySchedulePost from "@/components/MySchedulePost.vue";
 import LikedItemList from "@/components/LikedItemList.vue";
@@ -27,7 +24,6 @@ import MyItemReviewList from "@/components/MyItemReviewList.vue";
 import MyCommentList from "@/components/MyCommentList.vue";
 import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
 import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
-import SchedulePost from "@/components/SchedulePost.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -131,9 +127,6 @@ const router = createRouter({
                         {path: 'boards', name: 'MyBoardList', component: MyBoardList},
                         {path: 'review', name: 'MyItemReviewList', component: MyItemReviewList},
                         {path: 'comments', name: 'MyCommentList', component: MyCommentList},
-                        {path: 'schedules', name: 'ScheduleList', component: ScheduleList, children: [
-                            {path: ':id', name: 'SchedulePost', component: SchedulePost}]
-                        },
                         {path: 'boards', name: 'BoardList'},
                     ]
                 }

@@ -36,7 +36,6 @@ import dayjs from "dayjs";
 
 export default {
     name: "ScheduleList",
-
     data() {
         return {
             showSchedulePost: false,
