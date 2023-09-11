@@ -6,14 +6,14 @@
                 {{ errorMsg }}
             </v-alert>
             <v-form ref="form" v-model="valid" lazy-validation class="userInfoEdit_form">
-                <div class="my_page_profile_image">
+                <div class="my_page_profile_image mt-5">
                     <v-img :src="profileImgPreview" cover width="250px" height="250px" class="rounded-circle"
                            :inline="true"></v-img>
-                    <label for="file" class="my_page_profile_change">프로필 사진 바꾸기</label>
+                    <label for="file" class="my_page_profile_change mt-3">프로필 사진 바꾸기</label>
                     <input type="file" name="file" id="file" accept="image/*" @change="uploadProfileImage">
                     <!--                    <div class="my_page_profile_delete" @click="removeProfileImage">프로필 사진 삭제</div>-->
                 </div>
-                <div class="my_page_profile_form">
+                <div class="my_page_profile_form ml-3">
                     <div class="my_page_edit">
                         <div class="my_page_input_label">이메일</div>
                         <div class="readonly_data">{{ this.email }}</div>
