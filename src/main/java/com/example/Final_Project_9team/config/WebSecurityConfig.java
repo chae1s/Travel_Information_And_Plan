@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                                 "/", "/error",
 
                                 "/users/register", "users/check/**",
-                                "users/profile/**",
+                                "users/info/**",
                                 "board-create",
                                 "/item-list/**",
                                 "/schedules/write/**","/users/me/**","schedules/**",
