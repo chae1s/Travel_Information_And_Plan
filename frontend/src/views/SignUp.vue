@@ -17,6 +17,7 @@
                                     v-model="formData.email"
                                     label="e-mail"
                                     :rules="emailRules"
+                                    :error-messages="emailErrors"
                                     required
                                     @input="checkDuplicateEmail"
                             ></v-text-field>
@@ -25,6 +26,7 @@
                                     label="nickname"
                                     :counter="12"
                                     :rules="nameRules"
+                                    :error-messages="nicknameErrors"
                                     required
                                     @input="checkDuplicateNickname"
                             ></v-text-field>
@@ -34,7 +36,7 @@
                                     :type="show ? 'text' : 'password'"
                                     label="password"
                                     counter="8"
-                                    :rules="[rules.required, rules.min, rules.password]"
+                                    :rules="[rules.required, rules.min, rules.max, rules.password]"
                             ></v-text-field>
 
                             <v-text-field
@@ -56,11 +58,11 @@
                                 </div>
                                 <div class="ml-auto mr-1">
                                     <v-btn flat
-                                            depressed
-                                            large
-                                            block
-                                            class="mb-1"
-                                            @click="reset"
+                                           depressed
+                                           large
+                                           block
+                                           class="mb-1"
+                                           @click="reset"
                                     >지우기
                                     </v-btn>
                                 </div>
@@ -95,12 +97,15 @@ export default {
             isNicknameUnique: undefined,
             isError: false,
             errorMsg: "",
+            emailErrors: [],
+            nicknameErrors: [],
             show: false,
             rules: {
                 required: (value) => !!value || "비밀번호를 입력해주세요.",
                 password: v => !!(v || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[!@#$%^&])).+$/) ||
                     "영문 대소문자와 숫자, 특수기호(!@#$%^&)를 포함해주세요.",
-                min: (v) => v.length >= 8 || "8자리 이상으로 작성해주세요."
+                min: (v) => v.length >= 8 || "8자리 이상으로 작성해주세요.",
+                max: (v) => v.length <= 8 || "20자리 이하로 작성해주세요.",
             }
         }
     ),
@@ -115,24 +120,12 @@ export default {
             return [
                 (v) => !!v || "e-mail을 입력해주세요.",
                 (v) => /.+@.+\..+/.test(v) || "e-mail 형식을 확인해주세요.",
-                () => {
-                    if (this.isEmailUnique === false) {
-                        return "이미 사용중인 e-mail 입니다.";
-                    }
-                    return true;
-                },
             ];
         },
         nameRules() {
             return [
                 (v) => !!v || "nickname을 입력해주세요.",
-                (v) => (v && v.length <= 12) || "열두글자 이하로 작성해주세요.",
-                () => {
-                    if (this.isNicknameUnique === false) {
-                        return "이미 사용중인 nickname 입니다.";
-                    }
-                    return true;
-                },
+                (v) => (v && v.length <= 12) || "열두글자 이하로 작성해주세요."
             ];
         },
     },
@@ -179,8 +172,14 @@ export default {
         async checkDuplicateEmail() {
             try {
                 const response = await this.axios.post(`/users/check/email/${this.formData.email}`);
-                this.isEmailUnique = !response.data; // 중복시 true 반환, false일 때 unique
-                console.log(`이메일: ${this.formData.email}, 중복 여부: ${response.data ? '중복' : '고유'}`);
+                if (response.data == false) {
+                    this.isEmailUnique = true; // 중복시 true 반환, false일 때 unique
+                    this.emailErrors = [];
+                } else {
+                    this.isEmailUnique = false; // 중복시 true 반환, false일 때 unique
+                    this.emailErrors.push("이미 사용중인 email입니다.");
+                }
+                // console.log(`이메일: ${this.formData.email}, 중복 여부: ${response.data ? '중복' : '고유'}`);
             } catch (error) {
                 console.error("email 중복확인 오류: " + error);
             }
@@ -191,8 +190,14 @@ export default {
         async checkDuplicateNickname() {
             try {
                 const response = await this.axios.post(`/users/check/nickname/${this.formData.nickname}`);
-                this.isNicknameUnique = !response.data; // 중복시 true 반환, false일 때 unique
-                console.log(`nickname: ${this.formData.nickname}, 중복 여부: ${response.data ? '중복' : '고유'}`);
+                if (response.data == false) {
+                    this.isNicknameUnique = true; // 중복시 true 반환, false일 때 unique
+                    this.nicknameErrors = [];
+                } else {
+                    this.isNicknameUnique = false; // 중복시 true 반환, false일 때 unique
+                    this.nicknameErrors.push("이미 사용중인 이름입니다.");
+                }
+                // console.log(`nickname: ${this.formData.nickname}, 중복 여부: ${response.data ? '중복' : '고유'}`);
             } catch (error) {
                 console.error("nickname 중복확인 오류: " + error);
             }
@@ -225,7 +230,7 @@ export default {
 <style>
 
 .align-center {
-    align-items: center; /* 수직으로 중앙 정렬 */
+    align-items: center;
 }
 
 .font-adjust {
