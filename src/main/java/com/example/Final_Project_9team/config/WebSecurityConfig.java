@@ -42,7 +42,6 @@ public class WebSecurityConfig {
                                 "board-create",
                                 "/item-list/**",
                                 "/schedules/write/**","/users/me/**","schedules/**",
-
                                 // yj
                                 "schedules/chat/**", "/chatting","/mypage","/chatting","schedules/chat/**"
 

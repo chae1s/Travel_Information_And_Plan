@@ -26,7 +26,7 @@ function createSchedule(scheduleData) {
 }
 
 function readSchedule(scheduleId) {
-    return axiosInstance.get('/schedules/' + scheduleId)
+    return axiosInstance.get('/schedules/write/' + scheduleId)
 }
 
 function readLikedItemBySido(sido, page) {
@@ -51,7 +51,7 @@ function createScheduleItems(scheduleId) {
     return axiosInstance.post(`/schedules/${scheduleId}/schedule-items`)
 }
 
-function readAllSchedules() {
+function readAllMySchedules() {
     return axiosInstance.get('/users/me/schedules')
 }
 
@@ -59,8 +59,17 @@ function readMySchedule(scheduleId) {
     return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
 }
 
+function readAllSchedules() {
+    return axiosInstance.get('/schedules')
+}
+
+function readBoardSchedule(scheduleId) {
+    return axiosInstance.get(`/schedules/${scheduleId}`)
+}
+
+
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllSchedules, readMySchedule
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, readAllMySchedules, readMySchedule, readAllSchedules, readBoardSchedule
 };
 
