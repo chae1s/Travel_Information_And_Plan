@@ -16,6 +16,7 @@ public class UserResponseDto {
     private String content;
     private String location;
     private Boolean isLikedByMe;
+    private Boolean isInvited;
 
     // 프로필 이미지 경로 지정 메서드
     // 프로필 이미지가 있는 경우와 없는 경우 확인해서 fromEnetity 메서드에서 사용

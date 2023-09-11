@@ -6,7 +6,7 @@ function registerUser(userData) {
 }
 
 function loginUser(userData) {
-    return axiosInstance.post('/users/login', userData);
+  return axiosInstance.post('/users/login', userData);
 }
 
 export function updateUserInfo(userData) {
@@ -44,7 +44,7 @@ function createRouteList(scheduleId, tourList) {
     return axiosInstance.post('/schedules/' + scheduleId + '/schedule-items/route', tourList)
 }
 
-function readInvitations() {
+function readInvitations(){
     return axiosInstance.get('/schedules/invited-users');
 }
 
@@ -74,22 +74,17 @@ function readUserInfo(userData) {
 //     return axiosInstance.get('/users/${email}')
 // }
 
+function findInvitationList(scheduleId,keyword) {
+    // return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
+    return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
+}
+
+function inviteUserToSchedule(scheduleId,invitedUsername) {
+    return axiosInstance.post(`/schedules/invited-users/${scheduleId}?q=${invitedUsername}`)
+}
 export {
-    registerUser,
-    loginUser,
-    createBoard,
-    readBoards,
-    createSchedule,
-    readSchedule,
-    readLikedItemBySido,
-    createRouteList,
-    readInvitations,
-    acceptInvitation,
-    rejectInvitation,
-    createScheduleItems,
-    findUser,
-    readUserInfo,
-    uploadImage
-    // ,readUserInfo
+    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
+    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule
+    readUserInfo, uploadImage
 };
 
