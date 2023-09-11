@@ -98,10 +98,10 @@ public class ItemListController {
     }
 
     //즐겨찾기 기능
-    @PostMapping("/add")
+    @PostMapping("/add/{itemId}")
     public ResponseEntity<ResponseDto> bookmarkItem(
             Authentication auth,
-            Long itemId
+            @PathVariable("itemId") Long itemId
     ) {
         bookmarkItemService.createOrDeleteBookmarkItem(auth.getName(), itemId);
         return ResponseEntity.ok(

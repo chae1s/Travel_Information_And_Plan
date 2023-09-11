@@ -80,6 +80,7 @@
 <script>
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import axios from "axios";
+import {bookmarkItem} from "@/api";
 
 export default {
     name: "Home",
@@ -140,14 +141,8 @@ export default {
                     console.error('API 호출 오류', error);
                 });
         },
-        toggleBookmark(itemId) {
-            axios.post(`item-list/add`, this.item[itemId])
-                .then(response => {
-                    if (response.data.message === "Success") {
-                        // 즐겨찾기 추가 완료 메시지를 표시하거나 다른 처리를 수행
-                        alert("해당 여행지를 즐겨찾기에 추가했습니다.");
-                    }
-                });
+        async toggleBookmark(itemId) {
+            const {data} = await bookmarkItem(itemId);
         },
     }
 }
