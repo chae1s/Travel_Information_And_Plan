@@ -18,12 +18,10 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
-<<<<<<< HEAD
 import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import ScheduleList from "@/components/ScheduleList.vue";
 import SchedulePost from "@/components/SchedulePost.vue";
-=======
 import MyScheduleList from "@/components/MyScheduleList.vue";
 import MySchedulePost from "@/components/MySchedulePost.vue";
 import LikedItemList from "@/components/LikedItemList.vue";
@@ -32,7 +30,6 @@ import MyItemReviewList from "@/components/MyItemReviewList.vue";
 import MyCommentList from "@/components/MyCommentList.vue";
 import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
 import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
->>>>>>> 6677a0e (refactor : 커뮤니티게시판 스케줄 목록, 세부 일정 출력, my page의 기타 페이지 html, css)
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -139,12 +136,11 @@ const router = createRouter({
             ]
         },
         {
-<<<<<<< HEAD
             path: '/map',
             name:'TravelMap',
             component: TravelMap
-        }
-=======
+        },
+        {
             path: '/schedule-list',
             name: 'ScheduleBoardList',
             component: ScheduleBoardList
@@ -154,7 +150,6 @@ const router = createRouter({
             name: 'ScheduleBoardPost',
             component: ScheduleBoardPost
         },
->>>>>>> 6677a0e (refactor : 커뮤니티게시판 스케줄 목록, 세부 일정 출력, my page의 기타 페이지 html, css)
     ]
 })
 
