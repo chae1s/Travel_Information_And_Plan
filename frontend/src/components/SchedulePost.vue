@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div class="sidebar_main">
         <div class="schedule_header">
             <div class="schedule_title">{{ scheduleData.title }}</div>
@@ -163,9 +162,9 @@ export default {
             })
 
             const polyline = new naver.maps.Polyline({
-                map : map,
+                map: map,
                 path: polylinePath,
-                strokeColor : this.polylineHex[this.defaultDate - 1],
+                strokeColor: this.polylineHex[this.defaultDate - 1],
                 strokeOpacity: 0.8,
                 strokeWeight: 6
             })
@@ -183,20 +182,11 @@ export default {
             })
         },
     }
-=======
-  <div>일정 제목</div>
-
-</template>
-
-<script>
-export default {
-    name: "SchedulePost"
->>>>>>> 20b278c (feat : 작성한 일정 리스트 내용 출력)
 }
+
 </script>
 
 <style scoped>
-<<<<<<< HEAD
 .sidebar_main {
     width: 937px;
 }

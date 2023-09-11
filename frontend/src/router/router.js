@@ -27,7 +27,6 @@ import MyItemReviewList from "@/components/MyItemReviewList.vue";
 import MyCommentList from "@/components/MyCommentList.vue";
 import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
 import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
-import ScheduleList from "@/components/ScheduleList.vue";
 import SchedulePost from "@/components/SchedulePost.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -110,7 +109,6 @@ const router = createRouter({
             children: [
                 {path: 'my-info', name: 'MyInformation', children: [
                         {path: 'edit', name: 'UserInfoEdit', component: UserInfoEdit},
-                        {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
                         {path: 'password', name: 'Password', component: Password},
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
