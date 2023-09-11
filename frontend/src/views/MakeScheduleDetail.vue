@@ -38,7 +38,7 @@
                         <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="nextPageLikedItem"/>
                     </div>
                     <div class="schedule_view">
-                        <div class="schedule_map" id="map">
+                        <div class="items_map" id="map">
 
                         </div>
                         <div class="schedule_chat">
@@ -432,7 +432,7 @@ export default {
         margin-top: 24px;
     }
 
-    .schedule_map {
+    .items_map {
         height: 626px;
         width: 770px;
         background-color: #99C7FF;

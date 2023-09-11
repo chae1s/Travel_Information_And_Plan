@@ -46,3 +46,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   accessExpirationTime: ${JWT_EXPIRATION}
+
+NAVER_MAP_CLIENT_ID: pvpyjs42ed
+NAVER_MAP_CLIENT_SECRET: axYdkxoOlcuU1lIoPJSVuNY3393unETitNf1wPxK

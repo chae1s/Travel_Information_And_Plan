@@ -13,6 +13,8 @@ import MyPageMain from "@/views/MyPageMain.vue";
 import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import ItemReview from "@/views/ItemReview.vue";
+import TravelMap from "@/views/TravelMap.vue";
 import UserInfoPw from "@/components/UserInfoPw.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
 const router = createRouter({
@@ -84,6 +86,11 @@ const router = createRouter({
 
             ]
         },
+        {
+            path: '/map',
+            name:'TravelMap',
+            component: TravelMap
+        }
     ]
 })
 

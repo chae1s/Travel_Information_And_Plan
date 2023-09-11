@@ -17,13 +17,18 @@
                 홈페이지 : <a :href="item.homepage" target="_blank">{{ item.homepage }}</a>
             </p>
             </div>
+            <item-review :itemId="item.id"></item-review>
         </div>
     </div>
 </template>
 <script>
+import ItemReview from './ItemReview.vue';
 import axios from "axios";
   export default {
       name: "itemDetail",
+      components: {
+          'item-review': ItemReview,
+      },
       data() {
           return {
               itemId : this.$route.params.id,
@@ -76,6 +81,7 @@ import axios from "axios";
                       const match = this.item.homepage.match(urlPattern);
                       if (match) {
                           this.item.homepage = match[1];
+                          console.log(typeof(this.item.id));
                       } else {
                           console.log('URL을 찾을 수 없습니다.');
                       }
@@ -93,15 +99,17 @@ import axios from "axios";
 .item_detail_info {
     padding: 20px;
     background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
 .content_header {
-    padding: 20px 0;
     display: flex;
     justify-content: space-between;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
+    align-items: center;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .content_header div {
@@ -126,8 +134,11 @@ import axios from "axios";
     border-radius: 8px;
 }
 
-.item_info {
-    padding: 0 10px;
+.item_image img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 .item_text {
@@ -135,12 +146,11 @@ import axios from "axios";
     box-sizing: border-box;
 }
 
+
 .item_title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 20px;
-    font-weight: 600;
-    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
 }
 
 .item_fullAddress {
@@ -149,6 +159,11 @@ import axios from "axios";
     margin-top: 8px;
     font-size: 16px;
     text-align: left;
+}
+.item_homepage a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #007BFF;
 }
 
 .item_count {
@@ -161,26 +176,27 @@ import axios from "axios";
 .item_count li {
     margin-right: 10px;
 }
-
-.item_label_list {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    height: 25px;
+.item_content {
+    margin-top: 20px;
+}
+.item_overview {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
 }
 
-.item_label {
-    padding: 4px 8px;
-    margin-right: 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    background-color: #C4DFFF;
+.item_fullAddress {
+    font-size: 16px;
+    margin: 0;
 }
 
-.__label {
-    background-color: #FFE866;
+.item_map img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    margin-top: 20px;
+    border-radius: 8px;
 }
-
 .item_detail_info:deep(.location_checkbox) {
     display: flex;
     justify-content: space-between;

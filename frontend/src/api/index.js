@@ -47,11 +47,9 @@ function createRouteList(scheduleId, tourList) {
 function readInvitations(){
     return axiosInstance.get('/schedules/invited-users');
 }
-
 function acceptInvitation(scheduleId, matesId) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}/acceptance/${matesId}`);
 }
-
 function rejectInvitation(scheduleId, matesId) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}/rejection/${matesId}`);
 }
@@ -82,11 +80,15 @@ function findInvitationList(scheduleId,keyword) {
 function inviteUserToSchedule(scheduleId,invitedUsername) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}?q=${invitedUsername}`)
 }
+function bookmarkItem(itemId) {
+    return axiosInstance.post(`item-list/add/${itemId}`)
+}
+
 export {
-    registerUser, loginUser, readUserInfo, updateUserInfo,
+    registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
-    findUser
+    bookmarkItem
 };
 

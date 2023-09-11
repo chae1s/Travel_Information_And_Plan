@@ -38,7 +38,7 @@ export default {
         },
         initValue() {
             if (this.homeChecked) {
-                this.checked = ["0"]
+                //this.checked = ["1"]
             }
         },
     }
