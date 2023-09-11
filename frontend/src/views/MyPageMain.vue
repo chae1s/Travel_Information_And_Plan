@@ -44,7 +44,7 @@ export default {
                 {
                     sidebarTitle: '나의 여행',
                     sidebarList: ['메이트 초대 리스트', '관심등록 여행지'],
-                    sidebarRouter: ['/', '/']
+                    sidebarRouter: ['/my-page/my-trip/mate-invitation', '/']
                 },
                 {
                     sidebarTitle: '나의 포스트',

@@ -76,11 +76,11 @@ const router = createRouter({
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
                 },
-                // {path: 'my-trip', name: 'MyTrip', children: [
-                //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
-                //         {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
-                //     ]
-                // }
+                {path: 'my-trip', name: 'MyTrip', children: [
+                        {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
+                        // {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
+                    ]
+                }
 
             ]
         },
