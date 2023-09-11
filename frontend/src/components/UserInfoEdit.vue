@@ -5,73 +5,78 @@
             <v-alert v-if="isError" type="error">
                 {{ errorMsg }}
             </v-alert>
-            <div class="my_page_profile_image">
-                <v-img :src="formDataProfile.profileImage" width="160px" height="160px" class="rounded-circle"
-                       :inline="true"></v-img>
-                <label for="file" class="my_page_profile_change">프로필 사진 바꾸기</label>
-                <div class="my_page_profile_delete">프로필 사진 삭제</div> <!-- 필요없으면 지우기 -->
-                <input type="file" name="file" id="file"> <!-- 수정 -->
-            </div>
-<!--                        <div class="my_page_profile_form">-->
-            <v-form ref="form" v-model="valid" lazy-validation class="my_page_profile_form">
-                <div class="my_page_edit">
-                    <div class="my_page_input_label">이메일</div>
-                    <div class="readonly_data">{{ this.formData.email }}</div>
+            <v-form ref="form" v-model="valid" lazy-validation class="userInfoEdit_form">
+                <div class="my_page_profile_image">
+                    <v-img :src="profileImgPreview" cover width="250px" height="250px" class="rounded-circle"
+                           :inline="true"></v-img>
+                    <label for="file" class="my_page_profile_change">프로필 사진 바꾸기</label>
+                    <input type="file" name="file" id="file" accept="image/*" @change="uploadProfileImage">
+                    <!--                    <div class="my_page_profile_delete" @click="removeProfileImage">프로필 사진 삭제</div>-->
                 </div>
-                <div class="my_page_edit">
-                    <div class="my_page_input_label">닉네임</div>
-                    <v-text-field class="v-text-field-custom"
-                                  v-model="formData.nickname"
-                                  variant="outlined"
-                                  :counter="12"
-                                  :rules="nameRules"
-                                  @input="checkDuplicateNickname"
-                    ></v-text-field>
-                </div>
-                <div class="my_page_edit">
-                    <div class="my_page_input_label introduce">프로필 소개</div>
-                    <v-textarea class="v-text-field-custom"
-                                v-model="formDataProfile.content"
-                                variant="outlined"
-                                :rows="3"
-                                :counter="35"
-                                :rules="[rules.contentRules]"
-                    ></v-textarea>
-                </div>
-                <div class="my_page_edit">
-                    <div class="my_page_input_label introduce">지역</div>
-                    <v-text-field class="v-text-field-custom"
-                                  v-model="formDataProfile.location"
-                                  variant="outlined"
-                                  :counter="10"
-                                  :rules="[rules.locationRules]"
-                    ></v-text-field>
-                </div>
-                <div class="my_page_button_wrap">
-                    <button class="my_page_button">회원정보 수정</button>
+                <div class="my_page_profile_form">
+                    <div class="my_page_edit">
+                        <div class="my_page_input_label">이메일</div>
+                        <div class="readonly_data">{{ this.email }}</div>
+                    </div>
+                    <div class="my_page_edit">
+                        <div class="my_page_input_label">닉네임</div>
+                        <v-text-field class="v-text-field-custom"
+                                      v-model="formData.nickname"
+                                      variant="outlined"
+                                      :counter="12"
+                                      :rules="nameRules"
+                                      :error-messages="nicknameErrors"
+                                      @input="checkDuplicateNickname"
+                        ></v-text-field>
+                    </div>
+
+                    <div class="my_page_edit">
+                        <div class="my_page_input_label introduce">프로필 소개</div>
+                        <v-textarea class="v-text-field-custom"
+                                    v-model="formData.profileContent"
+                                    variant="outlined"
+                                    :rows="3"
+                                    :counter="35"
+                                    :rules="[rules.contentRules]"
+                        ></v-textarea>
+                    </div>
+
+                    <div class="my_page_edit">
+                        <div class="my_page_input_label introduce">지역</div>
+                        <v-text-field class="v-text-field-custom"
+                                      v-model="formData.profileLocation"
+                                      variant="outlined"
+                                      :rules="[rules.locationRules]"
+                        ></v-text-field>
+
+                    </div>
                 </div>
             </v-form>
-            <!--            </div>-->
+            <div class="my_page_button_wrap">
+                <v-btn flat class="my_page_button" @click="submitForm">회원정보 수정</v-btn>
+            </div>
+
         </div>
     </div>
 </template>
 
 <script>
 
-import {readUserInfo} from "@/api";
+import {updateUserInfo, readUserInfo} from "@/api";
 
 export default {
-    name: "ProfileEdit",
+    name: "UserInfoEdit",
 
     async created() {
         try {
             const {data} = await readUserInfo();
             console.log(data)
+            // 서버에서 profileImage를 제외한 모든 내용은 생성시 기본값 존재함
             this.email = data.email;
             this.formData.nickname = data.nickname;
-            this.formDataProfile.profileImage = data.profileImage;
-            this.formDataProfile.content = data.content;
-            this.formDataProfile.location = data.location;
+            this.formData.profileContent = data.content;
+            this.formData.profileLocation = data.location;
+            this.profileImgPreview = data.profileImage;
             this.presentNickname = data.nickname;
         } catch (error) {
             console.log("조회 에러:", error.response.data)
@@ -79,23 +84,25 @@ export default {
     },
     data() {
         return {
+            formData:
+                {
+                    nickname: '현재 닉네임',
+                    profileContent: '',
+                    profileLocation: '',
+                    isImageDefault: undefined,
+                    profileImage: []
+                },
             valid: undefined,
-            formData: {
-                nickname: '현재 닉네임',
-            },
-            formDataProfile: {
-                profileImage: '/img/default-profile.png',
-                content: '',
-                location: ''
-            },
             email: '현재 email',
+            profileImgPreview: '/img/default-profile.png',
             presentNickname: '',
-            isNicknameUnique: undefined,
+            isNicknameUnique: true,
+            nicknameErrors: [],
             isError: false,
-            errorMsg: "",
+            errorMsg: '',
             rules: {
                 contentRules: (v) => v.length <= 35 || "35글자 이내로 작성해주세요.",
-                locationRules: (v) => v.length <= 10 || "10글자 이내로 작성해주세요."
+                locationRules: (v) => v.length <= 20 || "20글자 이내로 작성해주세요.",
             }
         }
     },
@@ -104,48 +111,95 @@ export default {
             return [
                 (v) => !!v || "닉네임을 입력해주세요.",
                 (v) => (v && v.length <= 12) || "한글자 이상 열두글자 이하로 작성해주세요.",
-                (v) => {
-                    if (v != this.presentNickname) {
-                        if (this.isNicknameUnique === false) {
-                            return "이미 사용중인 nickname 입니다.";
-                        }
-                    }
-                    return true;
-                    console.log(this.isNicknameUnique)
-                },
             ];
         },
     },
     methods: {
-        submitForm() {
-            if (!this.formData.nickname) {
+        goToMain() {
+            // this.$router.go(0);
+            this.$router.push('Home')
+        }
+        ,
+        async submitForm() {
+            if (
+                !this.formData.nickname
+            ) {
                 this.isError = true
                 this.errorMsg = "닉네임을 입력해주세요."
-                return
-            }        },
-        goToInfo() {
-            console.log("내 정보 조회로 이동")
-            this.$router.push({name: 'ProfileEdit'})
-        },
-        // 닉네임 중복 확인
+                return;
+            }
+            this.validate()
+            console.log("valid:", this.valid)
+            if (this.valid) {
+                try {
+                    console.log("formData:", this.formData)
+
+                    const dto = {
+                        nickname: this.formData.nickname,
+                        profileContent: this.formData.profileContent,
+                        profileLocation: this.formData.profileLocation,
+                        isImageDefault: this.formData.isImageDefault
+                    }
+                    const userData = new FormData()
+                    userData.append("dto", new Blob([JSON.stringify(dto)], {type: "application/json"}));
+                    console.log("image:", this.formData.profileImage)
+                    userData.append('image', this.formData.profileImage);
+
+                    const {data} = await updateUserInfo(userData);
+                    alert(data.message);
+                    this.goToMain()
+                } catch
+                    (error) {
+                    console.log(error.response.data)
+                    this.isError = true
+                    this.errorMsg = error.response.data.message
+                }
+            }
+        }
+        ,
+
+        uploadProfileImage(e) {
+            let imageFile = e.target.files;
+            this.formData.profileImage = imageFile[0] // 첫번째 이미지만 첨부
+            this.profileImgPreview = URL.createObjectURL(imageFile[0]);
+            console.log("이미지 등록:", this.formData.profileImage)
+        }
+        ,
+        removeProfileImage() {
+            // 기본 프로필로 설정, 프로필 이미지 파일을 삭제
+            this.profileImgPreview = "/img/default-profile.png";
+            this.formData.profileImage = [];
+            this.formData.isImageDefault = true;
+            console.log("이미지 삭제:", this.formData.profileImage)
+            console.log("isImageDefault:", this.formData.isImageDefault)
+        }
+        ,
+
+// 닉네임 중복 확인
         async checkDuplicateNickname() {
             // 기존 닉네임과 비교
             if (this.formData.nickname === this.presentNickname) {
-                console.log("닉네임 유지: ${this.presentNickname}")
+                console.log(`닉네임 유지: ${this.presentNickname}`)
                 return;
             }
             // 입력값이 없을 때
-            if (this.formData.nickname.trim() === '') {
+            if (this.formData.nickname === null) {
                 console.log("입력값 없음")
                 return;
             }
             // 닉네임 변경시 중복체크
             if (this.formData.nickname != this.presentNickname) {
                 try {
-                    console.log(`닉네임: nickname: ${this.nickname}`)
-                    const response = await this.axios.post(`/users/check/nickname/${this.nickname}`);
-                    this.isNicknameUnique = !response.data; // 중복시 true 반환, false일 때 unique
-                    console.log(`중복 여부: ${response.data ? '중복' : '고유'}`);
+                    console.log(`닉네임: nickname: ${this.formData.nickname}`)
+                    const response = await this.axios.post(`/users/check/nickname/${this.formData.nickname}`);
+                    if (response.data == false) {
+                        this.isNicknameUnique = true; // 중복시 true 반환, false일 때 unique
+                        this.nicknameErrors = [];
+                    } else {
+                        this.isNicknameUnique = false; // 중복시 true 반환, false일 때 unique
+                        this.nicknameErrors.push("이미 사용중인 이름입니다.");
+                    }
+                    // console.log(`중복 여부: ${response.data ? '중복' : '고유'}`);
                 } catch (error) {
                     console.error("nickname 중복확인 오류: " + error);
                 }
@@ -153,7 +207,8 @@ export default {
             } else {
                 console.log(`닉네임 유지: ${this.isNicknameUnique}`);
             }
-        },
+        }
+        ,
         validate() {
             this.$refs.form.validate().then((validation) => {
                 console.log("check Valid: " + "isNicknameUnique: " + this.isNicknameUnique)
@@ -164,7 +219,8 @@ export default {
                     this.valid = false;
                 }
             });
-        },
+        }
+        ,
     }
 }
 </script>
@@ -179,9 +235,21 @@ export default {
     padding-bottom: 20px;
 }
 
+.userInfoEdit_form {
+    display: flex;
+    flex-direction: row;
+    min-width: 500px;
+}
+
+.my_page {
+    /*background-color: #42b983;*/
+}
+
 .my_page_profile_image {
-    text-align: left;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    margin-right: 40px;
 }
 
 .my_page_profile_change {
@@ -195,7 +263,6 @@ export default {
     font-size: 16px;
     cursor: pointer;
     color: #D3728E;
-    margin-left: 14px;
 }
 
 .my_page_profile_image input {
@@ -259,12 +326,12 @@ export default {
 
 .my_page_button {
     border: none;
-    margin: 80px auto 30px;
+    margin: 40px auto 30px;
     width: 198px;
     height: 42px;
     display: inline-block;
     background-color: #99C7FF;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: bold;
     color: #FFF;
     cursor: pointer;

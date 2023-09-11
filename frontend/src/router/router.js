@@ -9,14 +9,12 @@ import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 import LogoutView from "@/components/Logout.vue";
 import InvitationList from "@/components/InvitationList.vue";
-import UserInfo from "@/components/UseInfo.vue";
-import UserInfoView from "@/views/UserInfoView.vue";
 import MyPageMain from "@/views/MyPageMain.vue";
-import MyPageEdit from "@/components/ProfileEdit.vue";
 import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
-import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import UserInfoPw from "@/components/UserInfoPw.vue";
+import UserInfoEdit from "@/components/UserInfoEdit.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -66,34 +64,24 @@ const router = createRouter({
             name: 'BoardCreate',
             component: BoardCreate
         },
+
         {
-            path: '/my-info',
-            name: 'MyInfoView',
-            component: UserInfoView,
-            children: [
-                {path: 'update', name: 'update', component: UserInfo},
-                {path: 'pw-update', name: 'pw-update', component: UserInfoPw}
-            ]
-        },
-        // { // 나중에 메이트 보기 리스트 있으면 이렇게
-        //     path: '/mate',
-        //     name: 'mage',
-        //     component: Mate,
-        //     children: [
-        //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
-        //     ]
-        // },
-        {
-            path: '/mate-invitation', name: 'InvitationList', component: InvitationList
-        },
-        {
-            path: '/myPage/main',
+            path: '/my-page',
             name: 'MyPageMain',
             component: MyPageMain,
             children: [
-                {path: 'edit', name: 'ProfileEdit', component: ProfileEdit},
-                {path: 'password', name: 'Password', component: Password},
-                {path: 'delete', name: 'UserDelete', component: UserDelete}
+                {path: 'my-info', name: 'MyInformation', children: [
+                        {path: 'edit', name: 'UserInfoEdit', component: UserInfoEdit},
+                        {path: 'password', name: 'Password', component: Password},
+                        {path: 'delete', name: 'UserDelete', component: UserDelete},
+                    ]
+                },
+                // {path: 'my-trip', name: 'MyTrip', children: [
+                //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
+                //         {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
+                //     ]
+                // }
+
             ]
         },
     ]

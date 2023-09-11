@@ -6,7 +6,14 @@ function registerUser(userData) {
 }
 
 function loginUser(userData) {
-  return axiosInstance.post('/users/login', userData);
+    return axiosInstance.post('/users/login', userData);
+}
+
+export function updateUserInfo(userData) {
+    const headers = {
+        'Content-Type': 'multipart/form-data'
+    };
+    return axiosInstance.put('/users/me', userData, { headers });
 }
 
 function createBoard(boardData) {
@@ -37,12 +44,14 @@ function createRouteList(scheduleId, tourList) {
     return axiosInstance.post('/schedules/' + scheduleId + '/schedule-items/route', tourList)
 }
 
-function readInvitations(){
+function readInvitations() {
     return axiosInstance.get('/schedules/invited-users');
 }
+
 function acceptInvitation(scheduleId, matesId) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}/acceptance/${matesId}`);
 }
+
 function rejectInvitation(scheduleId, matesId) {
     return axiosInstance.post(`/schedules/invited-users/${scheduleId}/rejection/${matesId}`);
 }
@@ -55,13 +64,32 @@ function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
 
-function readUserInfo(userData){
+// 현재 회원의 모든 정보 조회
+function readUserInfo(userData) {
     return axiosInstance.get('/users/me')
-
 }
 
+// 다른 유저 정보 조회
+// function readUserProfile(email){
+//     return axiosInstance.get('/users/${email}')
+// }
+
 export {
-    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, readUserInfo
+    registerUser,
+    loginUser,
+    createBoard,
+    readBoards,
+    createSchedule,
+    readSchedule,
+    readLikedItemBySido,
+    createRouteList,
+    readInvitations,
+    acceptInvitation,
+    rejectInvitation,
+    createScheduleItems,
+    findUser,
+    readUserInfo,
+    uploadImage
+    // ,readUserInfo
 };
 

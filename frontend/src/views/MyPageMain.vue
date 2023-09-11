@@ -4,20 +4,17 @@
             <div class="sidebar_content">
                 <div class="my_page_main_sidebar">
                     <div class="profile_information">
-                        <div class="">프로필</div>
-                        <!-- 프로필 사진 등 프로필 정보 -->
-                        <router-link to="/myPage/main/edit">내 정보</router-link>
+                        <Profile/>
+                        <v-btn flat @click="goToInfo()">내 정보</v-btn>
                     </div>
                     <AppSideMenu v-for="sidebar in sidebarData" :key="sidebar"
-                        @profile-active="profileSelectedPage"
-                        :sidebar-title="sidebar.sidebarTitle"
-                        :sidebar-list="sidebar.sidebarList"
-                        :sidebar-router="sidebar.sidebarRouter"
-                        :sidebar-active="sidebar.sidebarActive" class="mt-3"/>
+                                 :sidebar-title="sidebar.sidebarTitle"
+                                 :sidebar-list="sidebar.sidebarList"
+                                 :sidebar-router="sidebar.sidebarRouter"
+                                 :sidebar-active="sidebar.sidebarActive" class="mt-3"/>
                 </div>
                 <div class="sidebar_main">
                     <router-view></router-view>
-
 
                 </div>
             </div>
@@ -28,11 +25,13 @@
 
 <script>
 import AppSideMenu from "@/components/AppSideMenu.vue";
+import Profile from "@/components/Profile.vue";
 
 export default {
     name: "MyPageMain",
     components: {
-        AppSideMenu
+        AppSideMenu,
+        Profile
     },
     data() {
         return {
@@ -40,7 +39,7 @@ export default {
                 {
                     sidebarTitle: '내 정보',
                     sidebarList: ['회원정보 수정', '비밀번호 변경', '회원 탈퇴'],
-                    sidebarRouter: ['/myPage/main/edit', '/myPage/main/password', '/myPage/main/delete']
+                    sidebarRouter: ['/my-page/my-info/edit', '/my-page/my-info/password', '/my-page/my-info/delete']
                 },
                 {
                     sidebarTitle: '나의 여행',
@@ -55,21 +54,31 @@ export default {
             ],
         }
     },
+    methods: {
+        goToInfo() {
+            console.log("내 정보 조회로 이동")
+            this.$router.push({name: 'UserInfoEdit'})
+        }
+    }
 }
 </script>
 
 <style scoped>
-    .sidebar_content {
-        display: flex;
-        gap: 53px;
-    }
+.sidebar_content {
+    display: flex;
+    gap: 53px;
+}
 
-    .my_page_main_sidebar {
-        width: 180px;
-    }
+.my_page_main_sidebar {
+    width: 180px;
+}
 
-    .profile_information {
-        border: 1px solid #DADADA;
-    }
+.profile_information {
+    flex-direction: row;
+    /*border: 1px solid #DADADA;*/
+    /*border-radius: 6px;*/
+    /*padding: 15px;*/
+    min-height: 300px;
+}
 
 </style>

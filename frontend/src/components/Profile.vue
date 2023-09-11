@@ -1,7 +1,10 @@
+<!--현재 로그인한 유저의 프로필을 불러옴-->
 <template>
     <div class="profile">
         <div class="profile-image">
-            <v-img :src="profileImage" alt="프로필 이미지"/>
+            <v-img cover
+                   :src="profileImage"
+                   class="rounded-circle" alt="프로필 이미지"/>
         </div>
         <h5 class="mt-2 mb-2">{{ nickname }}</h5>
         <div class="profile-content">{{ content }}</div>
@@ -10,13 +13,13 @@
 </template>
 
 <script>
-import {readUserProfile} from "@/api";
+import {readUserInfo} from "@/api";
 
 export default {
     name: "Profile",
     async created() {
         try {
-            const {data} = await readUserProfile();
+            const {data} = await readUserInfo();
             console.log(data)
             this.nickname = data.nickname;
             this.content = data.content;
@@ -29,8 +32,8 @@ export default {
     data() {
         return {
             nickname: 'nickname',
-            content:'',
-            location:'',
+            content: '',
+            location: '',
             profileImage: '/img/default-profile.png',
             // isLikedByMe:''
         }
@@ -39,18 +42,18 @@ export default {
 </script>
 
 <style scoped>
-.profile-content{
+
+.rounded-circle {
+    display: block;
+    max-width: 300px;
+    min-width: 180px;
+    min-height: 180px;
+    border: 1px solid #ccc;
+}
+
+.profile-content {
     font-size: 12px;
     margin: 2px;
 }
-
-/*.profile-image {*/
-/*    !*width: 150px; !* 원의 지름 크기 설정 *!*!*/
-/*    !*height: 150px; !* 원의 지름 크기 설정 *!*!*/
-/*    border: 1px solid #ccc;*/
-/*    border-radius: 50%; !* 원형 모양을 만듭니다. *!*/
-/*    overflow: hidden; !* 이미지를 원형에 맞게 자르기 위해 필요합니다. *!*/
-/*    margin: 0 auto;*/
-/*}*/
 
 </style>
