@@ -45,4 +45,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu")
     List<Item> findBySidoAndSigungu(@Param("sido")String sido, @Param("sigungu")String sigungu);
 
+    @Query("SELECT a FROM Item a WHERE a.location.sido = :sido AND a.location.sigungu = :sigungu AND a.contentTypeId = :contentTypeId")
+    Page<Item> findBySidoAndSigunguAndContentTypePage(@Param("sido")String sido, @Param("sigungu")String sigungu, @Param("contentTypeId") String contentTypeId, Pageable pageable);
+
 }

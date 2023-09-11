@@ -126,4 +126,10 @@ public class ItemListService {
 
         } else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     }
+    public Page<ItemPartResponseDto> readItemSidoAndSigunguAndContentType(int page, String sido, String sigungu, String contentTypeId) {
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id"));
+        Page<Item> itemPage = itemRepository.findBySidoAndSigunguAndContentTypePage(sido, sigungu, contentTypeId, pageable);
+
+        return itemPage.map(ItemPartResponseDto::fromEntity);
+    }
 }

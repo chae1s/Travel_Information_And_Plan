@@ -8,18 +8,32 @@
                 <label :for="sigungu.name">{{ sigungu.name }}</label>
             </div>
         </div>
-        <br>
+        <!-- 콘텐츠 ID 선택 체크박스 -->
+        <div class="form_checkbox_btn" v-for="contentTypeId in contentTypeIdList" :key="contentTypeId">
+            <input :id="contentTypeIds[contentTypeId].name" type="checkbox" v-model="checkedContentTypeIds" @change="clickContentTypeFunc" name="contentTypeId" :value="contentTypeId"/>
+            <label :for="contentTypeIds[contentTypeId].name">{{ contentTypeIds[contentTypeId].name }}</label>
+        </div>
     </div>
 </template>
 
 <script>
 import locations from "@/assets/locations";
+import contentTypeIds  from "@/assets/contentTypeIds";
 
 export default {
-    name: "SidoAndSigunguCheckbox",
+    name: "SidoAndSigunguAndCatCheckbox",
     computed: {
+        contentTypeIds() {
+            return contentTypeIds
+        },
         locations() {
             return locations
+        },
+        contentTypeId() {
+            return contentTypeIds
+        },
+        contentTypeIdList() {
+            return Object.keys(contentTypeIds); // 콘텐츠 ID 목록 추출
         }
     },
     props: [
@@ -29,7 +43,9 @@ export default {
         return {
             checkedSido : [],
             checkedSigungu: [],
+            checkedContentTypeIds: [],
             sidoCode: [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 32, 33, 34, 35, 36, 37, 38, 39],
+            contentTypeId:[12, 14, 32, 39],
             sigunguCodes: [],
         }
     },
@@ -41,25 +57,36 @@ export default {
     },
     methods: {
         clickFunc() {
-            this.$emit('checkedClick', this.checkedSido);
-            console.log("checkedSido:",this.checkedSido)
-            //this.getSigunguCode(this.checkedSido);
+            this.$emit('checkedClick', {
+                sidoCode: this.checkedSido,
+                //sigunguCode: this.checkedSigungu,
+                //contentTypeId: this.checkedContentTypeIds, // 선택한 콘텐츠 ID를 이벤트로 전달
+            });
+            this.getSigunguCode(this.checkedSido);
         },
         clickSigunguFunc(checkedSido) {
             if (this.checkedSigungu.length > 1) {
-                this.checkedSigungu.shift()
+                this.checkedSigungu.shift();
             }
             this.$emit("checkedClick", {
                 sidoCode: checkedSido,
                 sigunguCode: this.checkedSigungu,
             });
-            console.log("sidoCode:",this.checkedSido)
-            console.log("checkedSigungu:",this.checkedSigungu)
+        },
+        clickContentTypeFunc() {
+            if (this.checkedContentTypeIds.length > 1) {
+                this.checkedContentTypeIds.shift();
+            }
+            this.$emit('checkedClick', {
+                sidoCode: this.checkedSido,
+                sigunguCode: this.checkedSigungu,
+                contentTypeId: this.checkedContentTypeIds, // 선택한 콘텐츠 ID를 이벤트로 전달
+            });
         },
         initValue() {
             if (this.homeChecked) {
-                //this.checkedSido = ["1"]
-                this.getSigunguCode()
+                //this.checkedSido = ["0"]
+                //this.getSigunguCode()
             }
         },
         getSigunguCode() {

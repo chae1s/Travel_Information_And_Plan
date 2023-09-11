@@ -21,6 +21,7 @@ public class ItemPartResponseDto {
     private String fullAddress;
     private String latitude;//위도
     private String longitude;//경도
+    private String cat;//카테고리
 
     public static ItemPartResponseDto fromEntity(Item item) {
         return ItemPartResponseDto.builder()
@@ -35,6 +36,7 @@ public class ItemPartResponseDto {
                 .fullAddress(item.getLocation().getFullAddress())
                 .latitude(item.getLocation().getLatitude())
                 .longitude(item.getLocation().getLongitude())
+                .cat(item.getCat1())
                 .build();
     }
 }

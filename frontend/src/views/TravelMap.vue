@@ -11,6 +11,7 @@
                         <div>{{item.id}}</div>
                         <div class="item_title">{{ item.title }}</div>
                         <p class="item_fullAddress">{{ item.fullAddress }}</p>
+                        <p class="item_contentType">{{ getAddressText(item.contentTypeIds) }}</p>
                     </div>
                 <ul class="item_count">
                     <li @click="toggleBookmark(item.id)">관심등록</li>
@@ -55,6 +56,7 @@ export default {
                 fullAddress:'',
                 latitude:'',
                 longitude:'',
+                cat:'',
 
             },
             itemLocation:{
@@ -106,6 +108,7 @@ export default {
                         fullAddress: item.fullAddress,
                         latitude: item.latitude,
                         longitude: item.longitude,
+                        cat: item.cat
                     }));
                     this.totalPages = response.data.totalPages;
                     this.itemId = this.items[0].id;
@@ -233,7 +236,28 @@ export default {
                 });
             }
         },
-
+        getAddressText(itemTypeId) {
+            switch (itemTypeId) {
+                case '12':
+                    return '관광지';
+                case '14':
+                    return '문화시설';
+                case '15':
+                    return '축제/공연/행사';
+                case '25':
+                    return '여행코스';
+                case '28':
+                    return '레포츠';
+                case '32':
+                    return '숙박';
+                case '38':
+                    return '쇼핑';
+                case '39':
+                    return '음식점';
+                default:
+                    return '알 수 없음';
+            }
+        },
 
 
 

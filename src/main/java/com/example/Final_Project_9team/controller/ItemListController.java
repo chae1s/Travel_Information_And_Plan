@@ -37,7 +37,7 @@ public class ItemListController {
     private final ItemRepository itemRepository;
 
     //모든 관광상품 조회
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Page<ItemPartResponseDto>> readAllItemList(
             @RequestParam(value = "page", defaultValue = "1") int page) {
         return ResponseEntity.ok(itemListService.readItemAllPaged(page));
@@ -76,6 +76,15 @@ public class ItemListController {
             @RequestParam(value = "page", defaultValue = "1") int page
     ) {
         return ResponseEntity.of(Optional.ofNullable(itemListService.readItemSidoAndSigungu(page, sido, sigungu)));
+    }
+    @GetMapping("/{sido}/{sigungu}/{contentTypeId}")
+    public ResponseEntity<Page<ItemPartResponseDto>> readSidoSigunguContentTypeList(
+            @PathVariable("sido") String sido,
+            @PathVariable("sigungu") String sigungu,
+            @PathVariable("contentTypeId") String contentTypeId,
+            @RequestParam(value = "page", defaultValue = "1") int page
+    ) {
+        return ResponseEntity.of(Optional.ofNullable(itemListService.readItemSidoAndSigunguAndContentType(page, sido, sigungu, contentTypeId)));
     }
 
     //관광상품 상세조회
