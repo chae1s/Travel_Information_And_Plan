@@ -74,19 +74,19 @@ const router = createRouter({
             component: BoardCreate
         },
 
-        {
-            path: '/mypage',
-            name: 'MyPage',
-            component: MyPage,
-        },
-        {
-            path: '/my-info',
-            name: 'MyInfoView',
-            component: UserInfoView,
-            children: [
-                {path: 'update', name: 'update', component: UserInfo},
-            ]
-        },
+        // {
+        //     path: '/mypage',
+        //     name: 'MyPage',
+        //     component: MyPage,
+        // },
+        // {
+        //     path: '/my-info',
+        //     name: 'MyInfoView',
+        //     component: UserInfoView,
+        //     children: [
+        //         {path: 'update', name: 'update', component: UserInfo},
+        //     ]
+        // },
         // { // 나중에 메이트 보기 리스트 있으면 이렇게
         //     path: '/mate',
         //     name: 'mage',
