@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,6 +22,7 @@ public class ItemPath extends BaseTimeEntity {
     private Integer turn;
     private Integer distance;
     private Integer duration;
+    private LocalDate tourDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn

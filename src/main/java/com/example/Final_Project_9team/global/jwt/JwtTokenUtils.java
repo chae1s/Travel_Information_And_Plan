@@ -1,8 +1,7 @@
 package com.example.Final_Project_9team.global.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,11 +55,19 @@ public class JwtTokenUtils {
         try {
             jwtParser.parseClaimsJws(token);
             return true;
-        } catch (Exception e) {
-            log.warn("유효하지 않은 jwt: {}", e.getClass());
-            return false;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("JWT 서명이 잘못되었습니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("JWT 토큰이 만료되었습니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("잘못된 토큰입니다.");
         }
+
+        return false;
     }
+
 
     public Claims parseClaims(String token) {
         log.info("jwt parsing : {}", jwtParser.parseClaimsJws(token).getBody());

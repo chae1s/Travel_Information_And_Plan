@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -32,6 +33,23 @@ public class BoardResponseDto {
                         comments.map(CommentResponseDto::fromEntity)
                 )
         );
+        return dto;
+    }
+
+    public static BoardResponseDto fromEntity(Board board) {
+        BoardResponseDto dto = new BoardResponseDto();
+        dto.setTitle(board.getTitle());
+        dto.setContent(board.getContent());
+        dto.setUsername(board.getUser().getNickname());
+        dto.setViewCnt(board.getViewCnt());
+        dto.setLikesCnt(0);
+        dto.setCreatedAt(board.getCreatedAt());
+
+        PageDto<CommentResponseDto> pageDto = new PageDto<>();
+        pageDto.setLastPage(1);
+        pageDto.setContent(new ArrayList<>());
+        pageDto.setPageNumber(1);
+        dto.setComments(pageDto);
         return dto;
     }
 }

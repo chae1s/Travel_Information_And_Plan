@@ -4,7 +4,7 @@
             <v-list>
                 <v-list-item class="content_title">커뮤니티</v-list-item>
                 <v-list-item><a @click="$router.push('/boards')">여행 후기 게시판</a></v-list-item>
-                <v-list-item><a @click="$router.push('/schedules')">여행 일정 게시판</a></v-list-item>
+                <v-list-item><a @click="$router.push('/schedule-list')">여행 일정 게시판</a></v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -19,7 +19,6 @@
             </ul>
         </v-main>
     </v-app>
-
 </template>
 
 <script>
@@ -44,26 +43,19 @@ export default {
           title: this.title,
           content: this.content,
         };
-        const { data } = await createBoard(boardData);
-        console.log(data);
-        this.$router.push('/boards');
+        const response = await createBoard(boardData);
+        console.log(response.data);
+        this.goToBoardDetails(response.data);
 
         } catch (error) {
           // 에러 핸들링할 코드
           console.log(error.response.data);
           this.logMessage = error.response.data;
         }
-      },
-    async getBoards() {
-      try {
-        console.log(this.$store.state.token);
-        const { data } = await readBoards();
-        console.log(data);
-      } catch (error) {
-        // 에러 핸들링할 코드
-        console.log(error.response.data);
-        this.logMessage = error.response.data;
-      }
+    },
+    goToBoardDetails(boardId) {
+      this.$store.dispatch('updateBoardId', boardId);
+      this.$router.push(`/board-details`);
     }
   }
 }

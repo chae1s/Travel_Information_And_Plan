@@ -38,7 +38,7 @@ public class ScheduleController {
     }
 
     // 일정 정보 보기 - 세부 계획을 짤 수 있는 페이지에 보여주기
-    @GetMapping("/{scheduleId:\\d+}")
+    @GetMapping("/write/{scheduleId:\\d+}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
         return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth.getName()));
@@ -48,7 +48,7 @@ public class ScheduleController {
     @PostMapping("/{scheduleId}/schedule-items")
     public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
 
-        scheduleService.createScheduleItems(scheduleId);
+        scheduleService.createOrUpdateScheduleItems(scheduleId, false);
 
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
@@ -60,5 +60,35 @@ public class ScheduleController {
 
         return ResponseEntity.ok(itemPaths);
     }
+
+    @GetMapping("/{scheduleId:\\d+}")
+    public ResponseEntity<ScheduleResponseDto> readScheduleBoard(@PathVariable Long scheduleId) {
+
+        return ResponseEntity.ok(scheduleService.readScheduleByDisplay(scheduleId));
+    }
+
+    @PutMapping("/{scheduleId:\\d+}")
+    public ResponseEntity<Long> updateSchedule(@PathVariable("scheduleId") Long scheduleId, @RequestBody ScheduleRequestDto dto, Authentication auth) {
+
+        return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, dto, auth.getName()).getId());
+    }
+
+    @PutMapping("/{scheduleId}/schedule-items")
+    public ResponseEntity<ResponseDto> updateScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
+
+        scheduleService.createOrUpdateScheduleItems(scheduleId, true);
+
+        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
+    }
+
+    @PutMapping("/{scheduleId:\\d+}/display")
+    public ResponseEntity<ResponseDto> updateScheduleDisplay(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
+
+        scheduleService.updateDisplay(scheduleId, auth.getName());
+
+        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
+    }
+
+
 
 }

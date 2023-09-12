@@ -35,6 +35,7 @@ public enum ErrorCode {
     MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),
     USER_NOT_MATCHED_HOST(400,"ERR_BAD_REQUEST","채팅방의 호스트와 일치하지 않습니다."),
     INVALID_FILE(400,"ERR_BAD_REQUEST","첨부파일을 다시 확인해주세요."),
+    ERROR_NO_KEYWORD(400,"ERR_BAD_REQUEST","검색어를 입력해주세요."),
     USER_NOT_INCLUDED_SCHEDULE(400,"ERR_BAD_REQUEST","해당 일정에 속하는 유저가 아닙니다."),
 
     // 403 FORBIDDEN 권한이 없는 경우
@@ -51,11 +52,14 @@ public enum ErrorCode {
     CHATROOM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 채팅방입니다."),
     INVITATION_NOT_FOUND(404, "ERR_NOT_FOUND", "초대받은 일정이 없습니다."),
 
+    ERROR_SELF_ADDITION(412,"ERROR_SELF_ADDITION","본인을 추가할 수 없습니다."),
+
     // 500 내부 서버 에러
     INTERNAL_SERVER_ERROR(500, "ERR_INTERNAL_SERVER","서버 에러입니다. 서버 팀으로 문의바랍니다."),
 
     // JWT 관련 에러
-    TOKEN_NO_AUTH(403, "TOKEN_NO_AUTH", "권한 정보가 없는 토큰입니다.");
+    TOKEN_NO_AUTH(403, "TOKEN_NO_AUTH", "권한 정보가 없는 토큰입니다."),
+    TOKEN_INVALID(401, "TOKEN_INVALID", "유효하지 않은 토큰입니다.");
 
     private final int status;
     private final String code;

@@ -54,4 +54,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "AND m.isAccepted = true")
     boolean existsByUserEmailAndScheduleId(@Param("email") String email, @Param("scheduleId")Long scheduleId);
 
+    Page<Schedule> findAllByDisplayAndIsDeletedOrderByIdDesc(boolean isDisplay, boolean isDeleted, Pageable pageable);
 }

@@ -12,6 +12,10 @@ spring:
   web:
     resources:
       static-locations: file:media, classpath:/static
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
 
   datasource:
     url: jdbc:sqlite:db.sqlite
@@ -42,3 +46,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   accessExpirationTime: ${JWT_EXPIRATION}
+
+NAVER_MAP_CLIENT_ID: pvpyjs42ed
+NAVER_MAP_CLIENT_SECRET: axYdkxoOlcuU1lIoPJSVuNY3393unETitNf1wPxK

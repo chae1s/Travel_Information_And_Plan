@@ -8,17 +8,17 @@
                         <div class="title_and_mates">
                             <div class="schedule_data_name">{{scheduleData.title}}</div>
                             <div class="schedule_data_mates">
-                                <v-img :src="user.profileImage" alt="" v-for="(user, i) in scheduleData.users" :key="user" inline="true" width="33px" height="33px" class="rounded-circle"/>
+                                <v-img :src="user.profileImage" cover alt="" v-for="(user, i) in scheduleData.users" :key="user" inline="true" width="33px" height="33px" class="rounded-circle"/>
                                 <v-img src="@/assets/images/icons/mates_add.png" width="25px" height="25px" class="rounded-circle my-auto mx-0" inline="true"  @click="showMatesInvitation"/>
                             </div>
                         </div>
                         <div class="schedule_data_description">{{scheduleData.description}}</div>
                         <div class="schedule_data_tour_date">{{scheduleData.startDate}} ~ {{scheduleData.endDate}}</div>
                     </div>
-                  <!--   메이트 추가     /-->
+                    <!--   메이트 추가     /-->
                     <div v-if="showMatesInvitationComponent">
-                      <br>
-                      <MatesResearcher v-bind:scheduleId="scheduleId"></MatesResearcher>
+                        <br>
+                        <MatesResearcher v-bind:scheduleId="scheduleId"></MatesResearcher>
                     </div>
                     <div class="my_liked_items_sido">
                         <v-img src="@/assets/images/icons/chevron-left-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="prevPageLikedItem"/>
@@ -33,7 +33,9 @@
                             </li>
                         </ul>
                         <div class="selected_tour_date" v-if="clickItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
-                            <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.clickItem, this.clickItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
+                            <div v-for="dayIndex in scheduleData.period" @click="addItemToTourRoute(dayIndex - 1, this.clickItem, this.clickItemIndex)">
+                                Day{{dayIndex}} {{tourRouteList[dayIndex - 1].tourDateWithoutYear}}
+                            </div>
                         </div>
                         <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="nextPageLikedItem"/>
                     </div>
@@ -46,34 +48,37 @@
                         </div>
                     </div>
                     <div class="schedule_route">
-                        <div v-for="(tourRoute, dayIndex) in tourRouteList" :key="tourRoute"  class="schedule_daily_route" @click="createRouteList(dayIndex)">
+                        <div v-for="(tourRoute, dayIndex) in tourRouteList" :key="dayIndex"  class="schedule_daily_route" @click="createRouteList(dayIndex)">
                             <div class="daily_route_header">
-                                <div class="tour_day_num">Day{{dayIndex + 1}}</div>
+                                <div class="tour_day_num" v-if="dayIndex<scheduleData.period">Day{{dayIndex + 1}}</div>
                                 <div class="tour_date">{{tourRoute.tourDateWithoutYear}}</div>
                             </div>
-                            <ul class="schedule_daily_item_list">
+                            <ul class="schedule_daily_item_list" @dragover.prevent="onDragOver($event, dayIndex, -1)" @drop="onDrop($event, dayIndex, -1)">
                                 <li v-if="tourRoute.tourDestination.length === 0" class="empty_item_list">일정을 채워주세요</li>
-                                <li v-for="(destination, itemIndex) in tourRoute.tourDestination" :key="destination" class="schedule_daily_item">
+                                <li v-for="(destination, itemIndex) in tourRoute.tourDestination" :key="itemIndex" class="schedule_daily_item" draggable="true" @dragstart="onDragStart($event, dayIndex, itemIndex)">
                                     <v-img :src="require('@/assets/images/icons/day' + (dayIndex + 1) + '/course_pin_' + (itemIndex + 1) + '.png')" alt="" width="26" height="26" inline class="my-auto mr-7"/>
                                     <div class="daily_item_info">
                                         <div class="daily_item_info_name">{{ destination.name }}</div>
                                         <v-img src="@/assets/images/icons/u_multiply.png" alt="" @click="removeDestination(dayIndex, itemIndex)" inline width="12" height="12" class="ml-3 remove_item"/>
                                         <div class="daily_item_info_address">{{ destination.fullAddress}}</div>
                                     </div>
-                                    <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>이동시간 : {{itemPath[dayIndex].tourPaths[itemIndex].duration}}분</div>
-                                        <div>이동거리 : {{itemPath[dayIndex].tourPaths[itemIndex].distance}}km</div>
-                                    </div>
-                                    <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
-                                        <div>총 이동시간 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].duration }}분</div>
-                                        <div>총 이동거리 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].distance }}km</div>
+                                    <div v-if="tourRoute.tourDestination.length > 1">
+                                        <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex < tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                            <div>이동시간 : {{itemPath[dayIndex].tourPaths[itemIndex].duration}}분</div>
+                                            <div>이동거리 : {{itemPath[dayIndex].tourPaths[itemIndex].distance}}km</div>
+                                        </div>
+                                        <div v-if="itemPath[dayIndex].tourPaths.length > 1 && itemIndex === tourRoute.tourDestination.length - 1" class="schedule_daily_route_info">
+                                            <div>총 이동시간 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].duration }}분</div>
+                                            <div>총 이동거리 : {{ itemPath[dayIndex].tourPaths[itemPath[dayIndex].tourPaths.length - 1].distance }}km</div>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="schedule_button_wrap">
-                        <button class="schedule_button" type="button" @click="createScheduleItems">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="createScheduleItems" v-if="!isUpdate">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="updateScheduleItems" v-else>일정 수정</button>
                     </div>
                 </div>
             </div>
@@ -87,8 +92,13 @@ import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
 import MatesResearcher from '@/components/MatesResearcher.vue';
 import dayjs from 'dayjs';
-import {readSchedule, readLikedItemBySido, createRouteList, createScheduleItems} from "@/api/index";
-
+import {
+    readSchedule,
+    readLikedItemBySido,
+    createRouteList,
+    createScheduleItems,
+    updateScheduleItems
+} from "@/api/index";
 export default {
     name: "MakeScheduleDetail",
     components: {LocationCheckbox, Calendar, MatesResearcher},
@@ -115,8 +125,9 @@ export default {
             zoom: 11,
             likedItemPage: 1,
             likedItemTotalPage: 0,
-            showMatesInvitationComponent: false, // UserResearcher.vue 컴포넌트를 표시 여부를 관리하는 데이터
-
+            showMatesInvitationComponent: false,
+            dragData: {},
+            isUpdate: false
         }
     },
     mounted() {
@@ -135,11 +146,21 @@ export default {
                 this.scheduleData.period = data.period
                 this.scheduleData.users = data.userResponses
 
-                this.createMap(data.sido)
+                let scheduleItems = data.scheduleItemResponses
 
+                this.createMap(data.sido)
                 this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
 
                 this.createTourDate()
+
+
+                if (scheduleItems) {
+                    console.log('수정페이지')
+                    this.isUpdate = true
+                    this.InsertListTourDateAndPath(scheduleItems);
+                }
+
+
             } catch (error) {
                 console.log(error)
             }
@@ -152,7 +173,8 @@ export default {
             script.defer = true
             document.head.appendChild(script)
 
-            if (this.scheduleData.sido === '0') this.zoom = 8
+            if (this.scheduleData.sido === '0') this.zoom = 7
+            else if (this.scheduleData.sido === '2') this.zoom = 10
 
             script.onload = () => {
                 new window.naver.maps.Map("map", {
@@ -205,6 +227,44 @@ export default {
                 firstDate.setDate(firstDate.getDate() + 1)
             }
         },
+        InsertListTourDateAndPath(scheduleItems) {
+            for (let i = 0; i < scheduleItems.length; i++) {
+                if (i < this.scheduleData.period) {
+                    this.tourRouteList[i].tourDestination = scheduleItems[i].itemListResponses
+                    this.itemPath[i].tourPaths = scheduleItems[i].itemPaths
+                } else {
+                    this.tourRouteList.push({
+                        tourDate: '',
+                        tourDateWithoutYear: '',
+                        tourDestination: scheduleItems[i].itemListResponses
+                    })
+                    this.itemPath.push({
+                        tourDate: '',
+                        tourPaths: scheduleItems[i].itemPaths
+                    })
+                }
+
+                this.InsertSelectedLikeItem(scheduleItems[i].itemListResponses)
+                this.totalDurationAndDistance(scheduleItems[i].itemPaths, i)
+            }
+
+            console.log(this.selectedItemList)
+        },
+        InsertSelectedLikeItem(itemList) {
+            for (let i = 0; i < itemList.length; i++) {
+                this.selectedItemList.push(itemList[i].id)
+            }
+        },
+        totalDurationAndDistance(itemPaths, index) {
+            let dateTotalDistance = 0
+            let dateTotalDuration = 0
+            for (let i = 0; i < itemPaths.length; i++) {
+                dateTotalDistance += itemPaths[i].distance
+                dateTotalDuration += itemPaths[i].duration
+            }
+
+            this.itemPath[index].tourPaths.push({distance: dateTotalDistance, duration: dateTotalDuration})
+        },
         selectedLikedItem(item, itemIndex, event) {
             this.clickItem = item
             this.clickItemIndex = itemIndex
@@ -246,6 +306,41 @@ export default {
         checkedSelectedListInItemIndex(item) {
             return this.selectedItemList.indexOf(item.id) >= 0
         },
+        onDragStart(event, dayIndex, itemIndex) {
+            this.dragData = {dayIndex, itemIndex}
+        },
+        onDragOver(event, dayIndex, itemIndex) {
+            event.preventDefault()
+        },
+        onDrop(event, toDayIndex, toItemIndex) {
+            if (!this.dragData) return
+
+
+            const {dayIndex: fromDayIndex, itemIndex: fromItemIndex} = this.dragData
+            if (fromDayIndex === toDayIndex && fromItemIndex === toItemIndex) {
+                this.dragData = {}
+                return
+            }
+
+            const draggedItem = this.tourRouteList[fromDayIndex].tourDestination[fromItemIndex]
+
+            this.tourRouteList[fromDayIndex].tourDestination.splice(fromItemIndex, 1)
+            this.tourRouteList[toDayIndex].tourDestination.splice(toItemIndex, 0, draggedItem)
+
+            this.dragData = {}
+
+            if (this.tourRouteList[fromDayIndex].tourDestination.length <= 1) {
+                this.createItemMarkerAndPolyline(fromDayIndex)
+            } else {
+                this.createRouteList(fromDayIndex)
+            }
+
+            if (this.tourRouteList[toDayIndex].tourDestination.length <= 1) {
+                this.createItemMarkerAndPolyline(toDayIndex)
+            } else {
+                this.createRouteList(toDayIndex)
+            }
+        },
         async createRouteList(i) {
             try {
                 if (this.tourRouteList[i].tourDestination.length <= 1) {
@@ -261,8 +356,8 @@ export default {
         },
         createItemMarkerAndPolyline(i) {
             const map = new naver.maps.Map("map", {
-                center: new window.naver.maps.LatLng(37.5670135, 126.9783740),
-                zoom: 11
+                center: new window.naver.maps.LatLng(locations[this.scheduleData.sido].lat, locations[this.scheduleData.sido].lng),
+                zoom: this.zoom
             })
 
             let polylinePath = []
@@ -304,21 +399,33 @@ export default {
 
             return checked
         },
+        moveSchedulePosts(id) {
+            this.$router.push('/my-page/my-post/schedules/'+id)
+        },
         async createScheduleItems() {
             try {
                 if (this.checkedEmptyDestination()) {
                     const { data } = await createScheduleItems(this.scheduleId);
-
-                    console.log(data)
+                    alert("여행 계획이 모두 작성되었습니다.")
+                    this.moveSchedulePosts(this.scheduleId)
                 }
 
             } catch (error) {
                 console.log(error)
             }
         },
-      showMatesInvitation() {
-        this.showMatesInvitationComponent = !this.showMatesInvitationComponent;
-      },
+        showMatesInvitation() {
+            this.showMatesInvitationComponent = !this.showMatesInvitationComponent;
+        },
+        async updateScheduleItems() {
+            try {
+                const { data } = await updateScheduleItems(this.scheduleId)
+                alert("여행 계획이 모두 수정되었습니다.")
+                this.moveSchedulePosts(this.scheduleId)
+            } catch (error) {
+                console.log(error)
+            }
+        },
     },
 }
 </script>
@@ -471,6 +578,7 @@ export default {
         display: inline-block;
         margin: 0 0 44px 42px;
         width: 360.67px;
+        vertical-align: top;
     }
 
     .schedule_daily_route:first-child {
@@ -499,6 +607,7 @@ export default {
         margin: 12px 0 0 13px;
         display: flex;
         flex-direction: column;
+        min-height: 400px;
     }
 
     .empty_item_list {
