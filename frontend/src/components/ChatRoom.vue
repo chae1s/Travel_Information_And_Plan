@@ -100,7 +100,9 @@ export default {
             });
             previousDate = messageDate;
           }
-
+          console.log("message sender="+message.sender);
+          console.log("nickname="+this.nickname);
+          console.log("message="+message.message)
           // 메시지를 보낸 사용자가 '나'일 경우 닉네임으로 변경
           if (message.sender === this.nickname) {
             message.sender = '나';
@@ -120,13 +122,14 @@ export default {
         message: this.newMessage,
       }
       sendChatMessage(this.id, messageData);
-      console.log("메시지 전송 완료");
 
       // 로컬에 메시지 추가
       this.messages.push({
         sender: '나',   // 메시지를 보낸 사용자 (여기서는 나로 가정)
         message: this.newMessage,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 시간과 분만 포맷
+        time: new Date(),// 시간과 분만 포맷
+        // time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 시간과 분만 포맷
+
       });
 
       // 입력창 초기화
