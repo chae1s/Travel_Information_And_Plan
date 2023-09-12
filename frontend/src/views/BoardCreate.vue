@@ -4,7 +4,7 @@
             <v-list>
                 <v-list-item class="content_title">커뮤니티</v-list-item>
                 <v-list-item><a @click="$router.push('/boards')">여행 후기 게시판</a></v-list-item>
-                <v-list-item><a @click="$router.push('/schedules')">여행 일정 게시판</a></v-list-item>
+                <v-list-item><a @click="$router.push('/schedule-list')">여행 일정 게시판</a></v-list-item>
             </v-list>
         </v-navigation-drawer>
 
