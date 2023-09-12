@@ -54,6 +54,10 @@ function createScheduleItems(scheduleId) {
 function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
+// 현재 회원의 모든 정보 조회
+function readUserInfo(userData) {
+    return axiosInstance.get('/users/me')
+}
 
 function findInvitationList(scheduleId,keyword) {
     // return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
@@ -67,11 +71,18 @@ function getChatRooms(){
     return axiosInstance.get(`/schedules/chat/rooms`)
 }
 function getChatRoomData(roomId){
+    return axiosInstance.get(`/schedules/chat/rooms/${roomId}/room-data`)
+}
+function getChatMessages(roomId) {
     return axiosInstance.get(`/schedules/chat/rooms/${roomId}`)
+}
+
+function sendChatMessage(roomId,messageData) {
+    return axiosInstance.post(`/schedules/chat/rooms/${roomId}/send`,messageData)
 }
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
-    getChatRooms,getChatRoomData
+    getChatRooms,getChatRoomData,getChatMessages,sendChatMessage,readUserInfo
 };
 

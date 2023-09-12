@@ -44,13 +44,9 @@
 
 
 <script>
-// 채팅방 제목, 채팅방 멤버 수 불러오기
-// UI 만들기 - 닉네임,텍스트,시간,채팅방 텍스트입력창, 전송버튼
-// 채팅 진행 되도록 벡엔드 정보 받아오기
 import {getChatRoomData,getChatMessages,sendChatMessage,readUserInfo} from "@/api/index";
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client'
-import {ca} from "vuetify/locale";
 
 export default {
   data(){
@@ -72,27 +68,21 @@ export default {
 
   methods:{
     async getRoomData() {
-      console.log("getRoomData 실행");
       try{
         const response = await getChatRoomData(this.id);
         this.roomData =  response.data;
-        console.log("에러 발생?");
       }catch (error){
         console.error("채팅방 정보 불러오기 오류:", error);
       }
     },
     async loadChatMessages() {
       let previousDate = '';
-      console.log("loadChatMessages 실행");
       try {
         const response = await getChatMessages(this.id);
         this.messages = response.data;
 
-        // 받아온 메시지 중에서 내가 보낸 메시지를 '나'로 설정
         this.messages.forEach((message, index) => {
-          // 날짜가 바뀌면 '2023년 9월 12일' 메시지를 추가
           const messageDate = new Date(message.time).toLocaleDateString();
-          console.log("messageDate"+messageDate)
           if (messageDate !== previousDate) {
             this.messages.splice(index, 0, {
               dateChanged: true,
@@ -100,9 +90,6 @@ export default {
             });
             previousDate = messageDate;
           }
-          console.log("message sender="+message.sender);
-          console.log("nickname="+this.nickname);
-          console.log("message="+message.message)
           // 메시지를 보낸 사용자가 '나'일 경우 닉네임으로 변경
           // if (message.sender === this.nickname) {
           //   message.sender = '나';
@@ -131,7 +118,7 @@ export default {
       this.messages.push({
         sender: this.nickname,
         message: this.newMessage,
-        time: new Date(),// 시간과 분만 포맷
+        time: new Date(),
         // time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 시간과 분만 포맷
 
       });
@@ -144,14 +131,12 @@ export default {
 
         chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
       });
-
     },
 
     async loadUserInfo(){
       try{
         const userInfo = await readUserInfo();
         this.nickname = userInfo.data.nickname;
-        console.log("nickname="+this.nickname);
       }catch(error){
         console.error("사용자 정보 불러오기 오류:", error);
       }
@@ -181,7 +166,7 @@ export default {
     // WebSocket 연결
     connectWebSocket() {
       console.log("연결 시작")
-      const socket = new SockJS("http://localhost:8800/chatting"); // WebSocket 엔드포인트 URL
+      const socket = new SockJS("http://localhost:8080/chatting"); // WebSocket 엔드포인트 URL
       this.stompClient = Stomp.over(socket);
       console.log("연결중")
 
@@ -201,6 +186,7 @@ export default {
         });
       });
     },
+
   },
   watch: {
     messages() {

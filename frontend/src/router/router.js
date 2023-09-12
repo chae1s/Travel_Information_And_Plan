@@ -105,10 +105,14 @@ const router = createRouter({
             ]
         },
         {
-            path: '/chat/:id', name: 'ChatRoom', component:ChatRoom, props:true
+            path: '/chat/:id',
+            name: 'ChatRoom',
+            component:ChatRoom, props:true
         },
         {
-            path: '/chat-room-list', name:'ChatRoomList', component: ChatRoomList
+            path: '/chat-room-list',
+            name:'ChatRoomList',
+            component: ChatRoomList
         },
     ]
 })
