@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.entity;
 
+import com.example.Final_Project_9team.dto.ScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -59,5 +60,13 @@ public class Schedule {
     public void updateDurationAndDistance(Integer sumDuration, Integer sumDistance) {
         this.sumDuration = sumDuration;
         this.sumDistance = sumDistance;
+    }
+
+    public void updateSchedule(ScheduleRequestDto dto) {
+        this.title = dto.getTitle();
+        this.description = dto.getDescription();
+        this.sido = dto.getSido();
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
     }
 }

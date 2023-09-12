@@ -123,6 +123,18 @@ function readBoardSchedule(scheduleId) {
     return axiosInstance.get(`/schedules/${scheduleId}`)
 }
 
+function updateSchedule(scheduleId, scheduleData) {
+    return axiosInstance.put(`/schedules/${scheduleId}`, scheduleData)
+}
+
+function updateScheduleItems(scheduleId) {
+    return axiosInstance.put(`/schedules/${scheduleId}/schedule-items`)
+}
+
+function updateScheduleDisplay(scheduleId) {
+    return axiosInstance.put(`/schedules/${scheduleId}/display`)
+}
+
 
 function itemReview(itemId, reviewData) {
     return axiosInstance.post(`/item-detail/read/${itemId}`, reviewData)
@@ -140,7 +152,8 @@ function deleteReview(itemId, itemReviewId) {
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     createBoard, readBoards, uploadImage,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
+    updateScheduleDisplay,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview
 };
