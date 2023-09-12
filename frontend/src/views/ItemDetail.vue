@@ -17,12 +17,17 @@
                 홈페이지 : <a :href="item.homepage" target="_blank">{{ item.homepage }}</a>
             </p>
             </div>
-            <item-review :itemId="item.id"></item-review>
+            <router-link :to="'/item-detail/read/' + item.id + '/reviews'">
+                <div class="item_reviews">
+                    <a>후기 목록</a>
+                </div>
+            </router-link>
+            <item-review :item-id="item.id"></item-review>
         </div>
     </div>
 </template>
 <script>
-import ItemReview from './ItemReview.vue';
+import ItemReview from '@/components/ItemReview.vue';
 import axios from "axios";
   export default {
       name: "itemDetail",
@@ -34,6 +39,7 @@ import axios from "axios";
               itemId : this.$route.params.id,
               item: {
                   id:'',
+                  contentId:'',
                   contentTypeId: '',
                   title: '',
                   firstImage: '',
@@ -62,7 +68,8 @@ import axios from "axios";
 
                       // item 데이터 업데이트
                       this.item = {
-                          id: itemData.contentid,
+                          id: id,
+                          contentId: itemData.contentid,
                           contentTypeId: itemData.contenttypeid,
                           title: itemData.title,
                           firstImage: itemData.firstimage,
@@ -76,7 +83,7 @@ import axios from "axios";
                           mapy: itemData.mapy,
                           overview: itemData.overview
                       };
-
+                      console.log('item:', res.data.response.body)
                       const urlPattern = /<a href="([^"]+)" target="_blank"/;
                       const match = this.item.homepage.match(urlPattern);
                       if (match) {
@@ -86,6 +93,7 @@ import axios from "axios";
                           console.log('URL을 찾을 수 없습니다.');
                       }
                       console.log('homepage:', this.item.homepage);
+
                   })
                   .catch(error => {
                       console.error('API 호출 오류', error);

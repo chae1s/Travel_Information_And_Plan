@@ -28,6 +28,7 @@ public class ItemReview extends BaseTimeEntity {
     private String content;
     private Rating rating;
     private Boolean isDeleted;
+
     public void delete() {
         this.isDeleted = true;
     }

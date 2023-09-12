@@ -6,7 +6,7 @@
         <SidoAndSigunguAndCatCheckbox @checkedClick="handleLocationChange" :homeChecked="homeChecked"></SidoAndSigunguAndCatCheckbox>
         <ul class="item_list">
             <li class="item" v-for="(item, index) in items" :key="item.id">
-                <router-link :to="'/item-detail/read/' + item.id" target="_blank">
+                <router-link :to="'/item-detail/read/' + item.id">
                     <img :src="item.firstImage" alt="">
                     <div class="item_text">
                         <div>{{ item.id }}</div>
@@ -37,7 +37,6 @@ export default {
     name: "itemList",
     components: {
         SidoAndSigunguAndCatCheckbox,
-        LocationCheckbox
     },
     data() {
         return {
@@ -68,6 +67,7 @@ export default {
             if (this.childChecked.length > 1) {
                 this.childChecked.shift()
             }
+            console.log('childChecked', this.childChecked)
             this.itemSido = this.childChecked.sidoCode;
             this.itemSigungu = this.childChecked.sigunguCode;
             this.itemContentType = this.childChecked.contentTypeId;
