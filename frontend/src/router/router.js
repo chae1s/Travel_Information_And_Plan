@@ -88,28 +88,16 @@ const router = createRouter({
             name: 'BoardCreate',
             component: BoardCreate
         },
-
-        // {
-        //     path: '/mypage',
-        //     name: 'MyPage',
-        //     component: MyPage,
-        // },
-        // {
-        //     path: '/my-info',
-        //     name: 'MyInfoView',
-        //     component: UserInfoView,
-        //     children: [
-        //         {path: 'update', name: 'update', component: UserInfo},
-        //     ]
-        // },
-        // { // 나중에 메이트 보기 리스트 있으면 이렇게
-        //     path: '/mate',
-        //     name: 'mage',
-        //     component: Mate,
-        //     children: [
-        //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
-        //     ]
-        // },
+        {
+            path: '/board-list',
+            name: 'BoardList',
+            component: BoardList
+        },
+        {
+            path: '/board-details',
+            name: 'BoarDetails',
+            component: BoardDetails
+        },
         {
             path: '/mate-invitation', name: 'InvitationList', component: InvitationList
         },
@@ -124,6 +112,9 @@ const router = createRouter({
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
                 },
+                {path: 'likes-user-to', name: 'LikedByMe', component: UserLikedByMe},
+                {path: 'likes-user-from', name: 'LikedMe', component: UserWhoLikedMe},
+                {path: 'search', name: 'SearchUser', component: UserResearcher},
                 {path: 'my-trip', name: 'MyTrip', children: [
                         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
                         // {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
@@ -146,6 +137,7 @@ const router = createRouter({
 
             ]
         },
+
         {
             path: '/map',
             name:'TravelMap',
