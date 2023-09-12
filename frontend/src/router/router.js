@@ -24,6 +24,11 @@ import MyItemReviewList from "@/components/MyItemReviewList.vue";
 import MyCommentList from "@/components/MyCommentList.vue";
 import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
 import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
+import MatesResearcher from "@/components/MatesResearcher.vue";
+import UserLikedByMe from "@/components/UserLikedByMe.vue";
+import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
+import UserResearcher from "@/components/UserResearcher.vue";
+
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -74,30 +79,6 @@ const router = createRouter({
             component: BoardCreate
         },
 
-        // {
-        //     path: '/mypage',
-        //     name: 'MyPage',
-        //     component: MyPage,
-        // },
-        // {
-        //     path: '/my-info',
-        //     name: 'MyInfoView',
-        //     component: UserInfoView,
-        //     children: [
-        //         {path: 'update', name: 'update', component: UserInfo},
-        //     ]
-        // },
-        // { // 나중에 메이트 보기 리스트 있으면 이렇게
-        //     path: '/mate',
-        //     name: 'mage',
-        //     component: Mate,
-        //     children: [
-        //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
-        //     ]
-        // },
-        {
-            path: '/mate-invitation', name: 'InvitationList', component: InvitationList
-        },
         {
             path: '/my-page',
             name: 'MyPageMain',
@@ -109,10 +90,14 @@ const router = createRouter({
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
                 },
-                {path: 'my-trip', name: 'MyTrip', children: [
+                {path:'/likes-by-me', name: 'LikedByMe', component: UserLikedByMe},
+                {path:'/likes-by-me', name: 'LikedMe', component: UserWhoLikedMe},
+                {path:'/search-user', name: 'SearchUser', component: UserResearcher},
+
+                {
+                    path: 'my-trip', name: 'MyTrip', children: [
                         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
                         // {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
-
                         {path: 'liked-items', name: 'LikedItemList', component: LikedItemList}
                     ]
                 },
@@ -130,12 +115,11 @@ const router = createRouter({
                         {path: 'boards', name: 'BoardList'},
                     ]
                 }
-
             ]
         },
         {
             path: '/map',
-            name:'TravelMap',
+            name: 'TravelMap',
             component: TravelMap
         },
         {
