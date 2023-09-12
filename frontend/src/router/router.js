@@ -35,32 +35,38 @@ import UpdateSchedule from "@/views/UpdateSchedule.vue";
 import ItemReviews from "@/views/itemReviews.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
+
     routes: [
         {
             path: '/',
             name: 'Home',
             component: Home
         },
+
         {
             path: '/schedules/write',
             name: 'MakeSchedule',
             component: MakeSchedule
         },
+
         {
             path: '/schedules/:id/schedule-items',
             name: 'MakeScheduleDetail',
             component: MakeScheduleDetail
         },
+
         {
             path: '/sign-up',
             name: 'SignUp',
             component: SignUp
         },
+
         {
             path: '/logout',
             name: 'logout',
             component: LogoutView
         },
+
         {
             path: '/items-list',
             name: "ItemList",

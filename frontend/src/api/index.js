@@ -172,7 +172,7 @@ function deleteReview(itemId, itemReviewId) {
 }
 
 export {
-    registerUser, loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
+    loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, uploadImage, readBoard, createComment,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido,
