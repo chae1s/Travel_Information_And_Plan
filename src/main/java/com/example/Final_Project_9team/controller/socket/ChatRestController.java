@@ -1,5 +1,6 @@
 package com.example.Final_Project_9team.controller.socket;
 
+import com.example.Final_Project_9team.dto.ChatMessageDto;
 import com.example.Final_Project_9team.dto.MatesResponseDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.dto.ChatRoomDto;
@@ -29,7 +30,7 @@ public class ChatRestController {
 //        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
 //    }
     // 채팅방 단일 조회
-    @GetMapping("/rooms/{roomId}")
+    @GetMapping("/rooms/{roomId}/room-data")
     public ResponseEntity<ChatRoomDto> getRoomName(@PathVariable("roomId") Long roomId) {
         return ResponseEntity.ok(chatService.findRoomById(roomId));
     }
@@ -47,4 +48,18 @@ public class ChatRestController {
                                                       ) {
         return ResponseEntity.ok(chatService.updateRoomName(roomId, chatRoomDto.getRoomName(), "authentication.getName()"));
     }
+    // 채팅방 메시지 조회
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<List<ChatMessageDto>> getChatMessages(@PathVariable("roomId") Long roomId){
+        return ResponseEntity.ok(chatService.getChatMessages(roomId));
+    }
+    // 채팅방 메시지 보내기
+    @PostMapping("/rooms/{roomId}/send")
+    public ResponseEntity<ChatMessageDto> sendMessage(Authentication authentication,
+            @PathVariable("roomId") Long roomId,
+            @RequestBody ChatMessageDto messageDto
+    ) {
+        return ResponseEntity.ok(chatService.sendMessage(roomId, messageDto,authentication.getName()));
+    }
+
 }

@@ -6,64 +6,204 @@
       <div class="chatRoom-top-data-container">
         <div>
           <router-link to="/chat-room-list">
-            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px" class="to-room-list" inline="true" />
+            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px" class="to-room-list" :inline="true" />
           </router-link>
         </div>
         <div class="chatRoom-data-image"></div>
         <div class="chatRoom-data-text">
           <div class="room-name">{{ roomData.roomName }}</div>
           <div class="room-member-count-container"></div>
-            <v-img src="@/assets/images/icons/member-count.png" width="15px" height="15px" class="room-count" inline="true" />
-            <span class="member-count">{{roomData.count}}</span>
+          <v-img src="@/assets/images/icons/member-count.png" width="15px" height="15px" class="room-count" :inline="true" />
+          <span class="member-count">{{roomData.count}}</span>
         </div>
       </div>
     </div>
     <!--  채팅방 중간 부분  -->
-    <div class="chatRoom-chatting"></div>
+    <div class="chatRoom-chatting-container" ref="chatContainer">
+      <!-- 날짜 표시 -->
+      <div v-for="(message, index) in messages" :key="index">
+        <template v-if="message.dateChanged">
+          <div class="date-change">{{ message.date }}</div>
+        </template>
+        <div class="chat-message" :class="{ 'sent-message': message.sender === '나'}">
+          <div class="message-sender">{{ message.sender }}</div>
+          <div class="message-text">{{ message.message }}</div>
+          <div class="message-time">{{ formatTime(message.time) }}</div>
+        </div>
+      </div>
+    </div>
     <!--  채팅방 전송 부분  -->
     <div class="chatRoom-send-container">
-      <form>
-        <textarea type="text" placeholder="메시지 입력"></textarea>
+      <form @submit.prevent="sendMessage">
+        <textarea :value="newMessage" @input="updateMessage" placeholder="메시지를 입력하세요"></textarea>
         <button type="submit">전송</button>
       </form>
     </div>
   </div>
 </template>
 
+
+<script>
 // 채팅방 제목, 채팅방 멤버 수 불러오기
 // UI 만들기 - 닉네임,텍스트,시간,채팅방 텍스트입력창, 전송버튼
 // 채팅 진행 되도록 벡엔드 정보 받아오기
-
-<script>
-import {getChatRoomData} from "@/api/index";
+import {getChatRoomData,getChatMessages,sendChatMessage,readUserInfo} from "@/api/index";
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client'
+import {ca} from "vuetify/locale";
 
 export default {
   data(){
     return{
       roomData:{},
+      stompClient: null,
+      messages: [],
+      newMessage:'', // 입력한 새 메시지
+      nickname:'',
+      currentDate: '',
     };
   },
   props: {
     id: {
-      type: Number, // Long형의 경우 Number로 타입 지정
+      type: String, // Long형의 경우 Number로 타입 지정
       required: true // 필수 prop으로 지정 (옵션)
     }
   },
-  mounted() {
-    this.getRoomData();
-  },
+
   methods:{
     async getRoomData() {
+      console.log("getRoomData 실행");
       try{
         const response = await getChatRoomData(this.id);
         this.roomData =  response.data;
-
+        console.log("에러 발생?");
       }catch (error){
         console.error("채팅방 정보 불러오기 오류:", error);
       }
     },
+    async loadChatMessages() {
+      let previousDate = '';
+      console.log("loadChatMessages 실행");
+      try {
+        const response = await getChatMessages(this.id);
+        this.messages = response.data;
+
+        // 받아온 메시지 중에서 내가 보낸 메시지를 '나'로 설정
+        this.messages.forEach((message, index) => {
+          // 날짜가 바뀌면 '2023년 9월 12일' 메시지를 추가
+          const messageDate = new Date(message.time).toLocaleDateString();
+          console.log("messageDate"+messageDate)
+          if (messageDate !== previousDate) {
+            this.messages.splice(index, 0, {
+              dateChanged: true,
+              date: messageDate,
+            });
+            previousDate = messageDate;
+          }
+
+          // 메시지를 보낸 사용자가 '나'일 경우 닉네임으로 변경
+          if (message.sender === this.nickname) {
+            message.sender = '나';
+          }
+        });
+      } catch (error) {
+        console.error("채팅 메시지 불러오기 오류:", error);
+      }
+    },
+
+    sendMessage() {
+      if (this.newMessage.trim() === '') {
+        return; // 빈 메시지는 보내지 않음
+      }
+      // 서버로 메시지 전송
+      const messageData = {
+        message: this.newMessage,
+      }
+      sendChatMessage(this.id, messageData);
+      console.log("메시지 전송 완료");
+
+      // 로컬에 메시지 추가
+      this.messages.push({
+        sender: '나',   // 메시지를 보낸 사용자 (여기서는 나로 가정)
+        message: this.newMessage,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 시간과 분만 포맷
+      });
+
+      // 입력창 초기화
+      this.newMessage = '';
+
+    },
+
+    async loadUserInfo(){
+      try{
+        const userInfo = await readUserInfo();
+        this.nickname = userInfo.data.nickname;
+        console.log("nickname="+this.nickname);
+      }catch(error){
+        console.error("사용자 정보 불러오기 오류:", error);
+      }
+    },
+
+    updateMessage(event) {
+      this.newMessage = event.target.value;
+    },
+    formatTime(timeString) {
+      const date = new Date(timeString);
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      const period = hours < 12 ? "오전" : "오후";
+      const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+      return `${period} ${formattedHours}:${formattedMinutes}`;
+    },
+
+    // WebSocket 연결
+    connectWebSocket() {
+      console.log("연결 시작")
+      const socket = new SockJS("http://localhost:8800/chatting"); // WebSocket 엔드포인트 URL
+      this.stompClient = Stomp.over(socket);
+      console.log("연결중")
+
+      this.stompClient.connect({}, frame => {
+        // 연결 성공 시 처리
+        console.log("WebSocket 연결 성공",frame);
+
+        // 구독 설정
+        this.stompClient.subscribe(`/topic/chat/${this.id}`, (message) => {
+          console.log("message.body="+message.body);
+          // 메시지를 받았을 때 처리
+          const receivedMessage = JSON.parse(message.body);
+          this.messages.push({
+            sender: receivedMessage.sender,
+            message: receivedMessage.text,
+          });
+        });
+      });
+    },
   },
-}
+  watch: {
+    messages() {
+      // 화면에 추가된 후 동작하도록
+      this.$nextTick(() => {
+        let chatContainer = this.$refs.chatContainer;
+
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+      });
+    },
+  },
+
+  mounted() {
+    this.loadUserInfo();
+    this.loadChatMessages();
+    this.getRoomData();
+  },
+  created() {
+    this.connectWebSocket();
+  }
+};
+
 </script>
 
 
@@ -75,15 +215,14 @@ export default {
   height: 626px;
   border-radius: 10px;
   background-color: #E5F1FF;
-  overflow-y: scroll;
   position: relative; /* 부모 컨테이너를 기준으로 절대 위치 설정 */
 }
 /* 채팅방 윗부분 */
 .chatRoom-top-container{
-  width: 350px;
+  width: 100%;
   height: 100px;
   border-radius: 10px;
-  background-color: #DADADA;
+  background-color: #E5F1FF;
 }
 .to-room-list{
   margin-right: 10px;
@@ -114,19 +253,56 @@ export default {
   margin-left: 5px;
   font-size: 17px;
 }
-/* 채팅방 아래 부분 */
-.chatRoom-chatting {
-  /* 중간 부분 스타일 */
+/* 채팅방 중간 부분 (채팅메시지) */
+.chatRoom-chatting-container {
   flex: 1; /* 중간 부분이 남은 공간을 모두 차지하도록 설정 */
-
+  height: 430px;
+  overflow-y: scroll;
+  margin-bottom: 10px;
 }
+
+.chatRoom-chatting-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chatRoom-chatting-container::-webkit-scrollbar-thumb {
+  background-color: #DADADA;
+  border-radius: 10px;
+}
+.chatRoom-chatting-container::-webkit-scrollbar-track {
+  background-color: #E5F1FF;
+  border-radius: 10px;
+}
+
+.date-change {
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+  margin: 10px 0;
+}
+.chat-message{
+  text-align: left;
+  margin-left: 20px;
+  margin-right: 15px;
+  margin-bottom: 10px; /* 각 메시지 사이에 간격을 줍니다. */
+}
+.sent-message {
+  text-align: right;
+}
+.message-sender {
+  font-weight: bold;
+}
+.message-time{
+  font-size: 13px;
+}
+/* 채팅방 맨 아래 부분 */
 .chatRoom-send-container {
   position: absolute; /* 절대 위치 설정 */
   bottom: 0; /* 아래로부터 0px 떨어져 있도록 설정 */
   left:0;
   width:100%;
   height: 80px;
-  background-color: #DADADA;
+  background-color: #F1F7FF;
 }
 textarea {
   width: 80%;

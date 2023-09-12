@@ -15,8 +15,11 @@ import com.example.Final_Project_9team.entity.ChatMessage;
 import com.example.Final_Project_9team.repository.ChatMessageRepository;
 import com.example.Final_Project_9team.entity.ChatRoom;
 import com.example.Final_Project_9team.repository.ChatRoomRepository;
+import com.example.Final_Project_9team.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.bridge.Message;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -33,17 +36,17 @@ public class ChatService {
     private final UserRepository userRepository;
     private final MatesRepository matesRepository;
     private final ScheduleRepository scheduleRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final UserUtils userUtils;
 
     // (리스트조회) 내가 속한 메이트의 채팅방 리스트 조회하기
     public List<ChatRoomDto> getChatRooms(String userEmail) {
-//        userEmail = "sampleUser@gmail.com";
-        User user = userRepository.findByEmail(userEmail).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userUtils.getUser(userEmail);
+
         List<Mates> matesList = matesRepository.findAllByUserIdAndIsAcceptedTrue(user.getId());
         List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
 
         for (Mates mates : matesList) {
-            log.info("mates.getSchedule()="+mates.getSchedule().getId());
             ChatRoom chatRoom = chatRoomRepository.findBySchedule(mates.getSchedule()).orElseThrow(()->
                     new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
             ChatMessage latestMessage = chatMessageRepository.findTop1ByChatRoomOrderByIdDesc(chatRoom)
@@ -68,7 +71,6 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
                 ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
         Long count = matesRepository.countMatesByScheduleAndIsAcceptedTrue(chatRoom.getSchedule());
-        log.info("count="+count);
         chatRoom.setMemberCount(count);
         chatRoomRepository.save(chatRoom);
         return ChatRoomDto.fromEntity(chatRoom);
@@ -100,26 +102,47 @@ public class ChatService {
 //        return payload;
 //    }
 
-    // TODO 사용자 정보 받아와 검사하는 로직으로 변경해야함
-    public void saveChatMessage(ChatMessageDto chatMessageDto) {
-        String userEmail ="sampleUser2@gmail.com";
-        User user = userRepository.findByEmail(userEmail).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+//    public void saveChatMessage(ChatMessageDto chatMessageDto) {
+//        String userEmail ="sampleUser2@gmail.com";
+//        User user = userRepository.findByEmail(userEmail).orElseThrow(
+//                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+//
+//        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDto.getRoomId()).orElseThrow(
+//                ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+//        chatMessageRepository.save(chatMessageDto.toEntity(chatRoom,user));
+//    }
 
-        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDto.getRoomId()).orElseThrow(
-                ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
-        chatMessageRepository.save(chatMessageDto.toEntity(chatRoom,user));
-    }
-
-    public List<ChatMessageDto> getLast5Messages(Long roomId) {
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+//    public List<ChatMessageDto> getLast5Messages(Long roomId) {
+//        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+//        List<ChatMessageDto> chatMessageDtos = new ArrayList<>();
+//        List<ChatMessage> chatMessageEntities = chatMessageRepository.findTop5ByChatRoomOrderByIdDesc(chatRoom);
+//        Collections.reverse(chatMessageEntities);
+//        for (ChatMessage messageEntity: chatMessageEntities) {
+//            chatMessageDtos.add(ChatMessageDto.fromEntity(messageEntity));
+//        }
+//        return chatMessageDtos;
+//    }
+    // 채팅방 메시지 조회
+    public List<ChatMessageDto> getChatMessages(Long roomId) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoomIdOrderByIdAsc(roomId);
         List<ChatMessageDto> chatMessageDtos = new ArrayList<>();
-        List<ChatMessage> chatMessageEntities = chatMessageRepository.findTop5ByChatRoomOrderByIdDesc(chatRoom);
-        Collections.reverse(chatMessageEntities);
-        for (ChatMessage messageEntity: chatMessageEntities) {
-            chatMessageDtos.add(ChatMessageDto.fromEntity(messageEntity)); //여기서 에러
+        for (ChatMessage chatMessage : chatMessages) {
+            chatMessageDtos.add(ChatMessageDto.fromEntity(chatMessage));
         }
         return chatMessageDtos;
+    }
+
+    // 채팅방 메시지 보내기
+    public ChatMessageDto sendMessage(Long roomId, ChatMessageDto dto,String userEmail) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+        User user = userUtils.getUser(userEmail);
+
+        ChatMessageDto payload = ChatMessageDto.fromEntity(chatMessageRepository.save(dto.toEntity(chatRoom, user)));
+        messagingTemplate.convertAndSend(
+                String.format("/topic/%s", roomId),
+                dto
+        );
+        return payload;
     }
 
     // 같은 채팅방 메이트들 조회
