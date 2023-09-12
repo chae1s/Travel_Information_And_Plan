@@ -185,7 +185,13 @@ public class MyActivityService {
     // 일정 작성 페이지에 보여질 내가 관심등록한 여행지 리스트 - 내가 가려고 하는 지역의 여행지 목록
     public Page<ItemListResponseDto> readLikedItemsBySido(String email, String sido, int page, int size) {
 
-        Page<Item> pagedItems = itemRepository.findByLikedItemsBySido(email, sido, PageRequest.of(page - 1, size));
+        Page<Item> pagedItems;
+        // sido가 0일 때 즉 국내일때, 전국의 관심등록 여행지 리스트 가져오기
+        if (sido.equals("0")) {
+            pagedItems = itemRepository.findAllLikedItemsByMe(email, PageRequest.of(page - 1, size));
+        } else {
+            pagedItems = itemRepository.findAllByLikedItemsBySido(email, sido, PageRequest.of(page - 1, size));
+        }
 
         return pagedItems.map(item -> ItemListResponseDto.fromEntity(item));
     }
