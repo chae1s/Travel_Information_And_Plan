@@ -133,9 +133,7 @@ export default {
     methods: {
         goToLogin() {
             console.log("goToLogin: login 페이지 이동")
-            this.$router.push({
-                name: "Login"
-            })
+            this.$router.push({name: "Login"})
         }
         ,
         register(RegisterObj) {
