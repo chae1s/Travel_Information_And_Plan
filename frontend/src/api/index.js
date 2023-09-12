@@ -85,14 +85,26 @@ function createScheduleItems(scheduleId) {
 function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
+
 // 현재 회원의 모든 정보 조회
 function readUserInfo(userData) {
     return axiosInstance.get('/users/me')
 }
 
-// 현재 회원의 모든 정보 조회
-function readUserInfo(userData) {
-    return axiosInstance.get('/users/me')
+function likeUser(toUserId) {
+    return axiosInstance.post(`/users/me/liked-user/${toUserId}`)
+}
+
+function unLikeUser(toUserId) {
+    return axiosInstance.put(`/users/me/liked-user/${toUserId}`)
+}
+
+function readUserLikedByMe() {
+    return axiosInstance.get(`/users/me/liked-user/to`)
+}
+
+function readUserLikedMe() {
+    return axiosInstance.get(`/users/me/liked-user/from`)
 }
 
 // 다른 유저 정보 조회
@@ -173,6 +185,7 @@ export {
     updateScheduleDisplay,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview,
+    likeUser, unLikeUser, readUserLikedByMe, readUserLikedMe
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
     getChatRooms,getChatRoomData,getChatMessages,sendChatMessage,readUserInfo
