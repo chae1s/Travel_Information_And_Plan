@@ -9,7 +9,7 @@
               <div class="chatRoom-data-image"></div>
               <div class="chatRoom-data-text">
                 <span class="room-name">{{ room.roomName }}</span>
-                <span class="latest-message">{{ room.latestMessage }}</span>
+                <span class="latest-message">{{ truncateMessage(room.latestMessage, 20) }}</span>
               </div>
             </div>
           </router-link>
@@ -37,16 +37,18 @@ export default {
     async loadChatRooms() {
       try {
         const response = await getChatRooms();
+        const data = await response.data;
+        this.chatRooms = data;
 
-        if (response.status === 200) {
-          const data = await response.data;
-          this.chatRooms = data;
-        } else {
-          console.error("HTTP 응답 상태 코드가 200이 아닙니다.");
-        }
       } catch (error) {
         console.error("채팅방 리스트 불러오기 오류:", error);
       }
+    },
+    truncateMessage(message, maxLength) {
+      if (message.length > maxLength) {
+        return message.substring(0, maxLength) + "...";
+      }
+      return message;
     },
   },
 };
@@ -81,6 +83,7 @@ h2 {
 .chatRoom-data-container {
   display: flex;
   align-items: center;
+  margin-right: 10px;
 }
 .chatRoom-data-image {
   margin-left: 25px;
