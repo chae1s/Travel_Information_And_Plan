@@ -112,7 +112,8 @@ export default {
       const messageData = {
         message: this.newMessage,
       }
-      sendChatMessage(this.id, messageData);
+      // sendChatMessage(this.id, messageData);
+      this.stompClient.send(`/app/chat/${this.id}`, JSON.stringify(messageData));
 
       // 로컬에 메시지 추가
       this.messages.push({
@@ -182,6 +183,7 @@ export default {
           this.messages.push({
             sender: receivedMessage.sender,
             message: receivedMessage.text,
+            time: new Date(),
           });
         });
       });

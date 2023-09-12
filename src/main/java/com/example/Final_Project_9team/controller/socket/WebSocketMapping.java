@@ -36,7 +36,7 @@ public class WebSocketMapping {
         if (!chatMessageDto.getMessage().equals("")) { // 입력되지 않은 메시지는 전송되지 않도록
 //            String time = new SimpleDateFormat("HH:mm").format(new Date());
 //            chatMessageDto.setTime(time);
-//            chatService.saveChatMessage(chatMessageDto);
+
             simpMessagingTemplate.convertAndSend(
                     String.format("/topic/%s", chatMessageDto.getRoomId()),
                     chatMessageDto
