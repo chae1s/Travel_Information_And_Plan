@@ -13,8 +13,8 @@ function createBoard(boardData) {
     return axiosInstance.post('/boards', boardData);
 }
 
-function readBoards() {
-    return axiosInstance.get('/boards');
+function readBoards(page) {
+    return axiosInstance.get('/boards?page=' + (page || 1));
 }
 
 function uploadImage(image) {
@@ -53,6 +53,6 @@ function createScheduleItems(scheduleId) {
 
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation
+    readInvitations, acceptInvitation, rejectInvitation, uploadImage, createScheduleItems
 };
 
