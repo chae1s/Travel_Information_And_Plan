@@ -151,10 +151,10 @@ function deleteReview(itemId, itemReviewId) {
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
-    createBoard, readBoards, uploadImage,
+    createBoard, readBoards, uploadImage, readBoard, createComment,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
     updateScheduleDisplay,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
-    bookmarkItem, itemReview, updateReview, deleteReview
+    bookmarkItem, itemReview, updateReview, deleteReview,
 };
 
