@@ -91,6 +91,22 @@ function readUserInfo(userData) {
     return axiosInstance.get('/users/me')
 }
 
+function likeUser(toUserId) {
+    return axiosInstance.post(`/users/me/liked-user/${toUserId}`)
+}
+
+function unLikeUser(toUserId) {
+    return axiosInstance.put(`/users/me/liked-user/${toUserId}`)
+}
+
+function readUserLikedByMe() {
+    return axiosInstance.get(`/users/me/liked-user/to`)
+}
+
+function readUserLikedMe() {
+    return axiosInstance.get(`/users/me/liked-user/from`)
+}
+
 // 다른 유저 정보 조회
 // function readUserProfile(email){
 //     return axiosInstance.get('/users/${email}')
@@ -156,5 +172,6 @@ export {
     updateScheduleDisplay,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview,
+    likeUser, unLikeUser, readUserLikedByMe, readUserLikedMe
 };
 
