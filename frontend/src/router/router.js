@@ -10,27 +10,24 @@ import LogoutView from "@/components/Logout.vue";
 import InvitationList from "@/components/InvitationList.vue";
 import MyPageMain from "@/views/MyPageMain.vue";
 import Password from "@/components/Password.vue";
-import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
-import ItemReview from "@/components/ItemReview.vue";
 import BoardList from "@/views/BoardList.vue";
 import BoardDetails from "@/views/BoardDetails.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
-import MyScheduleList from "@/components/MyScheduleList.vue";
-import MySchedulePost from "@/components/MySchedulePost.vue";
 import LikedItemList from "@/components/LikedItemList.vue";
-import MyBoardList from "@/components/MyBoardList.vue";
-import MyItemReviewList from "@/components/MyItemReviewList.vue";
-import MyCommentList from "@/components/MyCommentList.vue";
 import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
 import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
-import MatesResearcher from "@/components/MatesResearcher.vue";
+import UpdateSchedule from "@/views/UpdateSchedule.vue";
+import MyScheduleList from "@/components/MyScheduleList.vue";
+import MySchedulePost from "@/components/MySchedulePost.vue";
+import MyItemReviewList from "@/components/MyItemReviewList.vue";
+import MyBoardList from "@/components/MyBoardList.vue";
+import MyCommentList from "@/components/MyCommentList.vue";
 import UserLikedByMe from "@/components/UserLikedByMe.vue";
 import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
 import UserResearcher from "@/components/UserResearcher.vue";
-import UpdateSchedule from "@/views/UpdateSchedule.vue";
 
 import ItemReviews from "@/views/itemReviews.vue";
 const router = createRouter({
@@ -42,25 +39,22 @@ const router = createRouter({
             component: Home
         },
         {
-            path: '/schedules/write',
-            name: 'MakeSchedule',
-            component: MakeSchedule
-        },
-        {
-            path: '/schedules/:id/schedule-items',
-            name: 'MakeScheduleDetail',
-            component: MakeScheduleDetail
-        },
-        {
             path: '/sign-up',
             name: 'SignUp',
             component: SignUp
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: LoginView
         },
         {
             path: '/logout',
             name: 'logout',
             component: LogoutView
         },
+
+
         {
             path: '/items-list',
             name: "ItemList",
@@ -78,11 +72,8 @@ const router = createRouter({
             component: ItemReviews,
             props: true
         },
-        {
-            path: '/login',
-            name: 'Login',
-            component: LoginView
-        },
+
+
         {
             path: '/board-create',
             name: 'BoardCreate',
@@ -98,9 +89,8 @@ const router = createRouter({
             name: 'BoarDetails',
             component: BoardDetails
         },
-        {
-            path: '/mate-invitation', name: 'InvitationList', component: InvitationList
-        },
+
+
         {
             path: '/my-page',
             name: 'MyPageMain',
@@ -137,10 +127,23 @@ const router = createRouter({
             ]
         },
 
+
         {
             path: '/map',
             name:'TravelMap',
             component: TravelMap
+        },
+
+
+        {
+            path: '/schedules/write',
+            name: 'MakeSchedule',
+            component: MakeSchedule
+        },
+        {
+            path: '/schedules/:id/schedule-items',
+            name: 'MakeScheduleDetail',
+            component: MakeScheduleDetail
         },
         {
             path: '/schedule-list',
