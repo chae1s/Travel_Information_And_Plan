@@ -25,7 +25,7 @@
         <template v-if="message.dateChanged">
           <div class="date-change">{{ message.date }}</div>
         </template>
-        <div class="chat-message" :class="{ 'sent-message': message.sender === '나'}">
+        <div class="chat-message" :class="{ 'sent-message': message.sender === '나' || message.sender === this.nickname}">
           <div class="message-sender">{{ message.sender }}</div>
           <div class="message-text">{{ message.message }}</div>
           <div class="message-time">{{ formatTime(message.time) }}</div>
@@ -131,6 +131,12 @@ export default {
 
       // 입력창 초기화
       this.newMessage = '';
+
+      this.$nextTick(() => {
+        let chatContainer = this.$refs.chatContainer;
+
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+      });
 
     },
 
