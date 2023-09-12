@@ -9,7 +9,10 @@
             <div class="schedule_mates">
                 <span v-for="user in scheduleData.users" :key="user">{{ user.nickname }}</span>
             </div>
-            <div class="show_schedule" v-if="!scheduleData.isDisplay">공유하기</div>
+            <div class="schedule_edit">
+                <div class="" v-if="checkedDate">수정하기</div>
+                <div class="show_schedule" v-if="!scheduleData.isDisplay">공유하기</div>
+            </div>
         </div>
         <div class="schedule_contents">
             <div id="map" class="schedule_map">
@@ -79,7 +82,8 @@ export default {
             totalDuration: [],
             totalDistance: [],
             zoom: 11,
-            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF']
+            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
+            nowDate: dayjs(new Date()).format("YYYY.MM.DD")
         }
     },
     mounted() {
@@ -181,6 +185,12 @@ export default {
                 })
             })
         },
+
+        checkedDate() {
+            if (this.nowDate > this.scheduleData.endDate) {
+                return false
+            }
+        }
     }
 }
 </script>
@@ -212,15 +222,20 @@ export default {
         margin-right: 0;
     }
 
-    .show_schedule {
+    .schedule_edit {
         margin-right: 14px;
         font-size: 14px;
         color: #565656;
         margin-bottom: 9px;
         margin-top: -16px;
-        cursor: pointer;
         display: inline-block;
         float: right;
+    }
+
+    .schedule_edit div {
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 14px;
     }
 
     .schedule_map {

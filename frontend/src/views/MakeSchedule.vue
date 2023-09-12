@@ -273,7 +273,7 @@ export default {
                 else if (this.scheduleSido === '') alert("여행갈 도시를 선택해주세요.")
                 else {
                     const { data } = await createSchedule(scheduleData)
-
+                    alert('일정이 저장되었습니다. 세부 일정을 작성해주세요.')
                     this.moveSchedule(data)
                 }
             } catch (error) {
