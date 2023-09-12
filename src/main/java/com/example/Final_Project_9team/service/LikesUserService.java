@@ -120,7 +120,7 @@ public class LikesUserService {
     // 현재 회원이 즐겨찾기한 회원 목록 조회
     // 결과가 없을 경우 빈 결과로 페이지 반환
     public List<UserResponseDto> readUserLikedByMe(String email) {
-        User user = userUtils.getUser(email);
+        User user = userUtils.getUser(email); // 현재 사용자, fromUser
 
         log.info("즐겨찾기 조회: \"{}.{}\" 즐겨찾기 회원 목록 조회", user.getId(), user.getNickname());
 
@@ -138,12 +138,12 @@ public class LikesUserService {
     // 결과가 없을 경우 빈 결과로 페이지 반환
     // isLiked 표시는 어떻게?
     public List<UserResponseDto> readUserWhoLikedMe(String email) {
-        User user = userUtils.getUser(email); // '현재 사용자, toUser'
+        User user = userUtils.getUser(email); // 현재 사용자, toUser
 
         log.info("즐겨찾기 조회: \"{}.{}\" 나를 즐겨찾기한 회원 목록 조회", user.getId(), user.getNickname());
 
         // LikesUser를 UserResponseDto로 반환
-        // 현재 회원이 To로 있는 필드의 From 회원 조회, isDelted == false만
+        // 현재 회원이 To로 있는 필드의 From 회원 조회, isDeleted == false여야 g람
         List<UserResponseDto> likedUserDtoFrom = user.getToUsers()
                 .stream()
                 .filter(likesUser -> likesUser.getIsDeleted() == false)

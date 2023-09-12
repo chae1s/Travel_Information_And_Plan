@@ -1,29 +1,30 @@
 <template>
-    <div class="likes-user-to-container">
-        <span class="highlight-text"><strong>나를 즐겨찾기한 회원</strong></span>
-        <div class="user-list-container">
+    <div class="likes-user-container">
+                <span class="highlight-text"><strong>나를 즐겨찾기한 회원</strong></span>
+        <!-- 목록 컨테이너-->
             <div class="mt-5" v-show="!showResultTable">나를 추가한 회원이 없습니다.</div>
-            <table class="likes-to-list" v-show="showResultTable">
-                <thead class="tread-style">
-                <th>닉네임</th>
-                <th>이메일</th>
-                <th>즐겨찾기</th>
-                </thead>
-                <tbody>
-                <tr v-for="(user, index) in this.userLikesByMe" :key="user.id" class="user-info">
-                    <td>{{ user.nickname }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                        <button class="action-button" @click="unLikeUser(user.id, user)" v-if="!user.isUnLiked">
-                            취소하기
-                        </button>
-                        <div class="unLiked" v-if="user.isUnLiked"> 취소됨</div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="search-results-container">
+                <table class="search-results" v-show="showResultTable">
+                    <thead>
+                    <th>닉네임</th>
+                    <th>이메일</th>
+                    <th>즐겨찾기</th>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(user, index) in this.userLikedMe" :key="user.id" class="user-info">
+                        <td>{{ user.nickname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <button class="action-button" @click="likeUser(user.id, user)" v-if="!user.isLiked">
+                                추가하기
+                            </button>
+                            <div class="action-done" v-if="user.isLiked"> 추가됨</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -34,7 +35,7 @@ export default {
     async created() {
         try {
             const response = await readUserLikedMe();
-            this.userLikesByMe = response.data;
+            this.userLikedMe = response.data;
             console.log(response)
         } catch (error) {
             console.log("조회 에러:", error.response.data)
@@ -75,16 +76,8 @@ export default {
 };
 </script>
 
+
 <style scoped>
-
-.highlight-text {
-    font-size: 20px;
-    background: linear-gradient(to top, #FFE866 50%, transparent 50%);
-}
-
-.likes-to-list {
-    border-collapse: separate;
-}
 
 th, td {
     text-align: center;
@@ -92,38 +85,40 @@ th, td {
     padding: 3px 15px;
 }
 
-/*th {*/
-/*    background-color: #42b983;*/
-/*}*/
-/*td {*/
-/*    background-color: #FFE866;*/
-/*}*/
-
-
-
-.likes-user-to-container {
-    margin-top: 20px;
-    max-width: 600px;
-    min-width: 420px;
-    max-height: 200px;
-    overflow-y: scroll;
+th {
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 0;
 }
 
-.likes-user-to-container::-webkit-scrollbar {
+.highlight-text {
+    font-size: 20px;
+    background: linear-gradient(to top, #FFE866 50%, transparent 50%);
+}
+
+.search-results-container {
+    margin-top: 20px;
+    max-width: 600px;
+    min-width: 500px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-results-container::-webkit-scrollbar {
     width: 10px;
 }
 
-.likes-user-to-container::-webkit-scrollbar-thumb {
+.search-results-container::-webkit-scrollbar-thumb {
     background-color: #FFE866; /* 스크롤 막대의 색상 */
     border-radius: 10px;
 }
 
-.likes-user-to-container::-webkit-scrollbar-track {
+.search-results-container::-webkit-scrollbar-track {
     background-color: beige; /* 스크롤 막대의 색상 */
     border-radius: 10px;
 }
 
-.user-list-container {
+.search-results {
     width: 100%;
     border-collapse: collapse;
 }
@@ -145,8 +140,7 @@ th, td {
     border: none;
     background-color: #FAED7D;
 }
-
-.unLiked {
+.action-done {
     font-size: 11px;
     color: #2F3438;
     width: 45px;
@@ -159,5 +153,4 @@ th, td {
     border: none;
     background-color: #E5F1FF;
 }
-
 </style>
