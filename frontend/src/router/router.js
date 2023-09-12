@@ -4,7 +4,6 @@ import Home from "@/views/Home.vue";
 import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
-import BoardCreate from "@/views/BoardCreate.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 import LogoutView from "@/components/Logout.vue";
@@ -16,6 +15,7 @@ import UserDelete from "@/components/UserDelete.vue";
 import ItemReview from "@/components/ItemReview.vue";
 import BoardList from "@/views/BoardList.vue";
 import BoardDetails from "@/views/BoardDetails.vue";
+import BoardCreate from "@/views/BoardCreate.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
 import MyScheduleList from "@/components/MyScheduleList.vue";
@@ -89,6 +89,16 @@ const router = createRouter({
             component: BoardCreate
         },
 
+        {
+            path: '/board-list',
+            name: 'BoardList',
+            component: BoardList
+        },
+        {
+            path: '/board-details',
+            name: 'BoarDetails',
+            component: BoardDetails
+        },
         {
             path: '/mate-invitation', name: 'InvitationList', component: InvitationList
         },

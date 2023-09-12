@@ -1,10 +1,6 @@
 import axiosInstance from '@/store/interceptor.js';
 
 
-function registerUser(userData) {
-    return axiosInstance.post('users/register', userData);
-}
-
 function loginUser(userData) {
   return axiosInstance.post('/users/login', userData);
 }
@@ -178,10 +174,11 @@ function deleteReview(itemId, itemReviewId) {
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
-    createBoard, readBoards, uploadImage,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
+    createBoard, readBoards, uploadImage, readBoard, createComment,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido,
+    createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
     updateScheduleDisplay,
-    readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
-    bookmarkItem, itemReview, updateReview, deleteReview
+    readInvitations, acceptInvitation, rejectInvitation, findInvitationList, inviteUserToSchedule,
+    bookmarkItem, itemReview, updateReview, deleteReview,
 };
 
