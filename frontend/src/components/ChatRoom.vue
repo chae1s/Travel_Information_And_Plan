@@ -152,7 +152,6 @@ export default {
 
         });
       });
-
     },
     async loadUserInfo(){
       try{
@@ -194,6 +193,13 @@ export default {
         chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
       });
     },
+    newMessage(){
+      this.$nextTick(() => {
+        let chatContainer = this.$refs.chatContainer;
+
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+      });
+    }
   },
 
   mounted() {
