@@ -28,6 +28,7 @@ import MatesResearcher from "@/components/MatesResearcher.vue";
 import UserLikedByMe from "@/components/UserLikedByMe.vue";
 import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
 import UserResearcher from "@/components/UserResearcher.vue";
+import UpdateSchedule from "@/views/UpdateSchedule.vue";
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -130,6 +131,11 @@ const router = createRouter({
             name: 'ScheduleBoardPost',
             component: ScheduleBoardPost
         },
+        {
+            path: '/schedules/update/:id',
+            name: 'ScheduleUpdate',
+            component: UpdateSchedule
+        }
     ]
 })
 

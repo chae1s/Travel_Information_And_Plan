@@ -1,6 +1,6 @@
 <template>
     <div class="location_checkbox">
-        <div class="form_checkbox_btn" v-for="code in sidoCode" :key="sidoCode">
+        <div class="form_checkbox_btn" v-for="code in sidoCode" :key="code">
             <input :id="locations[code].name" type="checkbox" v-model="checked" @change="clickFunc"  name="sido" :value="code">
             <label :for="locations[code].name">{{ locations[code].name }}</label>
         </div>
@@ -18,7 +18,7 @@ export default {
         }
     },
     props: [
-        'homeChecked'
+        'homeChecked', 'checkedSido'
     ],
     data() {
         return {
@@ -40,6 +40,11 @@ export default {
             if (this.homeChecked) {
                 //this.checked = ["1"]
             }
+        },
+    },
+    watch: {
+        checkedSido(newValue) {
+            this.checked.push(newValue)
         },
     }
 }

@@ -116,12 +116,20 @@ function readBoardSchedule(scheduleId) {
     return axiosInstance.get(`/schedules/${scheduleId}`)
 }
 
+function updateSchedule(scheduleId, scheduleData) {
+    return axiosInstance.put(`/schedules/${scheduleId}`, scheduleData)
+}
+
+function updateScheduleItems(scheduleId) {
+    return axiosInstance.put(`/schedules/${scheduleId}/schedule-items`)
+}
+
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, uploadImage,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem
 };

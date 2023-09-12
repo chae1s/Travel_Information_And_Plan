@@ -10,7 +10,7 @@
                 <span v-for="user in scheduleData.users" :key="user">{{ user.nickname }}</span>
             </div>
             <div class="schedule_edit">
-                <div class="" v-if="checkedDate">수정하기</div>
+                <div class="" v-if="checkedDate" @click="moveUpdateSchedule(scheduleId)">수정하기</div>
                 <div class="show_schedule" v-if="!scheduleData.isDisplay">공유하기</div>
             </div>
         </div>
@@ -40,12 +40,12 @@
                             <div class="destination_address">{{ item.fullAddress }}</div>
                             <div class="destination_information">{{ item.category }}</div>
                             <div v-if="i < itemPathList[defaultDate - 1].length" class="schedule_route_info">
-                                <div>이동시간 : {{ itemPathList[defaultDate - 1][i].duration }}</div>
-                                <div>이동거리 : {{ itemPathList[defaultDate - 1][i].distance }}</div>
+                                <div>이동시간 : {{ itemPathList[defaultDate - 1][i].duration }}분</div>
+                                <div>이동거리 : {{ itemPathList[defaultDate - 1][i].distance }}km</div>
                             </div>
                             <div v-if="i === itemPathList[defaultDate - 1].length" class="schedule_route_info">
-                                <div>총 이동시간 : {{ totalDuration[defaultDate - 1] }}</div>
-                                <div>총 이동거리 : {{ totalDistance[defaultDate - 1] }}</div>
+                                <div>총 이동시간 : {{ totalDuration[defaultDate - 1] }}분</div>
+                                <div>총 이동거리 : {{ totalDistance[defaultDate - 1] }}km</div>
                             </div>
                         </div>
                     </li>
@@ -190,7 +190,11 @@ export default {
             if (this.nowDate > this.scheduleData.endDate) {
                 return false
             }
-        }
+        },
+        moveUpdateSchedule(id) {
+            this.$router.push('/schedules/update/'+id)
+        },
+
     }
 }
 </script>
