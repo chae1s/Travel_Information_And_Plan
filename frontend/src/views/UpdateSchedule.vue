@@ -43,10 +43,10 @@
                                     </ul>
                                     <ul class="calendar_days">
                                         <li
-                                            v-for="(d, index) in firstCalendar.date" :key="index"
-                                            :class="{
+                                                v-for="(d, index) in firstCalendar.date" :key="index"
+                                                :class="{
                                                 'selected': selectedDate.indexOf(firstCalendar.year + '-' + firstCalendar.month.toString().padStart(2, '0') + '-' + d.toString().padStart(2, '0')) !== -1}"
-                                            @click="selectDate(firstCalendar.year, firstCalendar.month, d)">
+                                                @click="selectDate(firstCalendar.year, firstCalendar.month, d)">
                                             {{d}}
                                         </li>
                                     </ul>
@@ -61,34 +61,34 @@
                                         <span class="calendar_year" @click="">{{secondCalendar.year}}</span>년
                                         <span class="calendar_month">{{ secondCalendar.month }}</span>월
                                     </span>
-                                        <button class="month_button" type="button" @click="handleNextButton">
-                                            <v-img src="../assets/images/icons/chevron-right.png" alt=""/>
-                                        </button>
-                                    </div>
-                                    <div class="calendar_main">
-                                        <ul class="calendar_weeks">
-                                            <li v-for="week in weeks" :key="week">
-                                                {{week}}
-                                            </li>
-                                        </ul>
-                                        <ul class="calendar_days">
-                                            <li
+                                    <button class="month_button" type="button" @click="handleNextButton">
+                                        <v-img src="../assets/images/icons/chevron-right.png" alt=""/>
+                                    </button>
+                                </div>
+                                <div class="calendar_main">
+                                    <ul class="calendar_weeks">
+                                        <li v-for="week in weeks" :key="week">
+                                            {{week}}
+                                        </li>
+                                    </ul>
+                                    <ul class="calendar_days">
+                                        <li
                                                 v-for="(d, index) in secondCalendar.date" :key="index"
                                                 :class="{
                                                 'selected': selectedDate.indexOf(secondCalendar.year + '-' + secondCalendar.month.toString().padStart(2, '0') + '-' + d.toString().padStart(2, '0')) !== -1}"
                                                 @click="selectDate(secondCalendar.year, secondCalendar.month, d)">
-                                                {{d}}
-                                            </li>
-                                        </ul>
-                                    </div>
+                                            {{d}}
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <div class="schedule_location_input">
                         <div class="schedule_input_label">
                             여행 지역
                         </div>
-                        <LocationCheckbox @checkedClick="clickLocationChecked" ></LocationCheckbox>
+                        <LocationCheckbox @checkedClick="clickLocationChecked" :checkedSido="scheduleSido"></LocationCheckbox>
                     </div>
                     <div class="schedule_button_wrap">
                         <button @click="createSchedule" class="schedule_button" type="button">일정 생성</button>
@@ -100,13 +100,12 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
+import dayjs from 'dayjs'
 import Calendar from "@/components/Calendar.vue";
-import { createSchedule } from '@/api/index'
-
+import {readSchedule, updateSchedule} from '@/api/index'
 export default {
-    name: "MakeSchedule",
+    name: "UpdateSchedule",
     components: {
         dayjs,
         LocationCheckbox,
@@ -114,6 +113,7 @@ export default {
     },
     data() {
         return {
+            scheduleId : this.$route.params.id,
             scheduleTitle: '',
             scheduleDescription: '',
             startDate: null,
@@ -135,10 +135,11 @@ export default {
                 year: new Date().getFullYear(),
                 month: (new Date().getMonth() + 1),
             },
-            selectedDate: []
+            selectedDate: [],
         }
     },
     created() {
+        this.readSchedule(this.scheduleId)
         this.startDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
         this.endDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
     },
@@ -147,6 +148,22 @@ export default {
         this.makeCalendarDate(this.secondCalendar.year, this.secondCalendar.month, false)
     },
     methods: {
+        async readSchedule(id) {
+            try {
+                const { data } = await readSchedule(id)
+                console.log(data)
+                this.scheduleTitle = data.title
+                this.scheduleDescription = data.description
+                this.scheduleSido = data.sido
+                this.startDate = dayjs(data.startDate).format("YYYY-MM-DD")
+                this.endDate = dayjs(data.endDate).format("YYYY-MM-DD")
+
+                this.selectedDate = [this.startDate, this.endDate]
+                console.log(this.scheduleSido)
+            } catch (error) {
+                console.log(error)
+            }
+        },
         selectDate(year, month, date) {
             let selected = year + '-' + month.toString().padStart(2, '0') + '-' + date.toString().padStart(2, '0');
             let today = new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getDate().toString().padStart(2, '0')
@@ -272,8 +289,8 @@ export default {
                 else if (this.scheduleDescription === '') alert("일정을 설명해주세요.")
                 else if (this.scheduleSido === '') alert("여행갈 도시를 선택해주세요.")
                 else {
-                    const { data } = await createSchedule(scheduleData)
-                    alert('일정이 저장되었습니다. 세부 일정을 작성해주세요.')
+                    const { data } = await updateSchedule(this.scheduleId, scheduleData)
+                    alert('일정이 수정되었습니다. 세부 일정을 수정해주세요.')
                     this.moveSchedule(data)
                 }
             } catch (error) {
@@ -288,183 +305,183 @@ export default {
 
 <style scoped>
 
-    .content_title {
-        font-size: 22px;
-        font-weight: 700;
-        text-align: left;
-        padding-bottom: 20px;
-    }
+.content_title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: left;
+    padding-bottom: 20px;
+}
 
-    .schedule_input_section {
-        width: 970px;
-        margin: 0 auto;
-        text-align: left;
-    }
+.schedule_input_section {
+    width: 970px;
+    margin: 0 auto;
+    text-align: left;
+}
 
-    .schedule_name_input {
-        padding-bottom: 10px;
-    }
+.schedule_name_input {
+    padding-bottom: 10px;
+}
 
-    .schedule_description_input {
-        padding-bottom: 8px;
-        margin-bottom: 13px;
-        border-bottom: 1px solid #DADADA;
-    }
+.schedule_description_input {
+    padding-bottom: 8px;
+    margin-bottom: 13px;
+    border-bottom: 1px solid #DADADA;
+}
 
-    .schedule_date_input {
-        padding-bottom: 20px;
-        margin-bottom: 13px;
-        border-bottom: 1px solid #DADADA;
-    }
+.schedule_date_input {
+    padding-bottom: 20px;
+    margin-bottom: 13px;
+    border-bottom: 1px solid #DADADA;
+}
 
-    .month_calendar {
-        width: 334px;
-        height: 304px;
-    }
+.month_calendar {
+    width: 334px;
+    height: 304px;
+}
 
-    .calendar_header {
-        width: 294px;
-        height: 40px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-    }
+.calendar_header {
+    width: 294px;
+    height: 40px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
 
-    .month_button {
-        width: 24px;
-        height: 24px;
-        margin-top: 8px;
-        border: none;
-        background-color: transparent;
-    }
+.month_button {
+    width: 24px;
+    height: 24px;
+    margin-top: 8px;
+    border: none;
+    background-color: transparent;
+}
 
-    .month_button img {
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-    }
+.month_button img {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
 
-    .calendar_year_month {
-        font-size: 16px;
-        display: inline-block;
-        line-height: 40px;
-    }
+.calendar_year_month {
+    font-size: 16px;
+    display: inline-block;
+    line-height: 40px;
+}
 
-    .calendar_main {
-        width: 294px;
-        margin: 8px auto 0;
-        user-select: none;
-    }
+.calendar_main {
+    width: 294px;
+    margin: 8px auto 0;
+    user-select: none;
+}
 
-    .calendar_main ul {
-        display: flex;
-        flex-wrap: wrap;
-        text-align: center;
-        font-size: 14px;
-    }
+.calendar_main ul {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    font-size: 14px;
+}
 
-    .calendar_weeks {
-        height: 32px;
-        line-height: 32px;
-    }
+.calendar_weeks {
+    height: 32px;
+    line-height: 32px;
+}
 
-    .calendar_main ul li {
-        width: 40px;
-        position: relative;
-        margin: 0 1px;
-    }
+.calendar_main ul li {
+    width: 40px;
+    position: relative;
+    margin: 0 1px;
+}
 
-    .calendar_days li {
-        height: 40px;
-        line-height: 40px;
-        z-index: 1;
-        cursor: pointer;
-        margin: 0 1px;
-        width: 40px;
-    }
+.calendar_days li {
+    height: 40px;
+    line-height: 40px;
+    z-index: 1;
+    cursor: pointer;
+    margin: 0 1px;
+    width: 40px;
+}
 
-    .selected {
-        border-radius: 50%;
-        background-color: #C4DFFF;
-    }
+.selected {
+    border-radius: 50%;
+    background-color: #C4DFFF;
+}
 
-    .schedule_name_input label, .schedule_description_input label {
-        height: 29px;
-        display: inline-block;
-        width: 100%;
-    }
+.schedule_name_input label, .schedule_description_input label {
+    height: 29px;
+    display: inline-block;
+    width: 100%;
+}
 
-    .schedule_input_label {
-        font-size: 18px;
-        font-weight: 600;
-        height: 100%;
-        line-height: 29px;
-        display: inline-block;
-    }
+.schedule_input_label {
+    font-size: 18px;
+    font-weight: 600;
+    height: 100%;
+    line-height: 29px;
+    display: inline-block;
+}
 
-    .schedule_text_input {
-        padding: 2px 0 8px;
-        font-size: 16px;
-        border: none;
-        height: 25px;
-        width: 100%;
-        display: inline-block;
-    }
+.schedule_text_input {
+    padding: 2px 0 8px;
+    font-size: 16px;
+    border: none;
+    height: 25px;
+    width: 100%;
+    display: inline-block;
+}
 
-    .schedule_date {
-        padding: 6px 0;
-        font-size: 14px;
-    }
+.schedule_date {
+    padding: 6px 0;
+    font-size: 14px;
+}
 
-    .schedule_date_calendar {
-        width: 668px;
-        height: 320px;
-        margin: 0 auto;
-        display: flex;
-    }
+.schedule_date_calendar {
+    width: 668px;
+    height: 320px;
+    margin: 0 auto;
+    display: flex;
+}
 
-    .schedule_location_input:deep(.location_checkbox) {
-        padding: 6px 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 11.5px;
-        user-select: none;
-    }
+.schedule_location_input:deep(.location_checkbox) {
+    padding: 6px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11.5px;
+    user-select: none;
+}
 
-    .schedule_location_input:deep(.form_checkbox_btn input[type=checkbox]) {
-        display: none;
-    }
+.schedule_location_input:deep(.form_checkbox_btn input[type=checkbox]) {
+    display: none;
+}
 
-    .schedule_location_input:deep(.form_checkbox_btn label) {
-        width: 64px;
-        height: 42px;
-        padding: 9px 16px;
-        display: inline-block;
-        border-radius: 15px;
-        line-height: 23px;
-        cursor: pointer;
-        text-align: center;
-    }
+.schedule_location_input:deep(.form_checkbox_btn label) {
+    width: 64px;
+    height: 42px;
+    padding: 9px 16px;
+    display: inline-block;
+    border-radius: 15px;
+    line-height: 23px;
+    cursor: pointer;
+    text-align: center;
+}
 
-    .schedule_location_input:deep(.form_checkbox_btn input[type=checkbox]:checked + label) {
-        background-color: #C4DFFF;
-    }
+.schedule_location_input:deep(.form_checkbox_btn input[type=checkbox]:checked + label) {
+    background-color: #C4DFFF;
+}
 
-    .schedule_button_wrap {
-        text-align: center;
-    }
+.schedule_button_wrap {
+    text-align: center;
+}
 
-    .schedule_button {
-        border: none;
-        margin: 80px auto 30px;
-        width: 198px;
-        height: 42px;
-        display: inline-block;
-        background-color: #99C7FF;
-        font-size: 18px;
-        font-weight: bold;
-        color: #FFF;
-        cursor: pointer;
-    }
+.schedule_button {
+    border: none;
+    margin: 80px auto 30px;
+    width: 198px;
+    height: 42px;
+    display: inline-block;
+    background-color: #99C7FF;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    cursor: pointer;
+}
 
 </style>

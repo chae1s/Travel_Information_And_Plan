@@ -83,7 +83,7 @@ class ScheduleServiceTest {
         doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
         doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
         // when
-        scheduleService.createScheduleItems(schedule().getId());
+        scheduleService.createOrUpdateScheduleItems(schedule().getId(), false);
 
     }
 

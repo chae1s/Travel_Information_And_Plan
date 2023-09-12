@@ -48,7 +48,7 @@ public class ScheduleController {
     @PostMapping("/{scheduleId}/schedule-items")
     public ResponseEntity<ResponseDto> createScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
 
-        scheduleService.createScheduleItems(scheduleId);
+        scheduleService.createOrUpdateScheduleItems(scheduleId, false);
 
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
@@ -65,6 +65,20 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponseDto> readScheduleBoard(@PathVariable Long scheduleId) {
 
         return ResponseEntity.ok(scheduleService.readScheduleByDisplay(scheduleId));
+    }
+
+    @PutMapping("/{scheduleId:\\d+}")
+    public ResponseEntity<Long> updateSchedule(@PathVariable("scheduleId") Long scheduleId, @RequestBody ScheduleRequestDto dto, Authentication auth) {
+
+        return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, dto, auth.getName()).getId());
+    }
+
+    @PutMapping("/{scheduleId}/schedule-items")
+    public ResponseEntity<ResponseDto> updateScheduleItems(@PathVariable("scheduleId") Long scheduleId) {
+
+        scheduleService.createOrUpdateScheduleItems(scheduleId, true);
+
+        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
 
 
