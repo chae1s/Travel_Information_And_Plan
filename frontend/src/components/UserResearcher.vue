@@ -27,7 +27,7 @@
                         <button class="action-button" @click="likeUser(user.id, user)" v-if="!user.isLiked">
                             즐겨찾기
                         </button>
-                        <div class="liked" v-if="user.isLiked"> 추가됨</div>
+                        <div class="action-done" v-if="user.isLiked"> 추가됨</div>
                     </td>
                 </tr>
                 </tbody>
@@ -74,16 +74,16 @@ export default {
         },
         async likeUser(userId, user) {
             try {
-            console.log(`회원 \"${userId}.${user.nickname}\" 즐겨찾기 추가`)
+                console.log(`회원 \"${userId}.${user.nickname}\" 즐겨찾기 추가`)
                 console.log(`추가함: isLiked ${user.isLiked}`)
                 const {data} = await likeUser(userId);
-                user.isLiked=true;
+                user.isLiked = true;
                 console.log(data);
 
             } catch (error) {
                 if (error.response && error.response.status === 400) {
                     alert("이미 즐겨찾기 추가된 회원입니다.");
-                    user.isLiked=true;
+                    user.isLiked = true;
                 } else {
                     alert(error.response.message)
                 }
@@ -96,11 +96,16 @@ export default {
 
 <style scoped>
 
-
 th, td {
     text-align: center;
     border: none;
     padding: 3px 15px;
+}
+
+th {
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 0;
 }
 
 .highlight-text {
@@ -109,12 +114,12 @@ th, td {
 }
 
 .search-results-container {
-        margin-top: 20px;
-        max-width: 600px;
-        min-width: 420px;
-        max-height: 200px;
-        overflow-y: scroll;
-    }
+    margin-top: 20px;
+    max-width: 600px;
+    min-width: 500px;
+    max-height: 300px;
+    overflow-y: auto;
+}
 
 .search-results-container::-webkit-scrollbar {
     width: 10px;
@@ -165,7 +170,8 @@ th, td {
     border: none;
     background-color: #FAED7D;
 }
-.liked {
+
+.action-done {
     font-size: 11px;
     color: #2F3438;
     width: 45px;

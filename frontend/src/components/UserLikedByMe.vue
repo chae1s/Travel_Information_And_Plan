@@ -1,13 +1,16 @@
 <template>
-    <div class="likes-user-to-container">
+    <div class="likes-user-container">
         <span class="highlight-text"><strong>즐겨찾기한 회원</strong></span>
-        <div class="user-list-container">
-            <div class="mt-5" v-show="!showResultTable">즐겨찾기한 회원이 없습니다.</div>
-            <table class="likes-to-list" v-show="showResultTable">
-                <thead class="tread-style">
-                <th>닉네임</th>
-                <th>이메일</th>
-                <th>즐겨찾기</th>
+        <!-- 목록 컨테이너-->
+        <div class="mt-5" v-show="!showResultTable">즐겨찾기한 회원이 없습니다.</div>
+        <div class="search-results-container">
+            <table class="search-results" v-show="showResultTable">
+                <thead>
+                <tr>
+                    <th>닉네임</th>
+                    <th>이메일</th>
+                    <th>즐겨찾기</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(user, index) in this.userLikedByMe" :key="user.id" class="user-info">
@@ -17,7 +20,7 @@
                         <button class="action-button" @click="unLikeUser(user.id, user)" v-if="!user.isUnLiked">
                             취소하기
                         </button>
-                        <div class="unLiked" v-if="user.isUnLiked"> 취소됨</div>
+                        <div class="action-done" v-if="user.isUnLiked"> 취소됨</div>
                     </td>
                 </tr>
                 </tbody>
@@ -44,7 +47,6 @@ export default {
         return {
             userLikedByMe: [],
             isUnLiked: false,
-            isLoading: false,
         };
     },
     computed: {
@@ -77,53 +79,47 @@ export default {
 
 <style scoped>
 
-.highlight-text {
-    font-size: 20px;
-    background: linear-gradient(to top, #FFE866 50%, transparent 50%);
-}
-
-.likes-to-list {
-    border-collapse: separate;
-}
-
 th, td {
     text-align: center;
     border: none;
     padding: 3px 15px;
 }
 
-/*th {*/
-/*    background-color: #42b983;*/
-/*}*/
-/*td {*/
-/*    background-color: #FFE866;*/
-/*}*/
-
-
-
-.likes-user-to-container {
-    margin-top: 20px;
-    max-width: 600px;
-    min-width: 420px;
-    max-height: 200px;
-    overflow-y: scroll;
+th {
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 0;
 }
 
-.likes-user-to-container::-webkit-scrollbar {
+.highlight-text {
+    font-size: 20px;
+    background: linear-gradient(to top, #FFE866 50%, transparent 50%);
+}
+
+.search-results-container {
+    margin-top: 20px;
+    max-width: 600px;
+    min-width: 500px;
+    max-height: 300px;
+    overflow-y: auto;
+    /*background-color: #42b983;*/
+}
+
+.search-results-container::-webkit-scrollbar {
     width: 10px;
 }
 
-.likes-user-to-container::-webkit-scrollbar-thumb {
+.search-results-container::-webkit-scrollbar-thumb {
     background-color: #FFE866; /* 스크롤 막대의 색상 */
     border-radius: 10px;
 }
 
-.likes-user-to-container::-webkit-scrollbar-track {
+.search-results-container::-webkit-scrollbar-track {
     background-color: beige; /* 스크롤 막대의 색상 */
     border-radius: 10px;
 }
 
-.user-list-container {
+.search-results {
     width: 100%;
     border-collapse: collapse;
 }
@@ -146,7 +142,7 @@ th, td {
     background-color: #FAED7D;
 }
 
-.unLiked {
+.action-done {
     font-size: 11px;
     color: #2F3438;
     width: 45px;
@@ -159,5 +155,4 @@ th, td {
     border: none;
     background-color: #E5F1FF;
 }
-
 </style>
