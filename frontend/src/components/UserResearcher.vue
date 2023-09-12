@@ -1,6 +1,6 @@
 <template>
     <div class="user-researcher-container">
-<!--        <h4>회원 검색</h4>-->
+        <span class="highlight-text"><strong>회원 검색하기</strong></span>
         <!-- 검색 폼 -->
         <form class="search-form mt-3 mb-5" @submit.prevent="searchUsers">
             <input v-model="keyword" type="text" placeholder="닉네임 또는 이메일 입력">
@@ -95,19 +95,26 @@ export default {
 </script>
 
 <style scoped>
+
+
 th, td {
+    text-align: center;
     border: none;
+    padding: 3px 15px;
+}
+
+.highlight-text {
+    font-size: 20px;
+    background: linear-gradient(to top, #FFE866 50%, transparent 50%);
 }
 
 .search-results-container {
-    display: flex;
-    width: 100%;
-    /*max-width: 500px;*/
-    max-height: 100%;
-    overflow-y: scroll;
-    margin: 0 auto; /* 수평 가운데 정렬 */
-    /*background-color: #FFE866;*/
-}
+        margin-top: 20px;
+        max-width: 600px;
+        min-width: 420px;
+        max-height: 200px;
+        overflow-y: scroll;
+    }
 
 .search-results-container::-webkit-scrollbar {
     width: 10px;

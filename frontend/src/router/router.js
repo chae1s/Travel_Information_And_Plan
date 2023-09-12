@@ -16,9 +16,11 @@ import UserDelete from "@/components/UserDelete.vue";
 import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
-import TestVue from "@/components/TestVue.vue";
 import MatesResearcher from "@/components/MatesResearcher.vue";
-import LikesUser from "@/components/LikesUser.vue";
+import UserLikedByMe from "@/components/UserLikedByMe.vue";
+import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
+import UserResearcher from "@/components/UserResearcher.vue";
+
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -74,23 +76,30 @@ const router = createRouter({
             name: 'MyPageMain',
             component: MyPageMain,
             children: [
-                {path: 'my-info', name: 'MyInformation', children: [
+                {
+                    path: 'my-info', name: 'MyInformation', children: [
                         {path: 'edit', name: 'UserInfoEdit', component: UserInfoEdit},
                         {path: 'password', name: 'Password', component: Password},
                         {path: 'delete', name: 'UserDelete', component: UserDelete},
                     ]
                 },
-                {path: 'likes-user', name: 'LikesUser', component: LikesUser},
-                {path: 'my-trip', name: 'MyTrip', children: [
+                {path:'/likes-by-me', name: 'LikedByMe', component: UserLikedByMe},
+                {path:'/likes-by-me', name: 'LikedMe', component: UserWhoLikedMe},
+                {path:'/search-user', name: 'SearchUser', component: UserResearcher},
+
+                {
+                    path: 'my-trip', name: 'MyTrip', children: [
                         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
                         // {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
                     ]
                 }
             ]
         },
+
+
         {
             path: '/map',
-            name:'TravelMap',
+            name: 'TravelMap',
             component: TravelMap
         }
     ]

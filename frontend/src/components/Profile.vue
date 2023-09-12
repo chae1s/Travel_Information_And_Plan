@@ -7,8 +7,8 @@
                    class="rounded-circle" alt="프로필 이미지"/>
         </div>
         <h5 class="mt-2 mb-2">{{ nickname }}</h5>
-        <div class="profile-content">{{ content }}</div>
-        <div class="profile-content">{{ location }}</div>
+<!--        <div class="profile-content">{{ content }}</div>-->
+<!--        <div class="profile-content">{{ location }}</div>-->
     </div>
 </template>
 
@@ -22,8 +22,8 @@ export default {
             const {data} = await readUserInfo();
             console.log(data)
             this.nickname = data.nickname;
-            this.content = data.content;
-            this.location = data.location;
+            // this.content = data.content;
+            // this.location = data.location;
             this.profileImage = data.profileImage;
         } catch (error) {
             console.log("조회 에러:", error.response.data)
@@ -32,8 +32,8 @@ export default {
     data() {
         return {
             nickname: 'nickname',
-            content: '',
-            location: '',
+            // content: '',
+            // location: '',
             profileImage: '/img/default-profile.png',
             // isLikedByMe:''
         }

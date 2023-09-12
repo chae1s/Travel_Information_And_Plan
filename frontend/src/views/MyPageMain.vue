@@ -5,8 +5,34 @@
                 <div class="my_page_main_sidebar">
                     <div class="profile_information">
                         <Profile/>
-                        <v-btn flat @click="goToInfo()">내 정보</v-btn>
+                        <v-btn flat class="my-info-btn" @click="goToInfo()">내 정보</v-btn>
                     </div>
+                    <div class="user-searcher-like">
+                        <v-chip @click="goToLikes()"
+                            class="ma-1"
+                            size="x-small"
+                            color="#99CCFF"
+                            text-color="white"
+                            prepend-icon="mdi-heart"
+                        >즐겨찾기
+                        </v-chip>
+                        <v-chip @click="goToLikesMe()"
+                            class="ma-1"
+                            size="x-small"
+                            color="#99CCFF"
+                            text-color="white"
+                            prepend-icon="mdi-heart"
+                        >다른회원
+                        </v-chip>
+                        <p></p>
+                        <v-btn flat class="search-btn" @click="goToSearch()"
+                                size="x-small"
+                                prepend-icon="mdi-magnify"
+                        >회원찾기
+                        </v-btn>
+
+                    </div>
+
                     <AppSideMenu v-for="sidebar in sidebarData" :key="sidebar"
                                  :sidebar-title="sidebar.sidebarTitle"
                                  :sidebar-list="sidebar.sidebarList"
@@ -58,6 +84,15 @@ export default {
         goToInfo() {
             console.log("내 정보 조회로 이동")
             this.$router.push({name: 'UserInfoEdit'})
+        },
+        goToLikes() {
+            this.$router.push({name: 'LikedByMe'})
+        },
+        goToLikesMe() {
+            this.$router.push({name: 'LikedMe'})
+        },
+        goToSearch() {
+            this.$router.push({name: 'SearchUser'})
         }
     }
 }
@@ -73,12 +108,20 @@ export default {
     width: 180px;
 }
 
+.my-info-btn {
+    width: 70px;
+    height: 30px;
+    font-size: 13px;
+    color: #616161;
+    background-color: #ECEFF1;
+}
+.search-btn{
+    color: #616161;
+}
+
 .profile_information {
     flex-direction: row;
-    /*border: 1px solid #DADADA;*/
-    /*border-radius: 6px;*/
-    /*padding: 15px;*/
-    min-height: 300px;
+    margin-bottom: 3px;
 }
 
 </style>
