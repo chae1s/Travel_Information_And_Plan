@@ -33,7 +33,7 @@ function createSchedule(scheduleData) {
 }
 
 function readSchedule(scheduleId) {
-    return axiosInstance.get('/schedules/' + scheduleId)
+    return axiosInstance.get('/schedules/write/' + scheduleId)
 }
 
 function readLikedItemBySido(sido, page) {
@@ -58,8 +58,37 @@ function createScheduleItems(scheduleId) {
     return axiosInstance.post(`/schedules/${scheduleId}/schedule-items`)
 }
 
+function findUser(keyword) {
+    return axiosInstance.get(`/users?q=${keyword}`)
+}
+
+// 현재 회원의 모든 정보 조회
+function readUserInfo(userData) {
+    return axiosInstance.get('/users/me')
+}
+
+// 다른 유저 정보 조회
+// function readUserProfile(email){
+//     return axiosInstance.get('/users/${email}')
+// }
+
+function findInvitationList(scheduleId,keyword) {
+    // return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
+    return axiosInstance.get(`/schedules/invited-users/${scheduleId}?q=${keyword}`)
+}
+
+function inviteUserToSchedule(scheduleId,invitedUsername) {
+    return axiosInstance.post(`/schedules/invited-users/${scheduleId}?q=${invitedUsername}`)
+}
+function bookmarkItem(itemId) {
+    return axiosInstance.post(`item-list/add/${itemId}`)
+}
+
 export {
-    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation
+    registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
+    createBoard, readBoards, uploadImage,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
+    readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
+    bookmarkItem
 };
 

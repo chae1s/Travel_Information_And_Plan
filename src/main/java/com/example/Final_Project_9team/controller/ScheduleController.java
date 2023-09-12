@@ -38,7 +38,7 @@ public class ScheduleController {
     }
 
     // 일정 정보 보기 - 세부 계획을 짤 수 있는 페이지에 보여주기
-    @GetMapping("/{scheduleId:\\d+}")
+    @GetMapping("/write/{scheduleId:\\d+}")
     public ResponseEntity<ScheduleResponseDto> read(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
 
         return ResponseEntity.ok(scheduleService.readSchedule(scheduleId, auth.getName()));
@@ -60,5 +60,13 @@ public class ScheduleController {
 
         return ResponseEntity.ok(itemPaths);
     }
+
+    @GetMapping("/{scheduleId:\\d+}")
+    public ResponseEntity<ScheduleResponseDto> readScheduleBoard(@PathVariable Long scheduleId) {
+
+        return ResponseEntity.ok(scheduleService.readScheduleByDisplay(scheduleId));
+    }
+
+
 
 }
