@@ -19,7 +19,7 @@
                 <div class="nav_content">
                     <router-link to="/items-list" :class="{'selected': isItemPage}">여행정보</router-link>
                     <router-link to="/schedules/write" :class="{'selected': isSchedulePage}">일정짜기</router-link>
-                    <router-link to="/board-create" :class="{'selected': isBoardPage}">커뮤니티</router-link>
+                    <router-link to="/board-list" :class="{'selected': isBoardPage}">커뮤니티</router-link>
                     <router-link to="/" >여행지도</router-link>
                 </div>
                 <div>

@@ -18,6 +18,8 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import BoardList from "@/views/BoardList.vue";
+import BoardDetail from "@/views/BoardDetail.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -66,6 +68,16 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
+        },
+        {
+            path: '/board-list',
+            name: 'BoardList',
+            component: BoardList
+        },
+        {
+            path: '/board-detail',
+            name: 'BoardDetail',
+            component: BoardDetail
         },
         {
             path: '/mypage',
