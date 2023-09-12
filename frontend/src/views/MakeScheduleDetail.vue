@@ -173,7 +173,7 @@ export default {
             script.defer = true
             document.head.appendChild(script)
 
-            if (this.scheduleData.sido === '0') this.zoom = 8
+            if (this.scheduleData.sido === '0') this.zoom = 7
             else if (this.scheduleData.sido === '2') this.zoom = 10
 
             script.onload = () => {
