@@ -3,6 +3,7 @@ package com.example.Final_Project_9team.controller;
 import com.example.Final_Project_9team.dto.ItemPartResponseDto;
 import com.example.Final_Project_9team.dto.ItemResponseDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
+import com.example.Final_Project_9team.entity.ItemReview;
 import com.example.Final_Project_9team.entity.item.Item;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
@@ -10,6 +11,7 @@ import com.example.Final_Project_9team.exception.SuccessCode;
 import com.example.Final_Project_9team.repository.ItemRepository;
 import com.example.Final_Project_9team.service.BookmarkItemService;
 import com.example.Final_Project_9team.service.ItemListService;
+import com.example.Final_Project_9team.service.ItemReviewService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,7 @@ import java.util.Optional;
 public class ItemListController {
     private final ItemListService itemListService;
     private final BookmarkItemService bookmarkItemService;
+    private final ItemReviewService itemReviewService;
     private final ItemRepository itemRepository;
 
     //모든 관광상품 조회

@@ -1,5 +1,8 @@
 package com.example.Final_Project_9team.entity.enums;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
 public enum Rating {
     ONE(1),
     TWO(2),

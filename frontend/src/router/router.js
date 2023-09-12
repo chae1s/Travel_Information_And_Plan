@@ -13,10 +13,11 @@ import MyPageMain from "@/views/MyPageMain.vue";
 import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
-import ItemReview from "@/views/ItemReview.vue";
+import ItemReview from "@/components/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
-import UserInfoPw from "@/components/UserInfoPw.vue";
+//import UserInfoPw from "@/components/UserInfoPw.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
+import ItemReviews from "@/views/itemReviews.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -54,6 +55,12 @@ const router = createRouter({
             path: '/item-detail/read/:id',
             name: "ItemDetail",
             component: ItemDetail,
+            props: true
+        },
+        {
+            path: '/item-detail/read/:id/reviews',
+            name: 'ItemReviews',
+            component: ItemReviews,
             props: true
         },
         {

@@ -57,10 +57,13 @@ export default {
     },
     methods: {
         clickFunc() {
+            if (this.checkedSido.length > 1) {
+                this.checkedSido.shift();
+            }
+            this.checkedSigungu = [];
+            this.checkedContentTypeIds = [];
             this.$emit('checkedClick', {
                 sidoCode: this.checkedSido,
-                //sigunguCode: this.checkedSigungu,
-                //contentTypeId: this.checkedContentTypeIds, // 선택한 콘텐츠 ID를 이벤트로 전달
             });
             this.getSigunguCode(this.checkedSido);
         },
@@ -68,6 +71,7 @@ export default {
             if (this.checkedSigungu.length > 1) {
                 this.checkedSigungu.shift();
             }
+            this.checkedContentTypeIds = [];
             this.$emit("checkedClick", {
                 sidoCode: checkedSido,
                 sigunguCode: this.checkedSigungu,
@@ -91,7 +95,7 @@ export default {
         },
         getSigunguCode() {
             this.sigunguCodes = this.checkedSido
-                .map(code => locations[code].sigunguCode.map(sigungu => sigungu.sigungu))
+                .map((code) => locations[code].sigunguCode.map((sigungu) => sigungu.sigungu))
                 .flat();
             console.log("sigunguCodes",this.sigunguCodes)
         },

@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.repository;
 
 import com.example.Final_Project_9team.entity.Board;
+import com.example.Final_Project_9team.entity.ItemReview;
 import com.example.Final_Project_9team.entity.item.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
