@@ -81,6 +81,14 @@ public class ScheduleController {
         return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
     }
 
+    @PutMapping("/{scheduleId:\\d+}/display")
+    public ResponseEntity<ResponseDto> updateScheduleDisplay(@PathVariable("scheduleId") Long scheduleId, Authentication auth) {
+
+        scheduleService.updateDisplay(scheduleId, auth.getName());
+
+        return ResponseEntity.ok(ResponseDto.getMessage(SuccessCode.CREATED.getMessage()));
+    }
+
 
 
 }

@@ -207,8 +207,8 @@ public class ScheduleService {
         }
     }
 
-    private void updateDisplay(String email, Long scheduleId) {
-        User user = userRepository.findByEmail(email).get();
+    public void updateDisplay(Long scheduleId, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = scheduleRepository.findByIdAndIsDeletedFalse(scheduleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
