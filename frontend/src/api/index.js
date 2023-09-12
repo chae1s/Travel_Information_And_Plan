@@ -9,6 +9,13 @@ function loginUser(userData) {
   return axiosInstance.post('/users/login', userData);
 }
 
+function updateUserInfo(userData) {
+    const headers = {
+        'Content-Type': 'multipart/form-data'
+    };
+    return axiosInstance.put('/users/me', userData, { headers });
+}
+
 function createBoard(boardData) {
     return axiosInstance.post('/boards', boardData);
 }
@@ -53,6 +60,6 @@ function createScheduleItems(scheduleId) {
 
 export {
     registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
-    readInvitations, acceptInvitation, rejectInvitation, uploadImage, createScheduleItems
+    readInvitations, acceptInvitation, rejectInvitation
 };
 

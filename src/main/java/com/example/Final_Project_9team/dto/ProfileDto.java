@@ -1,5 +1,5 @@
 package com.example.Final_Project_9team.dto;
-
+// 프로필만 업로드 하는 로직, 사용하지 않음
 import com.example.Final_Project_9team.entity.Profile;
 import lombok.Data;
 

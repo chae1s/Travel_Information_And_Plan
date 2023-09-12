@@ -54,6 +54,12 @@ public class LocalFileHandler implements FileHandler{
 
     public void deleteFile(String fileFilename) throws FileNotFoundException {
 //        String path = System.getProperty("user.dir") + File.separator + "media" + File.separator + fileFilename;
+
+        if (fileFilename == null){
+            log.info("filePath == null, 삭제할 파일이 존재하지 않음");
+            return;
+        }
+
         String path = System.getProperty("user.dir") + File.separator + "src\\main\\resources\\static\\media" + File.separator + fileFilename;
 
         File file = ResourceUtils.getFile(path);
@@ -64,6 +70,5 @@ public class LocalFileHandler implements FileHandler{
         } else {
             log.info("파일이 이미 삭제되었습니다.");
         }
-
     }
 }

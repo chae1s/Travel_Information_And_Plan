@@ -5,21 +5,20 @@ import MakeScheduleDetail from "@/views/MakeScheduleDetail.vue";
 import SignUp from "@/views/SignUp.vue";
 import LoginView from "@/views/LoginView.vue";
 import BoardCreate from "@/views/BoardCreate.vue";
-import MyPage from "@/views/MyPage.vue";
 import ItemList from "@/views/ItemList.vue";
 import ItemDetail from "@/views/ItemDetail.vue";
 import LogoutView from "@/components/Logout.vue";
 import InvitationList from "@/components/InvitationList.vue";
-import UserInfo from "@/components/UseInfo.vue";
-import UserInfoView from "@/views/UserInfoView.vue";
 import MyPageMain from "@/views/MyPageMain.vue";
-import MyPageEdit from "@/components/ProfileEdit.vue";
 import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
-import ProfileEdit from "@/components/ProfileEdit.vue";
 import UserDelete from "@/components/UserDelete.vue";
 import BoardList from "@/views/BoardList.vue";
 import BoardDetail from "@/views/BoardDetail.vue";
+import ItemReview from "@/views/ItemReview.vue";
+import TravelMap from "@/views/TravelMap.vue";
+import UserInfoPw from "@/components/UserInfoPw.vue";
+import UserInfoEdit from "@/components/UserInfoEdit.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -68,16 +67,6 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
-        },
-        {
-            path: '/board-list',
-            name: 'BoardList',
-            component: BoardList
-        },
-        {
-            path: '/board-detail',
-            name: 'BoardDetail',
-            component: BoardDetail
         },
         {
             path: '/mypage',
