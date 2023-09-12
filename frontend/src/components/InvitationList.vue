@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sidebar_main">
     <div class="content-title">
       <strong>초대 리스트 조회</strong>
     </div>
@@ -93,14 +93,17 @@ export default {
 </script>
 
 <style scoped>
+.sidebar_main {
+  width: 937px;
+}
+
 .content-title{
   font-size: 25px;
 }
 .invitation-table {
-  width: 50%;
+  width: 75%;
   border-collapse: collapse;
-  margin-left: 370px;
-  margin-right: 400px;
+  margin: 0 auto;
 }
 
 th, td {

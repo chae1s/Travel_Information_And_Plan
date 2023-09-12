@@ -121,4 +121,10 @@ public class MyActivityController {
 
         return ResponseEntity.ok(myActivityService.readLikedItemsBySido(auth.getName(), sido, page, size));
     }
+
+    @GetMapping("/schedules/{scheduleId:\\d+}")
+    public ResponseEntity<ScheduleResponseDto> readSchedule(@PathVariable Long scheduleId, Authentication auth) {
+
+        return ResponseEntity.ok(myActivityService.readSchedule(scheduleId, auth.getName()));
+    }
 }

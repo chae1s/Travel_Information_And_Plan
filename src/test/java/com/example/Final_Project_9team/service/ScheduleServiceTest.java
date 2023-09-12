@@ -83,10 +83,8 @@ class ScheduleServiceTest {
         doReturn(Optional.of(item())).when(itemRepository).findById(any(Long.class));
         doReturn(scheduleItem()).when(scheduleItemRepository).save(any(ScheduleItem.class));
         // when
-        List<ScheduleItemResponseDto> scheduleItemResponses = scheduleService.createScheduleItems(schedule().getId(), scheduleItemRequests);
+        scheduleService.createScheduleItems(schedule().getId());
 
-        // then
-        assertThat(scheduleItemResponses.size()).isEqualTo(6);
     }
 
     @Test
@@ -180,7 +178,6 @@ class ScheduleServiceTest {
         itemIds.add(1L);
         itemIds.add(2L);
         ScheduleItemRequestDto scheduleItemRequest = new ScheduleItemRequestDto();
-        scheduleItemRequest.setItemIds(itemIds);
 
         return scheduleItemRequest;
     }
