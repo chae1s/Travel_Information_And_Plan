@@ -16,7 +16,6 @@ import UserDelete from "@/components/UserDelete.vue";
 import ItemReview from "@/components/ItemReview.vue";
 import BoardList from "@/views/BoardList.vue";
 import BoardDetails from "@/views/BoardDetails.vue";
-import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
 import MyScheduleList from "@/components/MyScheduleList.vue";
