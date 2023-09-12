@@ -16,6 +16,15 @@ function updateUserInfo(userData) {
     return axiosInstance.put('/users/me', userData, { headers });
 }
 
+function deleteUser() {
+    return axiosInstance.put('/users/me/delete');
+}
+
+function checkPassword(userData) {
+    return axiosInstance.post('/users/check/verify-password',userData);
+}
+
+
 function createBoard(boardData) {
     return axiosInstance.post('/boards', boardData);
 }
@@ -86,6 +95,23 @@ function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
 
+function likeUser(toUserId) {
+    return axiosInstance.post(`/users/me/liked-user/${toUserId}`)
+}
+
+function unLikeUser(toUserId) {
+    return axiosInstance.put(`/users/me/liked-user/${toUserId}`)
+}
+
+function readUserLikedByMe(userData) {
+    return axiosInstance.get(`/users/me/liked-user/to`)
+}
+
+function readUserLikedMe(userData) {
+    return axiosInstance.get(`/users/me/liked-user/from`)
+}
+
+
 // 현재 회원의 모든 정보 조회
 function readUserInfo(userData) {
     return axiosInstance.get('/users/me')
@@ -125,7 +151,8 @@ function readBoardSchedule(scheduleId) {
 
 
 export {
-    registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
+    registerUser, loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
+    likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,

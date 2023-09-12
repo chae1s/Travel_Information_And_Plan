@@ -131,8 +131,8 @@ export default {
     },
 
     methods: {
-        goToMain() {
-            console.log("goToMain: login 페이지 이동")
+        goToLogin() {
+            console.log("goToLogin: login 페이지 이동")
             this.$router.push({
                 name: "Login"
             })
@@ -157,7 +157,7 @@ export default {
                 this.axios.post("/users/register", RegisterObj)
                     .then(() => {
                         alert("회원가입이 완료되었습니다.")
-                        this.goToMain()
+                        this.goToLogin()
                     })
                     .catch((err) => {
                         if (err.response) {
