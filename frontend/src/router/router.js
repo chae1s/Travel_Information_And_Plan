@@ -14,7 +14,7 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
 import BoardList from "@/views/BoardList.vue";
-import BoardDetail from "@/views/BoardDetail.vue";
+import BoardDetails from "@/views/BoardDetails.vue";
 import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import UserInfoPw from "@/components/UserInfoPw.vue";
@@ -75,6 +75,16 @@ const router = createRouter({
             path: '/board-create',
             name: 'BoardCreate',
             component: BoardCreate
+        },
+        {
+            path: '/board-list',
+            name: 'BoardList',
+            component: BoardList
+        },
+        {
+            path: '/board-details',
+            name: 'BoardDetails',
+            component: BoardDetails
         },
 
         {

@@ -4,7 +4,8 @@ import createPersistedState from 'vuex-persistedstate'
 export default new Vuex.Store({
   state: {
     //username: '',
-    token: ''
+    token: '',
+    boardId: null
   },
   getters: {
     isLogin(state) {
@@ -16,15 +17,17 @@ export default new Vuex.Store({
       localStorage.removeItem(token)
       state.token = ''
     },
-    // setUsername(state, username) {
-    //   state.username = username;
-    // },
     setToken(state, token) {
       state.token = token;
     },
-    // clearUsername(state) {
-    //   state.username = '';
-    // },
+    setBoardId(state, id) {
+      state.boardId = id
+    }
+  },
+  actions: {
+    updateBoardId({ commit }, id) {
+      commit('setBoardId', id)
+    }
   },
   plugins: [
       createPersistedState()

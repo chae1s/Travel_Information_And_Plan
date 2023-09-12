@@ -24,6 +24,30 @@ function readBoards(page) {
     return axiosInstance.get('/boards?page=' + (page || 1));
 }
 
+function readBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function updateBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function deleteBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function createComment(boardId, dto) {
+    return axiosInstance.post(`boards/${ boardId }/comments`, dto);
+}
+
+function updateComment(boardId, dto) {
+    return axiosInstance.get('/boards/' + boardId, dto);
+}
+
+function deleteComment(boardId, dto) {
+    return axiosInstance.get('/boards/' + boardId, dto);
+}
+
 function uploadImage(image) {
     return axiosInstance.post('/images', image);
 }
@@ -86,7 +110,8 @@ function bookmarkItem(itemId) {
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
-    createBoard, readBoards, uploadImage,
+    createBoard, readBoards, uploadImage, readBoard, updateBoard, deleteBoard,
+    createComment, updateComment, deleteComment,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem
