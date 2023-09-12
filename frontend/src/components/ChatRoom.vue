@@ -35,7 +35,7 @@
     <!--  채팅방 전송 부분  -->
     <div class="chatRoom-send-container">
       <form @submit.prevent="sendMessage">
-        <textarea :value="newMessage" @input="updateMessage" placeholder="메시지를 입력하세요"></textarea>
+        <textarea :value="newMessage" @input="updateMessage" @keydown.enter="sendMessageOnEnter" placeholder="메시지를 입력하세요"></textarea>
         <button type="submit">전송</button>
       </form>
     </div>
@@ -129,7 +129,7 @@ export default {
 
       // 로컬에 메시지 추가
       this.messages.push({
-        sender: '나',   // 메시지를 보낸 사용자 (여기서는 나로 가정)
+        sender: this.nickname,
         message: this.newMessage,
         time: new Date(),// 시간과 분만 포맷
         // time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 시간과 분만 포맷
@@ -170,6 +170,12 @@ export default {
       const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
       return `${period} ${formattedHours}:${formattedMinutes}`;
+    },
+    sendMessageOnEnter(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Enter 키 기본 동작 방지 (새 줄 추가)
+        this.sendMessage(); // sendMessage 함수 호출
+      }
     },
 
     // WebSocket 연결
@@ -307,6 +313,7 @@ export default {
 }
 .message-time{
   font-size: 13px;
+  color: #999;
 }
 /* 채팅방 맨 아래 부분 */
 .chatRoom-send-container {
