@@ -61,7 +61,7 @@ h2 {
   text-align: left;
 }
 .chatRoom-list-container {
-  margin-left: 100px; /* 위치 수정 예정*/
+  /* margin-left: 100px; 위치 수정 예정*/
   width: 370px;
   height: 626px;
   border-radius: 10px;

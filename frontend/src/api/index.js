@@ -179,14 +179,12 @@ function sendChatMessage(roomId,messageData) {
     return axiosInstance.post(`/schedules/chat/rooms/${roomId}/send`,messageData)
 }
 export {
-    registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
+    registerUser, loginUser, updateUserInfo,
     createBoard, readBoards, uploadImage, readBoard, createComment,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
+    createSchedule, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
     updateScheduleDisplay,
-    readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview,
-    likeUser, unLikeUser, readUserLikedByMe, readUserLikedMe
-    registerUser, loginUser, createBoard, readBoards, createSchedule, readSchedule, readLikedItemBySido, createRouteList,
+    likeUser, unLikeUser, readUserLikedByMe, readUserLikedMe,
     readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
     getChatRooms,getChatRoomData,getChatMessages,sendChatMessage,readUserInfo
 };

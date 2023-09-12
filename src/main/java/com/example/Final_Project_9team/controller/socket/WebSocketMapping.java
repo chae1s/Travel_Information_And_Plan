@@ -30,18 +30,14 @@ public class WebSocketMapping {
             @Headers Map<String, Object> headers,
             @Header("nativeHeaders") Map<String, String> nativeHeaders
     ){
+        log.info("messagemappging메서드 시작");
         log.info(chatMessageDto.toString());
         log.info(headers.toString());
         log.info(nativeHeaders.toString());
-        if (!chatMessageDto.getMessage().equals("")) { // 입력되지 않은 메시지는 전송되지 않도록
-//            String time = new SimpleDateFormat("HH:mm").format(new Date());
-//            chatMessageDto.setTime(time);
-
-            simpMessagingTemplate.convertAndSend(
-                    String.format("/topic/%s", chatMessageDto.getRoomId()),
-                    chatMessageDto
-            );
-        }
+        simpMessagingTemplate.convertAndSend(
+                String.format("/topic/%d", chatMessageDto.getRoomId()),
+                chatMessageDto);
+        chatService.saveChatMessage(chatMessageDto);
     }
     @SubscribeMapping("/{roomId}") // 누군가가 구독할때 실행하는 메소드
     public List<ChatMessageDto> sendGreet(

@@ -108,21 +108,16 @@ export default {
       if (this.newMessage.trim() === '') {
         return; // 빈 메시지는 보내지 않음
       }
-      // 서버로 메시지 전송
-      const messageData = {
-        message: this.newMessage,
+      if (this.stompClient && this.stompClient.connected) {
+        console.log("연결성공");
+        const messageData = {
+          roomId: this.id,
+          sender: this.nickname,
+          message: this.newMessage,
+          time: new Date(),
+        };
+        this.stompClient.send(`/app/chat`, JSON.stringify(messageData),{});
       }
-      // sendChatMessage(this.id, messageData);
-      this.stompClient.send(`/app/chat/${this.id}`, JSON.stringify(messageData));
-
-      // 로컬에 메시지 추가
-      this.messages.push({
-        sender: this.nickname,
-        message: this.newMessage,
-        time: new Date(),
-        // time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 시간과 분만 포맷
-
-      });
 
       // 입력창 초기화
       this.newMessage = '';
@@ -134,6 +129,31 @@ export default {
       });
     },
 
+    // websocket 연결
+    connectWebSocket() {
+      const socket = new SockJS("http://localhost:8080/chatting"); // WebSocket 엔드포인트 URL
+      this.stompClient = Stomp.over(socket);
+
+      this.stompClient.connect({}, frame => {
+        this.connected = true;
+        console.log("WebSocket 연결 성공",frame);
+
+        // 구독 설정
+        this.stompClient.subscribe(`/topic/${this.id}`, (message) => {
+          console.log("message.body="+message.body);
+          // 메시지를 받았을 때 처리
+          const receivedMessage = JSON.parse(message.body);
+          this.messages.push({
+            sender: receivedMessage.sender,
+            message: receivedMessage.message,
+            time: new Date(),
+          });
+          // sendChatMessage(this.id, this.messages);
+
+        });
+      });
+
+    },
     async loadUserInfo(){
       try{
         const userInfo = await readUserInfo();
@@ -164,31 +184,6 @@ export default {
       }
     },
 
-    // WebSocket 연결
-    connectWebSocket() {
-      console.log("연결 시작")
-      const socket = new SockJS("http://localhost:8080/chatting"); // WebSocket 엔드포인트 URL
-      this.stompClient = Stomp.over(socket);
-      console.log("연결중")
-
-      this.stompClient.connect({}, frame => {
-        // 연결 성공 시 처리
-        console.log("WebSocket 연결 성공",frame);
-
-        // 구독 설정
-        this.stompClient.subscribe(`/topic/chat/${this.id}`, (message) => {
-          console.log("message.body="+message.body);
-          // 메시지를 받았을 때 처리
-          const receivedMessage = JSON.parse(message.body);
-          this.messages.push({
-            sender: receivedMessage.sender,
-            message: receivedMessage.text,
-            time: new Date(),
-          });
-        });
-      });
-    },
-
   },
   watch: {
     messages() {
@@ -217,7 +212,7 @@ export default {
 
 <style>
 .chatRoom-container {
-  margin-left: 100px; /* 위치 수정 예정*/
+  /* margin-left: 100px;  위치 수정 예정*/
   width: 370px;
   height: 626px;
   border-radius: 10px;
