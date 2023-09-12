@@ -54,7 +54,7 @@
                                             :class="show ? 'mdi mdi-eye' : 'mdi mdi-eye-off'"
                                             @click="show = !show"
                                     ></v-icon>
-                                    <span class="ml-1">비밀번호 보기</span>
+                                    <span class="ml-1" @click="show = !show">비밀번호 보기</span>
                                 </div>
                                 <div class="ml-auto mr-1">
                                     <v-btn flat
