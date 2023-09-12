@@ -1,13 +1,8 @@
 package com.example.Final_Project_9team.service;
 
-import com.example.Final_Project_9team.dto.BoardListResponseDto;
-import com.example.Final_Project_9team.dto.ItemListResponseDto;
-import com.example.Final_Project_9team.dto.PageDto;
-import com.example.Final_Project_9team.dto.ScheduleListResponseDto;
-import com.example.Final_Project_9team.entity.Board;
-import com.example.Final_Project_9team.entity.LikesBoard;
-import com.example.Final_Project_9team.entity.Schedule;
-import com.example.Final_Project_9team.entity.User;
+import com.example.Final_Project_9team.dto.*;
+import com.example.Final_Project_9team.dto.user.UserResponseDto;
+import com.example.Final_Project_9team.entity.*;
 import com.example.Final_Project_9team.entity.item.Item;
 import com.example.Final_Project_9team.exception.CustomException;
 import com.example.Final_Project_9team.exception.ErrorCode;
@@ -21,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +32,9 @@ public class MyActivityService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final LikesBoardRepository likesBoardRepository;
+    private final MatesRepository matesRepository;
+    private final ScheduleItemRepository scheduleItemRepository;
+    private final ItemPathRepository itemPathRepository;
 
 
     public PageDto<BoardListResponseDto> readAllBoards(String email, int page, int size) {
@@ -188,5 +188,61 @@ public class MyActivityService {
         Page<Item> pagedItems = itemRepository.findByLikedItemsBySido(email, sido, PageRequest.of(page - 1, size));
 
         return pagedItems.map(item -> ItemListResponseDto.fromEntity(item));
+    }
+
+    public ScheduleResponseDto readSchedule(Long scheduleId, String email) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // mates에 로그인한 사용자의 정보가 없을 경우 Exception 처리
+        if (!scheduleRepository.existsByUserEmailAndScheduleId(email, scheduleId)) {
+            log.error("{} {} 일정 접근 불가", user.getEmail(), schedule.getTitle());
+            throw new CustomException(ErrorCode.USER_NO_AUTH);
+        }
+
+        // 세부 계획 작성 페이지에 보일 메이트의 정보를 보여주기 위한 userList
+        List<Mates> mates = matesRepository.findAllBySchedule(schedule);
+        List<UserResponseDto> userResponses = readUserWriteSchedule(mates, schedule);
+        log.info("일정 메이트 수 : {}", userResponses.size());
+
+        LocalDate targetDate = schedule.getStartDate();
+        LocalDate endDate = schedule.getEndDate();
+
+        List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
+
+        while (targetDate.isBefore(endDate) || targetDate.isEqual(endDate)) {
+            scheduleItemResponses.add(readScheduleItemsAndItemPath(schedule, targetDate));
+
+            targetDate = targetDate.plusDays(1L);
+        }
+
+        return ScheduleResponseDto.fromEntity(schedule, userResponses, scheduleItemResponses);
+    }
+
+    private List<UserResponseDto> readUserWriteSchedule(List<Mates> mates, Schedule schedule) {
+        List<UserResponseDto> userResponses = new ArrayList<>();
+        for (Mates mate : mates) {
+            if (mate.getIsAccepted()) {
+                log.info("{} 일정 mates의 닉네임 : {}", schedule.getTitle(), mate.getUser().getNickname());
+                userResponses.add(UserResponseDto.fromEntity(mate.getUser()));
+            }
+        }
+
+        return userResponses;
+    }
+
+    private ScheduleItemResponseDto readScheduleItemsAndItemPath(Schedule schedule, LocalDate tourDate) {
+        List<ScheduleItem> scheduleItems = scheduleItemRepository.findAllByScheduleAndTourDateOrderByTurnAsc(schedule, tourDate);
+        List<ItemPath> itemPaths = itemPathRepository.findAllByScheduleAndTourDateOrderByTurn(schedule, tourDate);
+
+        List<ItemListResponseDto> itemListResponses = new ArrayList<>();
+        for (ScheduleItem scheduleItem : scheduleItems) {
+            itemListResponses.add(ItemListResponseDto.fromEntity(scheduleItem.getItem()));
+        }
+
+        List<ItemPathDto> itemPathDtos = itemPaths.stream().map(itemPath -> ItemPathDto.getItemPath(itemPath.getDistance(), itemPath.getDuration()))
+                .collect(Collectors.toList());
+
+        return ScheduleItemResponseDto.fromEntity(tourDate, itemListResponses, itemPathDtos);
     }
 }

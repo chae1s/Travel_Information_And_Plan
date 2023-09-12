@@ -29,17 +29,19 @@ public class BoardService {
     private final LikesBoardRepository likesBoardRepository;
 
     @Transactional
-    public void create(String email, BoardRequestDto dto) {
+    public Long create(String email, BoardRequestDto dto) {
         User writer = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        boardRepository.save(Board.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .user(writer)
-                .viewCnt(0)
-                .isDeleted(false)
-                .build());
+        return boardRepository.save(
+                Board.builder()
+                        .title(dto.getTitle())
+                        .content(dto.getContent())
+                        .user(writer)
+                        .viewCnt(0)
+                        .isDeleted(false)
+                        .build()
+        ).getId();
     }
 
 

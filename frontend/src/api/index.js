@@ -20,8 +20,32 @@ function createBoard(boardData) {
     return axiosInstance.post('/boards', boardData);
 }
 
-function readBoards() {
-    return axiosInstance.get('/boards');
+function readBoards(page) {
+    return axiosInstance.get('/boards?page=' + (page || 1));
+}
+
+function readBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function updateBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function deleteBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function createComment(boardId, dto) {
+    return axiosInstance.post(`boards/${ boardId }/comments`, dto);
+}
+
+function updateComment(boardId, dto) {
+    return axiosInstance.get('/boards/' + boardId, dto);
+}
+
+function deleteComment(boardId, dto) {
+    return axiosInstance.get('/boards/' + boardId, dto);
 }
 
 function uploadImage(image) {
@@ -33,7 +57,7 @@ function createSchedule(scheduleData) {
 }
 
 function readSchedule(scheduleId) {
-    return axiosInstance.get('/schedules/' + scheduleId)
+    return axiosInstance.get('/schedules/write/' + scheduleId)
 }
 
 function readLikedItemBySido(sido, page) {
@@ -83,6 +107,22 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
+function readAllMySchedules() {
+    return axiosInstance.get('/users/me/schedules')
+}
+
+function readMySchedule(scheduleId) {
+    return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
+}
+
+function readAllSchedules() {
+    return axiosInstance.get('/schedules')
+}
+
+function readBoardSchedule(scheduleId) {
+    return axiosInstance.get(`/schedules/${scheduleId}`)
+}
+
 
 function itemReview(itemId, reviewData) {
     return axiosInstance.post(`/item-detail/read/${itemId}`, reviewData)
@@ -100,7 +140,7 @@ function deleteReview(itemId, itemReviewId) {
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     createBoard, readBoards, uploadImage,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview
 };

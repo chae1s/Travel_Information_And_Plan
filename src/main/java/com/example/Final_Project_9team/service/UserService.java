@@ -109,7 +109,11 @@ public class UserService {
     // keyword가 포함된 email, nickname으로 회원 검색, 탈퇴회원 및 본인을 제외하고 반환
     // 해당 회원이 없을 경우 빈 리스트 반환
     public List<UserResponseDto> findUser(String keyword, String userEmail) {
-        log.info("user 검색");
+        log.info("user 검색: 검색어 \"{}\"", keyword);
+        // 검색어가 없을 경우 예외 (모든 회원이 조회되는 것 방지)
+        if (keyword == ""){
+            throw new CustomException(ErrorCode.ERROR_NO_KEYWORD);
+        }
         List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
         List<User> findByNickname = userRepository.findAllByNicknameContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
         List<User> mergedList = new ArrayList<>();

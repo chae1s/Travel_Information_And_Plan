@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.service;
 
 import com.example.Final_Project_9team.dto.CommentRequestDto;
+import com.example.Final_Project_9team.dto.CommentResponseDto;
 import com.example.Final_Project_9team.entity.Board;
 import com.example.Final_Project_9team.entity.Comment;
 import com.example.Final_Project_9team.entity.User;
@@ -23,24 +24,26 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public void create(String email, Long boardId, CommentRequestDto dto) {
+    public CommentResponseDto create(String email, Long boardId, CommentRequestDto dto) {
         User writer = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (!boardRepository.existsByIdAndIsDeletedFalse(boardId)) {
-            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
-        }
+        Board board =boardRepository.findByIdAndIsDeletedFalse(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+
 
         Comment newComment = Comment.builder()
                 .content(dto.getContent())
+                .parentId(dto.getParentId())
+                .board(board)
                 .user(writer)
                 .isDeleted(false)
                 .build();
 
-        commentRepository.save(newComment);
+        return CommentResponseDto.fromEntity(commentRepository.save(newComment));
     }
 
-    public void update(String email, Long boardId, Long commentId, CommentRequestDto dto) {
+    public CommentResponseDto update(String email, Long boardId, Long commentId, CommentRequestDto dto) {
         User writer = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -56,7 +59,7 @@ public class CommentService {
         }
 
         comment.updateContent(dto.getContent());
-        commentRepository.save(comment);
+        return CommentResponseDto.fromEntity(commentRepository.save(comment));
     }
 
     public void delete(String email, Long boardId, Long commentId) {

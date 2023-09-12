@@ -14,9 +14,24 @@ import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
 import ItemReview from "@/components/ItemReview.vue";
+import BoardList from "@/views/BoardList.vue";
+import BoardDetails from "@/views/BoardDetails.vue";
+import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
-//import UserInfoPw from "@/components/UserInfoPw.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
+import MyScheduleList from "@/components/MyScheduleList.vue";
+import MySchedulePost from "@/components/MySchedulePost.vue";
+import LikedItemList from "@/components/LikedItemList.vue";
+import MyBoardList from "@/components/MyBoardList.vue";
+import MyItemReviewList from "@/components/MyItemReviewList.vue";
+import MyCommentList from "@/components/MyCommentList.vue";
+import ScheduleBoardList from "@/views/ScheduleBoardList.vue";
+import ScheduleBoardPost from "@/views/ScheduleBoardPost.vue";
+import MatesResearcher from "@/components/MatesResearcher.vue";
+import UserLikedByMe from "@/components/UserLikedByMe.vue";
+import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
+import UserResearcher from "@/components/UserResearcher.vue";
+
 import ItemReviews from "@/views/itemReviews.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -74,6 +89,30 @@ const router = createRouter({
             component: BoardCreate
         },
 
+        // {
+        //     path: '/mypage',
+        //     name: 'MyPage',
+        //     component: MyPage,
+        // },
+        // {
+        //     path: '/my-info',
+        //     name: 'MyInfoView',
+        //     component: UserInfoView,
+        //     children: [
+        //         {path: 'update', name: 'update', component: UserInfo},
+        //     ]
+        // },
+        // { // 나중에 메이트 보기 리스트 있으면 이렇게
+        //     path: '/mate',
+        //     name: 'mage',
+        //     component: Mate,
+        //     children: [
+        //         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
+        //     ]
+        // },
+        {
+            path: '/mate-invitation', name: 'InvitationList', component: InvitationList
+        },
         {
             path: '/my-page',
             name: 'MyPageMain',
@@ -88,6 +127,22 @@ const router = createRouter({
                 {path: 'my-trip', name: 'MyTrip', children: [
                         {path: 'mate-invitation', name: 'InvitationList', component: InvitationList},
                         // {path: 'schedules', name: 'ScheduleList', component: ScheduleList}
+
+                        {path: 'liked-items', name: 'LikedItemList', component: LikedItemList}
+                    ]
+                },
+                {
+                    path: 'my-post',
+                    name: 'MyPost',
+                    children: [
+                        {path: 'schedules', name: 'ScheduleList', component: MyScheduleList, children: [
+                                {path: ':id', name: 'SchedulePost', component: MySchedulePost}
+                            ]
+                        },
+                        {path: 'boards', name: 'MyBoardList', component: MyBoardList},
+                        {path: 'review', name: 'MyItemReviewList', component: MyItemReviewList},
+                        {path: 'comments', name: 'MyCommentList', component: MyCommentList},
+                        {path: 'boards', name: 'BoardList'},
                     ]
                 }
 
@@ -97,7 +152,17 @@ const router = createRouter({
             path: '/map',
             name:'TravelMap',
             component: TravelMap
-        }
+        },
+        {
+            path: '/schedule-list',
+            name: 'ScheduleBoardList',
+            component: ScheduleBoardList
+        },
+        {
+            path: '/schedule-details/:id',
+            name: 'ScheduleBoardPost',
+            component: ScheduleBoardPost
+        },
     ]
 })
 

@@ -21,13 +21,12 @@ public class BoardController {
 
     // board 작성
     @PostMapping
-    public ResponseEntity<ResponseDto> create(
+    public ResponseEntity<Long> create(
             Authentication auth,
             @RequestBody BoardRequestDto dto
     ) {
-        boardService.create(auth.getName(), dto);
         return ResponseEntity.ok(
-                ResponseDto.getMessage(SuccessCode.CREATED.getMessage())
+                boardService.create(auth.getName(), dto)
         );
     }
 

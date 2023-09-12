@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users/me")
@@ -35,19 +37,16 @@ public class LikesUserController {
     // 내가 즐겨찾기한 회원 조회
     // GET /users/me/liked-user/to
     @GetMapping("/liked-user/to")
-    public ResponseEntity<Page<UserResponseDto>> readLikedUserByMe(
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+    public ResponseEntity<List<UserResponseDto>> readLikedUserByMe(
             Authentication auth) {
-        return ResponseEntity.status(HttpStatus.OK).body(likesUserService.readUserLikedByMe(auth.getName(), page, limit));
+        return ResponseEntity.status(HttpStatus.OK).body(likesUserService.readUserLikedByMe(auth.getName()));
     }
+
     // 나를 즐겨찾기한 회원 조회
     // GET /users/me/liked-user/from
     @GetMapping("/liked-user/from")
-    public ResponseEntity<Page<UserResponseDto>> readLikedUserMe(
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+    public ResponseEntity<List<UserResponseDto>> readLikedUserMe(
             Authentication auth) {
-        return ResponseEntity.status(HttpStatus.OK).body(likesUserService.readUserWhoLikedMe(auth.getName(), page, limit));
+        return ResponseEntity.status(HttpStatus.OK).body(likesUserService.readUserWhoLikedMe(auth.getName()));
     }
 }
