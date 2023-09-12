@@ -33,7 +33,9 @@
                             </li>
                         </ul>
                         <div class="selected_tour_date" v-if="clickItem" :style="{top: selectedPosition.top, left: selectedPosition.left}" >
-                            <div v-for="(tourRoute, dayIndex) in tourRouteList" @click="addItemToTourRoute(dayIndex, this.clickItem, this.clickItemIndex)">Day{{dayIndex + 1}} {{tourRoute.tourDateWithoutYear}}</div>
+                            <div v-for="dayIndex in scheduleData.period" @click="addItemToTourRoute(dayIndex - 1, this.clickItem, this.clickItemIndex)">
+                                Day{{dayIndex}} {{tourRouteList[dayIndex - 1].tourDateWithoutYear}}
+                            </div>
                         </div>
                         <v-img src="@/assets/images/icons/chevron-right-circle.png" alt="" width="24" height="24" inline class="mx-0 my-auto liked_icon_button" @click="nextPageLikedItem"/>
                     </div>
@@ -48,7 +50,7 @@
                     <div class="schedule_route">
                         <div v-for="(tourRoute, dayIndex) in tourRouteList" :key="dayIndex"  class="schedule_daily_route" @click="createRouteList(dayIndex)">
                             <div class="daily_route_header">
-                                <div class="tour_day_num">Day{{dayIndex + 1}}</div>
+                                <div class="tour_day_num" v-if="dayIndex<scheduleData.period">Day{{dayIndex + 1}}</div>
                                 <div class="tour_date">{{tourRoute.tourDateWithoutYear}}</div>
                             </div>
                             <ul class="schedule_daily_item_list" @dragover.prevent="onDragOver($event, dayIndex, -1)" @drop="onDrop($event, dayIndex, -1)">
@@ -75,7 +77,8 @@
                         </div>
                     </div>
                     <div class="schedule_button_wrap">
-                        <button class="schedule_button" type="button" @click="createScheduleItems">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="createScheduleItems" v-if="!isUpdate">일정 생성</button>
+                        <button class="schedule_button" type="button" @click="updateScheduleItems" v-else>일정 수정</button>
                     </div>
                 </div>
             </div>
@@ -89,7 +92,13 @@ import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
 import MatesResearcher from '@/components/MatesResearcher.vue';
 import dayjs from 'dayjs';
-import {readSchedule, readLikedItemBySido, createRouteList, createScheduleItems} from "@/api/index";
+import {
+    readSchedule,
+    readLikedItemBySido,
+    createRouteList,
+    createScheduleItems,
+    updateScheduleItems
+} from "@/api/index";
 export default {
     name: "MakeScheduleDetail",
     components: {LocationCheckbox, Calendar, MatesResearcher},
@@ -117,7 +126,8 @@ export default {
             likedItemPage: 1,
             likedItemTotalPage: 0,
             showMatesInvitationComponent: false,
-            dragData: {}
+            dragData: {},
+            isUpdate: false
         }
     },
     mounted() {
@@ -136,11 +146,21 @@ export default {
                 this.scheduleData.period = data.period
                 this.scheduleData.users = data.userResponses
 
-                this.createMap(data.sido)
+                let scheduleItems = data.scheduleItemResponses
 
+                this.createMap(data.sido)
                 this.readLikedItem(this.scheduleData.sido, this.likedItemPage)
 
                 this.createTourDate()
+
+
+                if (scheduleItems) {
+                    console.log('수정페이지')
+                    this.isUpdate = true
+                    this.InsertListTourDateAndPath(scheduleItems);
+                }
+
+
             } catch (error) {
                 console.log(error)
             }
@@ -153,7 +173,7 @@ export default {
             script.defer = true
             document.head.appendChild(script)
 
-            if (this.scheduleData.sido === '0') this.zoom = 8
+            if (this.scheduleData.sido === '0') this.zoom = 7
             else if (this.scheduleData.sido === '2') this.zoom = 10
 
             script.onload = () => {
@@ -206,6 +226,44 @@ export default {
 
                 firstDate.setDate(firstDate.getDate() + 1)
             }
+        },
+        InsertListTourDateAndPath(scheduleItems) {
+            for (let i = 0; i < scheduleItems.length; i++) {
+                if (i < this.scheduleData.period) {
+                    this.tourRouteList[i].tourDestination = scheduleItems[i].itemListResponses
+                    this.itemPath[i].tourPaths = scheduleItems[i].itemPaths
+                } else {
+                    this.tourRouteList.push({
+                        tourDate: '',
+                        tourDateWithoutYear: '',
+                        tourDestination: scheduleItems[i].itemListResponses
+                    })
+                    this.itemPath.push({
+                        tourDate: '',
+                        tourPaths: scheduleItems[i].itemPaths
+                    })
+                }
+
+                this.InsertSelectedLikeItem(scheduleItems[i].itemListResponses)
+                this.totalDurationAndDistance(scheduleItems[i].itemPaths, i)
+            }
+
+            console.log(this.selectedItemList)
+        },
+        InsertSelectedLikeItem(itemList) {
+            for (let i = 0; i < itemList.length; i++) {
+                this.selectedItemList.push(itemList[i].id)
+            }
+        },
+        totalDurationAndDistance(itemPaths, index) {
+            let dateTotalDistance = 0
+            let dateTotalDuration = 0
+            for (let i = 0; i < itemPaths.length; i++) {
+                dateTotalDistance += itemPaths[i].distance
+                dateTotalDuration += itemPaths[i].duration
+            }
+
+            this.itemPath[index].tourPaths.push({distance: dateTotalDistance, duration: dateTotalDuration})
         },
         selectedLikedItem(item, itemIndex, event) {
             this.clickItem = item
@@ -348,7 +406,7 @@ export default {
             try {
                 if (this.checkedEmptyDestination()) {
                     const { data } = await createScheduleItems(this.scheduleId);
-
+                    alert("여행 계획이 모두 작성되었습니다.")
                     this.moveSchedulePosts(this.scheduleId)
                 }
 
@@ -358,6 +416,15 @@ export default {
         },
         showMatesInvitation() {
             this.showMatesInvitationComponent = !this.showMatesInvitationComponent;
+        },
+        async updateScheduleItems() {
+            try {
+                const { data } = await updateScheduleItems(this.scheduleId)
+                alert("여행 계획이 모두 수정되었습니다.")
+                this.moveSchedulePosts(this.scheduleId)
+            } catch (error) {
+                console.log(error)
+            }
         },
     },
 }

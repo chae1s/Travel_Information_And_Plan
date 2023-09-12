@@ -9,7 +9,10 @@
             <div class="schedule_mates">
                 <span v-for="user in scheduleData.users" :key="user">{{ user.nickname }}</span>
             </div>
-            <div class="show_schedule" v-if="!scheduleData.isDisplay">공유하기</div>
+            <div class="schedule_edit">
+                <div v-if="checkedDate" @click="moveUpdateSchedule(scheduleId)">수정하기</div>
+                <div class="show_schedule" v-if="!scheduleData.isDisplay" @click="updateDisplay(scheduleId)">공유하기</div>
+            </div>
         </div>
         <div class="schedule_contents">
             <div id="map" class="schedule_map">
@@ -37,12 +40,12 @@
                             <div class="destination_address">{{ item.fullAddress }}</div>
                             <div class="destination_information">{{ item.category }}</div>
                             <div v-if="i < itemPathList[defaultDate - 1].length" class="schedule_route_info">
-                                <div>이동시간 : {{ itemPathList[defaultDate - 1][i].duration }}</div>
-                                <div>이동거리 : {{ itemPathList[defaultDate - 1][i].distance }}</div>
+                                <div>이동시간 : {{ itemPathList[defaultDate - 1][i].duration }}분</div>
+                                <div>이동거리 : {{ itemPathList[defaultDate - 1][i].distance }}km</div>
                             </div>
                             <div v-if="i === itemPathList[defaultDate - 1].length" class="schedule_route_info">
-                                <div>총 이동시간 : {{ totalDuration[defaultDate - 1] }}</div>
-                                <div>총 이동거리 : {{ totalDistance[defaultDate - 1] }}</div>
+                                <div>총 이동시간 : {{ totalDuration[defaultDate - 1] }}분</div>
+                                <div>총 이동거리 : {{ totalDistance[defaultDate - 1] }}km</div>
                             </div>
                         </div>
                     </li>
@@ -54,7 +57,7 @@
 
 <script>
 import locations from "@/assets/locations";
-import {readMySchedule} from "@/api/index";
+import {readMySchedule, updateScheduleDisplay} from "@/api/index";
 import dayjs from "dayjs";
 
 export default {
@@ -79,7 +82,8 @@ export default {
             totalDuration: [],
             totalDistance: [],
             zoom: 11,
-            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF']
+            polylineHex: ['#C4DFFF', '#FFE866', '#72D3B6', '#FFC7C2', '#B3B9FF'],
+            nowDate: dayjs(new Date()).format("YYYY.MM.DD")
         }
     },
     mounted() {
@@ -181,6 +185,30 @@ export default {
                 })
             })
         },
+
+        checkedDate() {
+            if (this.nowDate > this.scheduleData.endDate) {
+                return false
+            }
+        },
+        moveUpdateSchedule(id) {
+            this.$router.push('/schedules/update/'+id)
+        },
+
+        async updateDisplay(id) {
+            try {
+                console.log('checked')
+                const checked = confirm('일정을 공개하시겠습니까?')
+                if (checked) {
+                    const { data } = await updateScheduleDisplay(id)
+                    alert('일정이 공개되었습니다.')
+                    this.scheduleData.isDisplay = true
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+
     }
 }
 </script>
@@ -212,15 +240,20 @@ export default {
         margin-right: 0;
     }
 
-    .show_schedule {
+    .schedule_edit {
         margin-right: 14px;
         font-size: 14px;
         color: #565656;
         margin-bottom: 9px;
         margin-top: -16px;
-        cursor: pointer;
         display: inline-block;
         float: right;
+    }
+
+    .schedule_edit div {
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 14px;
     }
 
     .schedule_map {

@@ -28,7 +28,7 @@ export default {
                     sidebarTitle: '커뮤니티',
                     sidebarList: ['여행 후기 게시판', '여행 일정 게시판'],
                     sidebarRouter: ['/schedule-list', '/schedule-list']
-                }
+                },
 
         }
     },

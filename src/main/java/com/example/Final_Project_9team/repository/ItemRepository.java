@@ -34,7 +34,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                     "AND li.isLike = true " +
                     "ORDER BY li.id DESC "
     )
-    Page<Item> findByLikedItemsBySido(@Param("email") String email, @Param("sido") String sido, Pageable pageable);
+    Page<Item> findAllByLikedItemsBySido(@Param("email") String email, @Param("sido") String sido, Pageable pageable);
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido")
     Page<Item> findBySido(@Param("sido")String sido, Pageable pageable);
     @Query("SELECT a FROM Item a WHERE a.location.sido = :sido")
