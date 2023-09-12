@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ItemPathRepository extends JpaRepository<ItemPath, Long> {
     List<ItemPath> findAllByScheduleAndTourDateOrderByTurn(Schedule schedule, LocalDate tourDate);
+
+    List<ItemPath> findAllBySchedule(Schedule schedule);
 }

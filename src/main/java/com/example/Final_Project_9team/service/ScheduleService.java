@@ -90,12 +90,23 @@ public class ScheduleService {
         List<Mates> mates = matesRepository.findAllBySchedule(schedule);
         List<UserResponseDto> userResponses = readUserWriteSchedule(mates, schedule);
 
-        return ScheduleResponseDto.fromEntity(schedule, userResponses, period);
+        if (!scheduleItemRepository.existsByScheduleId(schedule.getId())) {
+            log.info("기존에 등록된 여행지 없음.");
+            return ScheduleResponseDto.fromEntity(schedule, userResponses, period);
+        }
+
+        log.info("기존에 등록된 여행지 존재");
+        LocalDate targetDate = schedule.getStartDate();
+        LocalDate endDate = schedule.getEndDate();
+
+        List<ScheduleItemResponseDto> scheduleItemResponses = readScheduleItemsAndItemPathAllDay(schedule);
+
+        return ScheduleResponseDto.fromEntity(schedule, userResponses, scheduleItemResponses);
 
     }
 
     // 여행 일정 기간동안의 계획 한 번에 저장
-    public void createScheduleItems(Long scheduleId) {
+    public void createOrUpdateScheduleItems(Long scheduleId, boolean isUpdate) {
 
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
         LocalDate targetDate = schedule.getStartDate();
@@ -103,6 +114,15 @@ public class ScheduleService {
 
         int totalDistance = 0;
         int totalDuration = 0;
+
+        // 스케줄 수정이면 기존의 schedulePath, itemPath 모두 삭제
+        if (isUpdate) {
+            List<ScheduleItem> scheduleItems = scheduleItemRepository.findAllBySchedule(schedule);
+            List<ItemPath> itemPaths = itemPathRepository.findAllBySchedule(schedule);
+            log.info("수정 전 scheduleItems: {}개, itemPaths: {}개 삭제", scheduleItems.size(), itemPaths.size() );
+            scheduleItemRepository.deleteAll(scheduleItems);
+            itemPathRepository.deleteAll(itemPaths);
+        }
 
         while (targetDate.isBefore(endDate) || targetDate.isEqual(endDate)) {
             String id = String.format("no%d%s", scheduleId, targetDate);
@@ -123,6 +143,7 @@ public class ScheduleService {
         schedule.updateDurationAndDistance(totalDuration, totalDistance);
         scheduleRepository.save(schedule);
     }
+
 
     public List<ItemPathDto> createRouteInformation(Long scheduleId, ScheduleItemRequestDto scheduleItemRequest) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -186,8 +207,8 @@ public class ScheduleService {
         }
     }
 
-    private void updateDisplay(String email, Long scheduleId) {
-        User user = userRepository.findByEmail(email).get();
+    public void updateDisplay(Long scheduleId, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = scheduleRepository.findByIdAndIsDeletedFalse(scheduleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -404,5 +425,41 @@ public class ScheduleService {
                 .collect(Collectors.toList());
 
         return ScheduleItemResponseDto.fromEntity(tourDate, itemListResponses, itemPathDtos);
+    }
+
+    public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto dto, String email) {
+        // 로그인한 유저 정보 가져오기
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        // 일정 등록
+        schedule.updateSchedule(dto);
+
+        schedule = scheduleRepository.save(schedule);
+        log.info("일정 {} 수정 완료", schedule.getTitle());
+
+
+        return ScheduleResponseDto.fromEntity(schedule);
+    }
+
+    // 일정을 수정할 때 사용하는 메소드
+    private List<ScheduleItemResponseDto> readScheduleItemsAndItemPathAllDay(Schedule schedule) {
+        List<ScheduleItem> scheduleItems = scheduleItemRepository.findAllByScheduleOrderByTurnAsc(schedule);
+
+
+        LocalDate startDate = scheduleItems.get(0).getTourDate();       // 여행 첫 번째 날짜
+        LocalDate endDate = scheduleItems.get(scheduleItems.size() - 1).getTourDate();      // 여행 마지막 날짜
+
+
+        List<ScheduleItemResponseDto> scheduleItemResponses = new ArrayList<>();
+
+        while (startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
+            scheduleItemResponses.add(readScheduleItemsAndItemPath(schedule, startDate));
+
+            startDate = startDate.plusDays(1L);
+        }
+
+        return scheduleItemResponses;
     }
 }
