@@ -124,12 +124,17 @@ function updateScheduleItems(scheduleId) {
     return axiosInstance.put(`/schedules/${scheduleId}/schedule-items`)
 }
 
+function updateScheduleDisplay(scheduleId) {
+    return axiosInstance.put(`/schedules/${scheduleId}/display`)
+}
+
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
+    updateScheduleDisplay,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem
 };

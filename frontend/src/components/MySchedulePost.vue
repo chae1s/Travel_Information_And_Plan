@@ -10,8 +10,8 @@
                 <span v-for="user in scheduleData.users" :key="user">{{ user.nickname }}</span>
             </div>
             <div class="schedule_edit">
-                <div class="" v-if="checkedDate" @click="moveUpdateSchedule(scheduleId)">수정하기</div>
-                <div class="show_schedule" v-if="!scheduleData.isDisplay">공유하기</div>
+                <div v-if="checkedDate" @click="moveUpdateSchedule(scheduleId)">수정하기</div>
+                <div class="show_schedule" v-if="!scheduleData.isDisplay" @click="updateDisplay(scheduleId)">공유하기</div>
             </div>
         </div>
         <div class="schedule_contents">
@@ -57,7 +57,7 @@
 
 <script>
 import locations from "@/assets/locations";
-import {readMySchedule} from "@/api/index";
+import {readMySchedule, updateScheduleDisplay} from "@/api/index";
 import dayjs from "dayjs";
 
 export default {
@@ -193,6 +193,20 @@ export default {
         },
         moveUpdateSchedule(id) {
             this.$router.push('/schedules/update/'+id)
+        },
+
+        async updateDisplay(id) {
+            try {
+                console.log('checked')
+                const checked = confirm('일정을 공개하시겠습니까?')
+                if (checked) {
+                    const { data } = await updateScheduleDisplay(id)
+                    alert('일정이 공개되었습니다.')
+                    this.scheduleData.isDisplay = true
+                }
+            } catch (error) {
+                console.log(error)
+            }
         },
 
     }
