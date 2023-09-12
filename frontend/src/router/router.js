@@ -131,7 +131,6 @@ const router = createRouter({
                         {path: 'boards', name: 'MyBoardList', component: MyBoardList},
                         {path: 'review', name: 'MyItemReviewList', component: MyItemReviewList},
                         {path: 'comments', name: 'MyCommentList', component: MyCommentList},
-                        {path: 'boards', name: 'BoardList'},
                     ]
                 }
 
