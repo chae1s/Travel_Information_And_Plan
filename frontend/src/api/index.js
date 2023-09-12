@@ -136,12 +136,25 @@ function updateScheduleDisplay(scheduleId) {
 }
 
 
+function itemReview(itemId, reviewData) {
+    return axiosInstance.post(`/item-detail/read/${itemId}`, reviewData)
+}
+function updateReview(itemId, itemReviewId, content) {
+    const apiUrl = `/item-detail/read/${itemId}/reviews/${itemReviewId}`;
+    return axiosInstance.put(apiUrl, { content });
+}
+
+function deleteReview(itemId, itemReviewId) {
+    const apiUrl = `/item-detail/read/${itemId}/reviews/${itemReviewId}`;
+    return axiosInstance.delete(apiUrl);
+}
+
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
     updateScheduleDisplay,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
-    bookmarkItem
+    bookmarkItem, itemReview, updateReview, deleteReview
 };
 

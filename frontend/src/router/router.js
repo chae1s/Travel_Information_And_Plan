@@ -13,9 +13,9 @@ import MyPageMain from "@/views/MyPageMain.vue";
 import Password from "@/components/Password.vue";
 import MyPageDelete from "@/components/UserDelete.vue";
 import UserDelete from "@/components/UserDelete.vue";
+import ItemReview from "@/components/ItemReview.vue";
 import BoardList from "@/views/BoardList.vue";
 import BoardDetails from "@/views/BoardDetails.vue";
-import ItemReview from "@/views/ItemReview.vue";
 import TravelMap from "@/views/TravelMap.vue";
 import UserInfoEdit from "@/components/UserInfoEdit.vue";
 import MyScheduleList from "@/components/MyScheduleList.vue";
@@ -32,6 +32,7 @@ import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
 import UserResearcher from "@/components/UserResearcher.vue";
 import UpdateSchedule from "@/views/UpdateSchedule.vue";
 
+import ItemReviews from "@/views/itemReviews.vue";
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -69,6 +70,12 @@ const router = createRouter({
             path: '/item-detail/read/:id',
             name: "ItemDetail",
             component: ItemDetail,
+            props: true
+        },
+        {
+            path: '/item-detail/read/:id/reviews',
+            name: 'ItemReviews',
+            component: ItemReviews,
             props: true
         },
         {

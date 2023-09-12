@@ -41,6 +41,7 @@ export default {
     },
     methods: {
         clickFunc() {
+            this.checkedSigungu = [];
             this.$emit('checkedClick', this.checkedSido);
             console.log("checkedSido:",this.checkedSido)
             //this.getSigunguCode(this.checkedSido);
