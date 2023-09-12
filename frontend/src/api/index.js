@@ -107,12 +107,27 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
+function readAllMySchedules() {
+    return axiosInstance.get('/users/me/schedules')
+}
+
+function readMySchedule(scheduleId) {
+    return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
+}
+
+function readAllSchedules() {
+    return axiosInstance.get('/schedules')
+}
+
+function readBoardSchedule(scheduleId) {
+    return axiosInstance.get(`/schedules/${scheduleId}`)
+}
+
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
-    createBoard, readBoards, uploadImage, readBoard, updateBoard, deleteBoard,
-    createComment, updateComment, deleteComment,
-    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList,
+    createBoard, readBoards, uploadImage,
+    createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,
     bookmarkItem
 };

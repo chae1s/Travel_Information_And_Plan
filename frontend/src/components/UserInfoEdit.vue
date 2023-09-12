@@ -241,10 +241,6 @@ export default {
     min-width: 500px;
 }
 
-.my_page {
-    /*background-color: #42b983;*/
-}
-
 .my_page_profile_image {
     display: flex;
     flex-direction: column;
@@ -252,11 +248,16 @@ export default {
     margin-right: 40px;
 }
 
+.rounded-circle {
+    border: 1px solid #ccc;
+}
+
 .my_page_profile_change {
     display: inline-block;
     font-size: 16px;
     cursor: pointer;
 }
+
 
 .my_page_profile_delete {
     display: inline-block;
