@@ -12,6 +12,10 @@ function updateUserInfo(userData) {
     return axiosInstance.put('/users/me', userData, { headers });
 }
 
+function updateUserPassword(userData) {
+    return axiosInstance.put('/users/me/password', userData)
+}
+
 function deleteUser() {
     return axiosInstance.put('/users/me/delete');
 }
@@ -170,7 +174,7 @@ function deleteReview(itemId, itemReviewId) {
 }
 
 export {
-    loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
+    loginUser, readUserInfo, updateUserInfo, findUser, updateUserPassword, deleteUser, checkPassword,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, updateBoard, deleteBoard, uploadImage, readBoard,
     createComment,updateComment, deleteComment,

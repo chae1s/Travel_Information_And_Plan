@@ -50,7 +50,7 @@ public class UserService {
     public void registerUser(UserSignupDto dto) {
         log.info("회원가입: 비밀번호 입력 확인");
         if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            throw new CustomException(ErrorCode.UNMATCHED_PASSWORD);
         }
         log.info("회원가입: email 중복 확인 {}", dto.getEmail());
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -204,16 +204,22 @@ public class UserService {
     @Transactional
     public void updateUserPassword(UserUpdatePwDto dto, String email) {
         User user = userUtils.getUser(email);
-        log.info("비밀번호 수정: 비밀번호 입력 확인");
-        if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            log.info("login: 비밀번호 불일치");
+        log.info("비밀번호 수정");
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            log.info("비밀번호 불일치");
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
         if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            log.info("비밀번호 확인과 입력 틀림");
+            throw new CustomException(ErrorCode.UNMATCHED_PASSWORD);
+        }
+        if (passwordEncoder.matches(dto.getCurrentPassword(), dto.getPassword())) {
+            log.info("기존과 동일한 비밀번호");
+            throw new CustomException(ErrorCode.ALREADY_USED_PASSWORD);
         }
         user.updatePassword(passwordEncoder.encode(dto.getPassword()));
         userRepository.save(user);
+        log.info("비밀번호 수정 완료");
     }
 
     // 회원탈퇴

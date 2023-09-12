@@ -91,8 +91,8 @@ public class UserController {
 //    }
 
     // 비밀번호 수정
-    // PUT /users/me/pass-word
-    @PutMapping("/me/pass-word")
+    // PUT /users/me/password
+    @PutMapping("/me/password")
     public ResponseEntity<ResponseDto> updateUserPassword(@Valid @RequestBody UserUpdatePwDto dto, Authentication auth) {
         userService.updateUserPassword(dto, auth.getName());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto().getMessage("비밀번호가 수정되었습니다."));
