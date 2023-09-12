@@ -20,8 +20,32 @@ function createBoard(boardData) {
     return axiosInstance.post('/boards', boardData);
 }
 
-function readBoards() {
-    return axiosInstance.get('/boards');
+function readBoards(page) {
+    return axiosInstance.get('/boards?page=' + (page || 1));
+}
+
+function readBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function updateBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function deleteBoard(boardId) {
+    return axiosInstance.get('/boards/' + boardId);
+}
+
+function createComment(boardId, dto) {
+    return axiosInstance.post(`boards/${ boardId }/comments`, dto);
+}
+
+function updateComment(boardId, dto) {
+    return axiosInstance.get('/boards/' + boardId, dto);
+}
+
+function deleteComment(boardId, dto) {
+    return axiosInstance.get('/boards/' + boardId, dto);
 }
 
 function uploadImage(image) {
@@ -61,23 +85,6 @@ function createScheduleItems(scheduleId) {
 function findUser(keyword) {
     return axiosInstance.get(`/users?q=${keyword}`)
 }
-
-function likeUser(toUserId) {
-    return axiosInstance.post(`/users/me/liked-user/${toUserId}`)
-}
-
-function unLikeUser(toUserId) {
-    return axiosInstance.put(`/users/me/liked-user/${toUserId}`)
-}
-
-function readUserLikedByMe(userData) {
-    return axiosInstance.get(`/users/me/liked-user/to`)
-}
-
-function readUserLikedMe(userData) {
-    return axiosInstance.get(`/users/me/liked-user/from`)
-}
-
 
 // 현재 회원의 모든 정보 조회
 function readUserInfo(userData) {
@@ -119,7 +126,6 @@ function readBoardSchedule(scheduleId) {
 
 export {
     registerUser, loginUser, readUserInfo, updateUserInfo, findUser,
-    likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, uploadImage,
     createSchedule, createScheduleItems, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList,inviteUserToSchedule,

@@ -1,6 +1,7 @@
 package com.example.Final_Project_9team.controller;
 
 import com.example.Final_Project_9team.dto.CommentRequestDto;
+import com.example.Final_Project_9team.dto.CommentResponseDto;
 import com.example.Final_Project_9team.dto.ResponseDto;
 import com.example.Final_Project_9team.exception.SuccessCode;
 import com.example.Final_Project_9team.repository.CommentRepository;
@@ -18,28 +19,27 @@ public class CommentController {
 
     // comment 작성
     @PostMapping
-    public ResponseEntity<ResponseDto> create(
+    public ResponseEntity<CommentResponseDto> create(
             Authentication auth,
             @PathVariable("boardId") Long boardId,
             @RequestBody CommentRequestDto dto
             ) {
-        commentService.create(auth.getName(), boardId, dto);
+
         return ResponseEntity.ok(
-                ResponseDto.getMessage(SuccessCode.CREATED.getMessage())
+                commentService.create(auth.getName(), boardId, dto)
         );
     }
 
     // comment 수정
     @PutMapping("{commentId}")
-    public ResponseEntity<ResponseDto> update(
+    public ResponseEntity<CommentResponseDto> update(
             Authentication auth,
             @PathVariable("boardId") Long boardId,
             @PathVariable("commentId") Long commentId,
             @RequestBody CommentRequestDto dto
     ) {
-        commentService.update(auth.getName(), boardId, commentId, dto);
         return ResponseEntity.ok(
-                ResponseDto.getMessage(SuccessCode.SUCCESS.getMessage())
+                commentService.update(auth.getName(), boardId, commentId, dto)
         );
     }
 
