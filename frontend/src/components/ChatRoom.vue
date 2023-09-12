@@ -25,10 +25,10 @@
         <template v-if="message.dateChanged">
           <div class="date-change">{{ message.date }}</div>
         </template>
-        <div class="chat-message" :class="{ 'sent-message': message.sender === '나' || message.sender === this.nickname}">
+        <div v-if="!message.empty" class="chat-message" :class="{ 'sent-message': message.sender === '나' || message.sender === this.nickname}">
           <div class="message-sender">{{ message.sender }}</div>
           <div class="message-text">{{ message.message }}</div>
-          <div class="message-time">{{ formatTime(message.time) }}</div>
+          <div class="message-time">{{ message.time ? formatTime(message.time) : '' }}</div>
         </div>
       </div>
     </div>
@@ -104,8 +104,12 @@ export default {
           console.log("nickname="+this.nickname);
           console.log("message="+message.message)
           // 메시지를 보낸 사용자가 '나'일 경우 닉네임으로 변경
-          if (message.sender === this.nickname) {
-            message.sender = '나';
+          // if (message.sender === this.nickname) {
+          //   message.sender = '나';
+          // }
+          // 빈 메시지일 경우 플래그 설정
+          if (!message.message) {
+            message.empty = true;
           }
         });
       } catch (error) {
