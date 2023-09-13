@@ -1,10 +1,6 @@
 import axiosInstance from '@/store/interceptor.js';
 
 
-function registerUser(userData) {
-    return axiosInstance.post('users/register', userData);
-}
-
 function loginUser(userData) {
   return axiosInstance.post('/users/login', userData);
 }
@@ -14,6 +10,14 @@ function updateUserInfo(userData) {
         'Content-Type': 'multipart/form-data'
     };
     return axiosInstance.put('/users/me', userData, { headers });
+}
+
+function deleteUser() {
+    return axiosInstance.put('/users/me/delete');
+}
+
+function checkPassword(userData) {
+    return axiosInstance.post('/users/check/verify-password',userData);
 }
 
 function createBoard(boardData) {
@@ -179,13 +183,15 @@ function sendChatMessage(roomId,messageData) {
     return axiosInstance.post(`/schedules/chat/rooms/${roomId}/send`,messageData)
 }
 export {
-    registerUser, loginUser, updateUserInfo,
-    createBoard, readBoards, uploadImage, readBoard, createComment,
-    createSchedule, readSchedule, readLikedItemBySido, createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule, updateSchedule, updateScheduleItems,
-    updateScheduleDisplay,
-    bookmarkItem, itemReview, updateReview, deleteReview,
-    likeUser, unLikeUser, readUserLikedByMe, readUserLikedMe,
-    readInvitations, acceptInvitation, rejectInvitation, createScheduleItems, findUser, findInvitationList,inviteUserToSchedule,
-    getChatRooms,getChatRoomData,getChatMessages,sendChatMessage,readUserInfo
+    loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
+    likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
+    createBoard, readBoards, updateBoard, deleteBoard, uploadImage, readBoard,
+    createComment,updateComment, deleteComment,
+    createSchedule, createScheduleItems, readSchedule,
+    createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
+    updateScheduleDisplay, updateSchedule, updateScheduleItems,
+    readInvitations, acceptInvitation, rejectInvitation, findInvitationList, inviteUserToSchedule,
+    bookmarkItem, itemReview, updateReview, deleteReview, readLikedItemBySido,
+    getChatRooms,getChatRoomData,getChatMessages,
 };
 
