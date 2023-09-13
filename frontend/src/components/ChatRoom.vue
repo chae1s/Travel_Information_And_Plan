@@ -8,10 +8,10 @@
           <!--          <router-link :to="'/schedules/' + scheduleId + '/schedule-items/chat-room-list'">-->
           <!--          <router-link :to="{ name: 'ChatRoomList' }">-->
 
-            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px"
-                   class="to-room-list" :inline="true"
-                   @click="redirectToChatRoomList()"
-            />
+<!--            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px"-->
+<!--                   class="to-room-list" :inline="true"-->
+<!--                   @click="redirectToChatRoomList()"-->
+<!--            />-->
         </div>
         <div class="chatRoom-data-image"></div>
         <div class="chatRoom-data-text">
