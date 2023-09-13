@@ -26,12 +26,14 @@
     "roboto-fontface": "*",
     "sass": "^1.66.1",
     "sass-loader": "^13.3.2",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.2.13",
     "vue-router": "^4.2.4",
     "vuetify": "^3.0.0-beta.0",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0",
-    "webfontloader": "^1.0.0"
+    "webfontloader": "^1.0.0",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
