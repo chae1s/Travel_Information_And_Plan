@@ -41,10 +41,10 @@
                     </div>
                     <div class="schedule_view">
                         <div class="schedule_map" id="map">
-
                         </div>
+                      <!--   채팅방 추가     /-->
                         <div class="schedule_chat">
-
+                            <ChatRoom v-bind:scheduleId="scheduleId"></ChatRoom>
                         </div>
                     </div>
                     <div class="schedule_route">
@@ -91,6 +91,9 @@ import Calendar from "@/components/Calendar.vue";
 import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import locations from "@/assets/locations";
 import MatesResearcher from '@/components/MatesResearcher.vue';
+import ChatRoomList from "@/components/ChatRoomList.vue";
+import ChatRoom from "@/components/ChatRoom.vue";
+
 import dayjs from 'dayjs';
 import {
     readSchedule,
@@ -101,7 +104,7 @@ import {
 } from "@/api/index";
 export default {
     name: "MakeScheduleDetail",
-    components: {LocationCheckbox, Calendar, MatesResearcher},
+    components: {LocationCheckbox, Calendar, MatesResearcher, ChatRoomList, ChatRoom},
     data() {
         return {
             scheduleId : this.$route.params.id,

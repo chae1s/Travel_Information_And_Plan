@@ -30,6 +30,9 @@ import UserWhoLikedMe from "@/components/UserWhoLikedMe.vue";
 import UserResearcher from "@/components/UserResearcher.vue";
 
 import ItemReviews from "@/views/itemReviews.vue";
+import ChatRoom from "@/components/ChatRoom.vue";
+import ChatRoomList from "@/components/ChatRoomList.vue";
+
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
@@ -38,6 +41,54 @@ const router = createRouter({
             name: 'Home',
             component: Home
         },
+        {
+            path: '/schedules/write',
+            name: 'MakeSchedule',
+            component: MakeSchedule
+        },
+        {
+            path: '/schedules/:id/schedule-items',
+            name: 'MakeScheduleDetail',
+            component: MakeScheduleDetail,
+            children: [
+                {
+                    path: 'chat', // ChatRoom에 동적 파라미터 제거
+                    name: 'Chat',
+                    component: ChatRoom,
+                    props: true
+                },
+                {
+                    path: 'chat-room-list',
+                    name: 'ChatRoomList',
+                    component: ChatRoomList,
+                    props: true
+                }
+            ]
+        },
+        // {
+        //     path: '/chat-room-list',
+        //     name:'ChatRoomList',
+        //     component: ChatRoomList,
+        //     props: true
+        // },
+        // {
+        //     path:'/chat/:id',
+        //     name: 'Chat',
+        //     component: ChatRoom,
+        //     props: true
+        // },
+        // {
+        //     path: '/chat/:id',
+        //     name: 'ChatRoom',
+        //     component:ChatRoom, props:true
+        // },
+        // {
+        //     path: '/chat-room-list',
+        //     name:'ChatRoomList',
+        //     component: ChatRoomList,
+        // },
+
+
         {
             path: '/sign-up',
             name: 'SignUp',
