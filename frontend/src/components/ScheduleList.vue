@@ -26,6 +26,10 @@
             </tr>
             </tbody>
         </table>
+        <Pagination
+            :totalPages="totalPages"
+            @page-changed="handlePageChange"
+        />
     </div>
 </template>
 
@@ -33,9 +37,11 @@
 import {readAllSchedules} from "@/api";
 import locations from "@/assets/locations";
 import dayjs from "dayjs";
+import Pagination from "@/components/Pagination.vue";
 
 export default {
     name: "ScheduleList",
+    components: {Pagination},
     data() {
         return {
             showSchedulePost: false,
@@ -47,7 +53,8 @@ export default {
                 startDate: '',
                 endDate: ''
             },
-            scheduleList: [{}]
+            scheduleList: [{}],
+            totalPages: 1,
         }
     },
     mounted() {
@@ -57,9 +64,9 @@ export default {
         moveSchedulePost(id) {
             this.$router.push(`/schedule-details/${id}`);
         },
-        async fetchSchedules() {
+        async fetchSchedules(page) {
             try {
-                const {data} = await readAllSchedules()
+                const {data} = await readAllSchedules(page)
                 console.log(data)
                 this.scheduleList = data.content.map(schedule => ({
                     id: schedule.id,
@@ -73,7 +80,12 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        async handlePageChange(page) {
+            console.log(`페이지 변경: ${page}`);
+            this.currentPage = page;
+            await this.fetchSchedules(page); // 페이지가 변경될 때마다 게시글 목록을 가져옴
+        },
     },
 }
 </script>
