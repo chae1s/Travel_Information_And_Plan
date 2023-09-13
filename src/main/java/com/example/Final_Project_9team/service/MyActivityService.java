@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class MyActivityService {
     private final MatesRepository matesRepository;
     private final ScheduleItemRepository scheduleItemRepository;
     private final ItemPathRepository itemPathRepository;
+    private final LikesItemRepository likesItemRepository;
 
 
     public PageDto<BoardListResponseDto> readAllBoards(String email, int page, int size) {
@@ -152,20 +154,17 @@ public class MyActivityService {
         return PageDto.fromPage(pagedDto);
     }
 
-    public PageDto<ItemListResponseDto> readAllLikedItems(String email, int page, int size) {
+    public List<LikesItemDto> readAllLikedItems(String email) {
         if(!userRepository.existsByEmail(email)) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
+        List<LikesItem> likesItems = likesItemRepository.findLikesItemByUserId(email);
+        List<LikesItemDto> likesItemDtos = new ArrayList<>();
+        for(LikesItem likesItem : likesItems) {
+            likesItemDtos.add(LikesItemDto.fromEntity(likesItem));
+        }
 
-        Page<Item> pagedItems = itemRepository.findAllLikedItemsByMe(
-                email,
-                PageRequest.of(page - 1, size)
-        );
-
-        Page<ItemListResponseDto> pagedDto
-                = pagedItems.map(item -> ItemListResponseDto.fromEntity(item));
-
-        return PageDto.fromPage(pagedDto);
+        return likesItemDtos;
     }
 
     // 여행지 상세 페이지에서 여행지를 일정에 추가할 때 보기 위한 일정 목록

@@ -69,4 +69,15 @@ public class ItemReviewService {
         itemReview.delete();
         itemReviewRepository.save(itemReview);
     }
+    public List<ItemReviewResponseDto> getItemReviewsByUserId(String email) {
+        if(!userRepository.existsByEmail(email)) {
+                throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }List<ItemReview> itemReviews = itemReviewRepository.findItemReviewByUserId(email);
+        List<ItemReviewResponseDto> itemReviewResponseDtos = new ArrayList<>();
+
+        for(ItemReview itemReview : itemReviews) {
+            itemReviewResponseDtos.add(ItemReviewResponseDto.fromEntity(itemReview));
+        }
+        return itemReviewResponseDtos;
+    }
 }

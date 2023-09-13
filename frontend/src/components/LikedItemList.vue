@@ -2,24 +2,57 @@
     <div class="sidebar_main">
         <div class="main_title">관심등록 여행지</div>
         <ul class="item_list">
-            <li class="item" v-for="i in 20" >
-                <a @click="$router.push('/schedules')">
-                    <v-img src="@/assets/images/site_1.jpg" alt="" height="126px"  class="rounded-lg" cover/>
-                    <div class="item_info">
-                        <div class="item_text">
-                            <div class="item_title">안반데기</div>
-                            <p class="item_fullAddress">주소</p>
-                        </div>
-                    </div>
-                </a>
+            <li class="item" v-for="(item, itemIndex) in likedItemList" :key="itemIndex">
+                <div class="item_info">
+                    <router-link :to="'/item-detail/read/' + item.id">
+                    <v-img :src="item.firstImage" alt="" cover class="rounded-lg" height="126px" />
+                    <div class="my_liked_item_id" style="display: none">{{ item.id }}</div>
+                    <div class="my_liked_item_name">{{ item.name }}</div>
+                    <div class="my_liked_item_address">{{ item.fullAddress }}</div>
+                    <div class="my_liked_item_category">{{ item.category }}</div>
+                    </router-link>
+                </div>
             </li>
+            <li v-if="likedItemList.length === 0" class="empty_liked_item">관심등록한 여행지가 없습니다.</li>
         </ul>
     </div>
 </template>
 
 <script>
+import {readUserLikedItem} from "@/api";
+
 export default {
-    name: "LikedItemList"
+    name: "LikedItemList",
+    data() {
+        return {
+            likedItemList: [],
+            item: {
+                id:'',
+                contentTypeId: '',
+                contentId:'',
+                title: '',
+                firstImage: '',
+                sido: '',
+                fullAddress:'',
+            },
+        }
+    },
+    mounted() {
+        this.readUserLikedItem();
+    },
+    methods: {
+         async readUserLikedItem() {
+             try {
+                 const response = await readUserLikedItem();
+                 this.likedItemList = response.data;
+                 console.log("data:", response.data)
+                 console.log('관심등록한 여행지 불러오기 성공');
+             } catch (error) {
+                 console.error('관심등록한 여행지 불러오는 중 오류 발생', error)
+             }
+
+         }
+    },
 }
 </script>
 
