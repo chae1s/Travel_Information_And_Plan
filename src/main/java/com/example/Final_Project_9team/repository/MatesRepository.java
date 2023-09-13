@@ -22,4 +22,6 @@ public interface MatesRepository extends JpaRepository<Mates, Long> {
 
     List<Mates> findAllByScheduleIdAndIsAcceptedFalseAndIsDeletedFalse(Long ScheduleId);
 
+    Long countMatesByScheduleAndIsAcceptedTrue(Schedule schedule);
+
 }

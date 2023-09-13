@@ -30,6 +30,7 @@ public enum ErrorCode {
     ALREADY_INVITED_MATES(400, "ERR_BAD_REQUEST", "이미 초대된 유저입니다"),
     ALREADY_LIKED_USER(400, "ERR_BAD_REQUEST", "이미 즐겨찾기된 유저입니다."),
     USER_NOT_LIKED(400, "ERR_BAD_REQUEST", "즐겨찾기된 유저가 아닙니다."),
+    ALREADY_USED_PASSWORD(400, "ALREADY_USED_PASSWORD", "기존에 사용하던 비밀번호입니다."),
 
     INVALID_PARAMETER(400, "ERR_BAD_REQUEST","파라미터 값을 확인해주세요."),
     MATES_NOT_MATCHED_USER(400,"ERR_BAD_REQUEST","메이트와 유저 정보가 일치하지 않습니다."),
@@ -46,6 +47,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 댓글입니다."),
     BOARD_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 게시글입니다."),
     INVALID_PASSWORD(404, "ERR_NOT_FOUND", "비밀번호가 일치하지 않습니다."),
+    UNMATCHED_PASSWORD(404, "ERR_NOT_FOUND", "비밀번호 확인이 일치하지 않습니다."),
     SCHEDULE_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 일정입니다."),
     ITEM_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 관광상품입니다."),
     MATES_NOT_FOUND(404, "ERR_NOT_FOUND", "존재하지 않는 메이트입니다."),

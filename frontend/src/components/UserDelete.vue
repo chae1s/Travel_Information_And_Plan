@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="my_page_button_wrap">
-                    <button class="my_page_button">회원 탈퇴</button>
+                    <button class="my_page_button" @click="deleteUser">회원 탈퇴</button>
                 </div>
             </div>
         </div>
@@ -22,52 +22,75 @@
 
 <script>
 
+import {deleteUser} from "@/api";
+
 export default {
     name: "UserDelete",
+    methods: {
+        async deleteUser() {
+            const ret = confirm("탈퇴하시겠습니까?");
+            if (ret) {
+                try {
+                    const deleteResponse = await deleteUser();
+                    console.log(deleteResponse)
+                    alert("탈퇴되었습니다.")
+                    this.$store.commit('logout');
+                    this.goToMain()
+                } catch (error) {
+                    console.error("오류 발생:", error);
+                    alert("탈퇴처리중 오류가 발생했습니다.");
+                }
+            }
+        },
+        goToMain() {
+            console.log("goToMain")
+            this.$router.push('/')
+        }
+    },
 }
 </script>
 
 <style scoped>
 
-    .main_title {
-        font-size: 22px;
-        font-weight: 700;
-        text-align: left;
-        padding-bottom: 20px;
-    }
+.main_title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: left;
+    padding-bottom: 20px;
+}
 
-    .my_page_delete_text p {
-        margin-bottom: 20px;
-        font-weight: bold;
-        font-size: 18px;
-        text-align: left;
-    }
+.my_page_delete_text p {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: left;
+}
 
-    .delete_check_message {
-        width: 519px;
-        line-height: 25px;
-        font-size: 16px;
-        text-align: left;
-    }
+.delete_check_message {
+    width: 519px;
+    line-height: 25px;
+    font-size: 16px;
+    text-align: left;
+}
 
-    .delete_check_message span {
-        font-weight: bold;
-    }
+.delete_check_message span {
+    font-weight: bold;
+}
 
-    .my_page_button_wrap {
-        text-align: center;
-    }
+.my_page_button_wrap {
+    text-align: center;
+}
 
-    .my_page_button {
-        border: none;
-        margin: 50px auto 30px;
-        width: 198px;
-        height: 42px;
-        display: inline-block;
-        background-color: #99C7FF;
-        font-size: 18px;
-        font-weight: bold;
-        color: #FFF;
-        cursor: pointer;
-    }
+.my_page_button {
+    border: none;
+    margin: 50px auto 30px;
+    width: 198px;
+    height: 42px;
+    display: inline-block;
+    background-color: #99C7FF;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    cursor: pointer;
+}
 </style>

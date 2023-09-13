@@ -12,6 +12,10 @@ function updateUserInfo(userData) {
     return axiosInstance.put('/users/me', userData, { headers });
 }
 
+function updateUserPassword(userData) {
+    return axiosInstance.put('/users/me/password', userData)
+}
+
 function deleteUser() {
     return axiosInstance.put('/users/me/delete');
 }
@@ -169,8 +173,21 @@ function deleteReview(itemId, itemReviewId) {
     return axiosInstance.delete(apiUrl);
 }
 
+function getChatRooms(){
+    return axiosInstance.get(`/schedules/chat/rooms`)
+}
+function getChatRoomData(roomId){
+    return axiosInstance.get(`/schedules/chat/rooms/${roomId}/room-data`)
+}
+function getChatMessages(roomId) {
+    return axiosInstance.get(`/schedules/chat/rooms/${roomId}`)
+}
+
+function sendChatMessage(roomId,messageData) {
+    return axiosInstance.post(`/schedules/chat/rooms/${roomId}/send`,messageData)
+}
 export {
-    loginUser, readUserInfo, updateUserInfo, findUser, checkPassword, deleteUser,
+    loginUser, readUserInfo, updateUserInfo, findUser, updateUserPassword, deleteUser, checkPassword,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, updateBoard, deleteBoard, uploadImage, readBoard,
     createComment,updateComment, deleteComment,
@@ -179,5 +196,6 @@ export {
     updateScheduleDisplay, updateSchedule, updateScheduleItems,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList, inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview, readLikedItemBySido,
+    getChatRooms,getChatRoomData,getChatMessages,
 };
 

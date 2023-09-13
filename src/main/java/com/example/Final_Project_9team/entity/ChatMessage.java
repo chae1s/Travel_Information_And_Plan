@@ -3,6 +3,7 @@ package com.example.Final_Project_9team.entity;
 import com.example.Final_Project_9team.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ChatMessage extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +31,8 @@ public class ChatMessage extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    public ChatMessage(String message) {
+        this.message = message;
+    }
 }

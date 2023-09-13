@@ -75,10 +75,6 @@ export default {
     },
     async inviteUser(username,user) {
       try {
-        console.log("username=" + username);
-        console.log("scheduleId="+this.scheduleId);
-        console.log("user.invited=" + user.isInvited);
-
         const response = await inviteUserToSchedule(this.scheduleId,username);
         alert("초대가 완료되었습니다.");
         user.isInvited=true;
@@ -88,7 +84,7 @@ export default {
           alert("이미 초대된 유저입니다.");
           user.isInvited=true;
         } else {
-          alert("오류가 발생했습니다."); // 다른 오류 처리
+          alert("오류가 발생했습니다.");
         }
         console.error("초대 과정 중 오류 발생:", error);
       }
@@ -155,7 +151,7 @@ th, td {
   font-size: 14px;
   color: #2F3438;
   width: 40px;
-  height: 27px;
+  height: 28px;
   display: inline-block;
   border-radius: 10px;
   line-height: 30px;
