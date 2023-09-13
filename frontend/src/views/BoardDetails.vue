@@ -29,9 +29,9 @@
                                     {{ comment.content }}
                                 </v-list-item-title>
                                 <v-list-item-subtitle class="text-sm-left">작성자: {{ comment.username }} | 작성시간: {{ comment.createdAt }}</v-list-item-subtitle>
-                                <v-btn class="text-sm-left" @click="toggleReplyForm(comment.parentId === null ? comment.id : comment.parentId)">답글</v-btn>
-                                <v-icon class="text-sm-right">mdi-comment-edit-outline</v-icon>
-                                <v-icon class="text-sm-right">mdi-trash-can-outline</v-icon>
+                                <v-btn style="float: left;" @click="toggleReplyForm(comment.parentId === null ? comment.id : comment.parentId)">답글</v-btn>
+                                <v-icon style="float: right;">mdi-comment-edit-outline</v-icon>
+                                <v-icon style="float: right;">mdi-trash-can-outline</v-icon>
 
                                 <v-card v-if="showReplyForm === comment.id">
                                     <v-card-title>
