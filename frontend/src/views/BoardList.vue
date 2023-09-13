@@ -39,6 +39,7 @@
                         </tr>
                         </tbody>
                     </table>
+                    <v-btn @click="$router.push('/board-create')">작성</v-btn>
                     <Pagination
                         :totalPages="totalPages"
                         @page-changed="handlePageChange"
