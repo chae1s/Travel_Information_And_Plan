@@ -13,23 +13,27 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="i in 10">
-                <td class="board_id" >{{ i }}</td>
-                <td class="board_title" @click="">
-                    <span>커뮤니티 게시글 제목</span>
+            <tr v-for="(board, index) in boards" :key="board.title" @click="goToBoardDetails(board.boardId)">
+                <td class="board_id" >{{ board.boardId }}</td>
+                <td class="board_title">
+                    {{ board.title }}
                 </td>
-                <td class="board_created">2023-00-00</td>
-                <td class="board_liked">0</td>
-                <td class="board_view_count">0</td>
+                <td class="board_created">{{ board.createdAt }}</td>
+                <td class="board_liked">{{ board.likesCnt }}</td>
+                <td class="board_view_count">{{ board.viewCnt }}</td>
             </tr>
             </tbody>
         </table>
+        <Pagination
+            :totalPages="totalPages"
+            @page-changed="handlePageChange"
+        />
     </div>
 </template>
 
 <script>
 import Pagination from "@/components/Pagination.vue";
-import {readBoards} from "@/api";
+import {readAllMyBoards} from "@/api";
 export default {
     name: "MyBoardList",
     components: {
@@ -44,7 +48,7 @@ export default {
     methods: {
         async fetchBoards(page) {
             try {
-                const response = await readBoards(page);
+                const response = await readAllMyBoards(page);
                 const pageDto = response.data;
                 this.totalPages = pageDto.lastPage; // totalPages 업데이트
                 this.boards = pageDto.content; // 게시판 목록 업데이트

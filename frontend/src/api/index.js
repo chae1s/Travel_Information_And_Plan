@@ -135,6 +135,14 @@ function readAllMySchedules(page) {
     return axiosInstance.get(`/users/me/schedules?page=${page || 1}`)
 }
 
+function readAllMyBoards(page) {
+    return axiosInstance.get(`/users/me/boards?page=${page || 1}`)
+}
+
+function readAllMyCommentedBoards(page) {
+    return axiosInstance.get(`/users/me/comments?page=${page || 1}`)
+}
+
 function readMySchedule(scheduleId) {
     return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
 }
@@ -193,6 +201,7 @@ export {
     createComment,updateComment, deleteComment,
     createSchedule, createScheduleItems, readSchedule,
     createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
+    readAllMyBoards, readAllMyCommentedBoards,
     updateScheduleDisplay, updateSchedule, updateScheduleItems,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList, inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview, readLikedItemBySido,

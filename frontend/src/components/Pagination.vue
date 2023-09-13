@@ -1,14 +1,12 @@
 <template>
     <div class="pagination">
-        <v-icon @click="goToPage(1)" :disabled="currentPage === 1">mdi-chevron-double-left</v-icon>
-        <v-icon @click="previousPage" :disabled="currentPage === 1">mdi-chevron-left</v-icon>
-
+        <v-icon class="pagination-icon" @click="goToPage(1)" :disabled="currentPage === 1">mdi-chevron-double-left</v-icon>
+        <v-icon class="pagination-icon" @click="previousPage" :disabled="currentPage === 1">mdi-chevron-left</v-icon>
         <button v-for="page in displayedPages" :key="page" @click="goToPage(page)" :class="{ active: page === currentPage }">
             {{ page }}
         </button>
-
-        <v-icon @click="nextPage" :disabled="currentPage === totalPages">mdi-chevron-right</v-icon>
-        <v-icon @click="goToPage(totalPages)" :disabled="currentPage === totalPages">mdi-chevron-double-right</v-icon>
+        <v-icon class="pagination-icon" @click="nextPage" :disabled="currentPage === totalPages">mdi-chevron-right</v-icon>
+        <v-icon class="pagination-icon" @click="goToPage(totalPages)" :disabled="currentPage === totalPages">mdi-chevron-double-right</v-icon>
     </div>
 </template>
 
@@ -57,11 +55,17 @@ export default {
 }
 
 .pagination button {
-    margin: 0 2px;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 0 8px;
 }
 
 .pagination button.active {
     font-weight: bold;
+}
+
+.pagination-icon {
+    margin-top: 10px;
+    font-size: 24px;
 }
 </style>

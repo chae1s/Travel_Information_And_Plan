@@ -1,32 +1,54 @@
 <template>
-    <div>
-        <table class="board-table">
-            <thead>
-            <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>조회수</th>
-                <th>좋아요 수</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(board, index) in boards" :key="board.title" @click="goToBoardDetails(board.boardId)">
-                <td>{{ board.boardId }}</td>
-                <td>{{ board.title }}</td>
-                <td>{{ board.username }}</td>
-                <td>{{ board.viewCnt }}</td>
-                <td>{{ board.likesCnt }}</td>
-            </tr>
-            </tbody>
-        </table>
-        <v-btn @click="$router.push('/board-create')">작성</v-btn>
-        <!-- Pagination 컴포넌트를 사용하면서 totalPages를 상위 컴포넌트에서 관리 -->
-        <Pagination
-            :totalPages="totalPages"
-            @page-changed="handlePageChange"
-        />
-    </div>
+    <main>
+        <div class="content">
+            <div class="sidebar_content">
+                <div class="my_page_main_sidebar">
+                    <div class="sidebar">
+                        <div class="sidebar_title">
+                            커뮤니티
+                        </div>
+                        <div class="sidebar_menu">
+                            <p :class="{ selected: isActive('/board-list') }" @click="$router.push('/board-list')">여행 후기 게시판</p>
+                            <p :class="{ selected: isActive('/schedule-list') }" @click="$router.push('/schedule-list')">여행 일정 게시판</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar_main">
+                    <div class="main_title">여행 후기 게시판</div>
+                    <table class="board_table">
+                        <thead>
+                        <tr>
+                            <th class="board_head_id"></th>
+                            <th class="board_head_title">게시글 제목</th>
+                            <th class="board_head_created">작성자</th>
+                            <th class="board_head_created">작성일</th>
+                            <th class="board_head_liked">좋아요</th>
+                            <th class="board_head_view_count">조회</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(board, index) in boards" :key="board.title" @click="goToBoardDetails(board.boardId)">
+                            <td class="board_id" >{{ board.boardId }}</td>
+                            <td class="board_title">
+                                {{ board.title }}
+                            </td>
+                            <td class="board_created">{{ board.username }}</td>
+                            <td class="board_created">{{ board.createdAt }}</td>
+                            <td class="board_liked">{{ board.likesCnt }}</td>
+                            <td class="board_view_count">{{ board.viewCnt }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <Pagination
+                        :totalPages="totalPages"
+                        @page-changed="handlePageChange"
+                    />
+                </div>
+
+            </div>
+        </div>
+    </main>
+
 </template>
 
 <script>
@@ -63,6 +85,9 @@ export default {
         goToBoardDetails(boardId) {
             this.$store.dispatch('updateBoardId', boardId);
             this.$router.push(`/board-details`);
+        },
+        isActive(route) {
+            return this.$route.path === route;
         }
     },
     created() {
@@ -72,18 +97,89 @@ export default {
 </script>
 
 <style scoped>
-.board-table {
+.sidebar_main {
+    width: 937px;
+}
+
+.main_title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: left;
+    padding-bottom: 20px;
+}
+
+.board_table {
     width: 100%;
+    border-top: 1px solid #DADADA;
     border-collapse: collapse;
+    cursor: default;
 }
 
-.board-table th,
-.board-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+.board_table thead {
+    font-size: 16px;
 }
 
-.board-table th {
-    background-color: #f2f2f2;
+.board_table thead th {
+    padding: 7px 10px;
+    border-bottom: 1px solid #DADADA;
 }
+
+.board_table tbody td {
+    border-bottom: 1px solid #DADADA;
+}
+
+.board_id {
+    width: 55px;
+}
+
+.board_title {
+    text-align: left;
+    padding: 9px 5px;
+}
+
+.board_title span {
+    cursor: pointer;
+}
+
+.board_created {
+    width: 150px;
+}
+
+.board_liked, .board_view_count {
+    width: 70px;
+}
+
+.sidebar {
+    width: 138px;
+}
+
+.sidebar_title {
+    font-size: 19px;
+    font-weight: 700;
+    text-align: left;
+    padding-bottom: 8px;
+}
+
+.sidebar_menu {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.selected {
+    font-weight: bold;
+    color: #99C7FF;
+}
+
+.sidebar_content {
+    display: flex;
+    gap: 53px;
+    min-height: 700px;
+}
+
+.my_page_main_sidebar {
+    width: 180px;
+}
+
 </style>
