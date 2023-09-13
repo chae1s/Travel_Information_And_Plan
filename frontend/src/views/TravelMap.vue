@@ -424,10 +424,11 @@ export default {
     text-align: left;
 }
 .info{
+  font-size: 18px;
   color: white;
   position: absolute;
   top: 30%; /* 세로 중앙 정렬을 위해 top 위치를 50%로 설정 */
-  left: 45%;
+  left: 43%;
 
 }
 </style>
