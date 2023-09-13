@@ -53,7 +53,7 @@ import { uploadImage } from '@/api/index';
 
 export default {
     components: {
-        EditorContent,
+        EditorContent
     },
     props: {
         modelValue: {
@@ -212,7 +212,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 #text-editor {
   border: 1px solid #808080;
 
@@ -312,8 +312,8 @@ export default {
     }
   }
 
-  .tiptap {
-    height: 500px;
+  .ProseMirror {
+    height: 300px;
     overflow-y: auto;
     padding-left: 0.5em;
     padding-right: 0.5em;
