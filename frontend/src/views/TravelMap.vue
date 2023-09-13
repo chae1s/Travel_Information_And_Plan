@@ -1,6 +1,6 @@
 <template>
     <div class="items_map" id="map">
-
+    <span class="info">아래에서 여행지를 선택해주세요.</span>
     </div>
     <div class="item_detail_info">
         <SidoAndSigunguCheckbox @checkedClick="handleLocationChange" :homeChecked="homeChecked"></SidoAndSigunguCheckbox>
@@ -292,6 +292,7 @@ export default {
     height: 626px;
     width: 770px;
     background-color: #99C7FF;
+    margin: 0 auto;
 }
 .content_header div {
     font-size: 22px;
@@ -421,5 +422,13 @@ export default {
     flex-direction: column;
     gap: 13px;
     text-align: left;
+}
+.info{
+  font-size: 18px;
+  color: white;
+  position: absolute;
+  top: 30%; /* 세로 중앙 정렬을 위해 top 위치를 50%로 설정 */
+  left: 43%;
+
 }
 </style>
