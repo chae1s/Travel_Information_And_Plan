@@ -1,9 +1,9 @@
 <template>
     <main>
-        <div class="ad_image_section">
-            <v-img src="@/assets/images/adImage.png" alt="" class="ad_image" cover/>
-        </div>
         <div class="content">
+            <div class="ad_image_section">
+                <v-img src="@/assets/images/main-image.gif" alt="" class="ad_image" cover/>
+            </div>
             <div class="home_content">
                 <div class="item_recommend_section">
                     <div class="content_header">
