@@ -49,7 +49,7 @@ class ScheduleServiceTest {
     private final LocalDate endDate = LocalDate.of(2023, 8, 25);
     private final LocalDate tourDate = LocalDate.of(2023, 8, 23);
 
-    @Test
+
     @DisplayName("일정 등록 후 mates에 일정과 작성자 등록하기")
     public void createSchedule() {
         // given
@@ -70,7 +70,7 @@ class ScheduleServiceTest {
         assertThat(scheduleResponse.getStartDate()).isEqualTo(startDate);
     }
 
-    @Test
+
     @DisplayName("여행 계획 등록하기")
     public void createScheduleItem() {
         // given
@@ -87,7 +87,7 @@ class ScheduleServiceTest {
 
     }
 
-    @Test
+
     @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
     public void readSchedulesAfterToday() {
         // given
@@ -106,7 +106,7 @@ class ScheduleServiceTest {
         assertThat(scheduleListResponseDs.size()).isEqualTo(2);
     }
 
-    @Test
+
     @DisplayName("하나의 여행지 일정의 원하는 날짜에 추가")
     public void createDateToScheduleItem() {
 

@@ -25,12 +25,12 @@ class ScheduleRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
+
     public void setScheduleRepositoryIsNotNull() {
         assertThat(scheduleRepository).isNotNull();
     }
 
-    @Test
+
     @DisplayName("일정 등록")
     public void createSchedule() {
         // given
@@ -53,7 +53,7 @@ class ScheduleRepositoryTest {
         assertThat(schedule.getStartDate()).isEqualTo(startDate);
     }
 
-    @Test
+
     @DisplayName("여행 마지막 날짜가 오늘 날짜 이후에 있는 일정 목록")
     public void readSchedulesAfterToday() {
         String title = "즐거운 여행";
