@@ -71,6 +71,9 @@ function readSchedule(scheduleId) {
 function readLikedItemBySido(sido, page) {
     return axiosInstance.get(`/users/me/liked-items/${sido}?page=${page}`)
 }
+function readUserLikedItem() {
+    return axiosInstance.get(`/users/me/liked-item`)
+}
 
 function createRouteList(scheduleId, tourList) {
     return axiosInstance.post('/schedules/' + scheduleId + '/schedule-items/route', tourList)
@@ -198,7 +201,7 @@ function sendChatMessage(roomId,messageData) {
     return axiosInstance.post(`/schedules/chat/rooms/${roomId}/send`,messageData)
 }
 export {
-    loginUser, readUserInfo, updateUserInfo, findUser, updateUserPassword, deleteUser, checkPassword, readUserLikedItemReview,
+    loginUser, readUserInfo, updateUserInfo, findUser, updateUserPassword, deleteUser, checkPassword, readUserLikedItemReview, readUserLikedItem,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, updateBoard, deleteBoard, uploadImage, readBoard,
     createComment,updateComment, deleteComment,

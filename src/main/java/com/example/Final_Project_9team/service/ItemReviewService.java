@@ -71,7 +71,7 @@ public class ItemReviewService {
     }
     public List<ItemReviewResponseDto> getItemReviewsByUserId(String email) {
         if(!userRepository.existsByEmail(email)) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }List<ItemReview> itemReviews = itemReviewRepository.findItemReviewByUserId(email);
         List<ItemReviewResponseDto> itemReviewResponseDtos = new ArrayList<>();
 

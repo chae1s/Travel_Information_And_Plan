@@ -96,15 +96,13 @@ public class MyActivityController {
     }
 
     // 좋아요 한 item 페이지 단위 조회
-    @GetMapping("liked-items")
-    public ResponseEntity<PageDto<ItemListResponseDto>> readAllLikedItems(
-            Authentication auth,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+    @GetMapping("liked-item")
+    public ResponseEntity<List<LikesItemDto>> readAllLikedItems(
+            Authentication auth
     ) {
-        return ResponseEntity.ok(
-                myActivityService.readAllLikedItems(auth.getName(), page, size)
-        );
+        List<LikesItemDto> likesItems = myActivityService.readAllLikedItems(auth.getName());
+
+        return ResponseEntity.ok(likesItems);
     }
 
     // 나의 일정 중 날짜 기준으로 목록 조회하기
