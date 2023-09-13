@@ -3,6 +3,7 @@ package com.example.Final_Project_9team.controller;
 
 import com.example.Final_Project_9team.dto.*;
 import com.example.Final_Project_9team.exception.SuccessCode;
+import com.example.Final_Project_9team.service.ItemReviewService;
 import com.example.Final_Project_9team.service.MyActivityService;
 import com.example.Final_Project_9team.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 // 내 활동 페이지에서 조회할 것들
 public class MyActivityController {
     private final MyActivityService myActivityService;
+    private final ItemReviewService itemReviewService;
 
     // 작성한 board 페이지 단위 조회
     @GetMapping("boards")
@@ -126,5 +128,11 @@ public class MyActivityController {
     public ResponseEntity<ScheduleResponseDto> readSchedule(@PathVariable Long scheduleId, Authentication auth) {
 
         return ResponseEntity.ok(myActivityService.readSchedule(scheduleId, auth.getName()));
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity<List<ItemReviewResponseDto>> getItemReviews(Authentication auth) {
+        List<ItemReviewResponseDto> itemReviews = itemReviewService.getItemReviewsByUserId(auth.getName());
+        return ResponseEntity.ok(itemReviews);
     }
 }

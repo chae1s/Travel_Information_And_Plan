@@ -114,6 +114,9 @@ function readUserLikedByMe() {
 function readUserLikedMe() {
     return axiosInstance.get(`/users/me/liked-user/from`)
 }
+function readUserLikedItemReview() {
+    return axiosInstance.get(`/users/me/reviews`)
+}
 
 // 다른 유저 정보 조회
 // function readUserProfile(email){
@@ -195,7 +198,7 @@ function sendChatMessage(roomId,messageData) {
     return axiosInstance.post(`/schedules/chat/rooms/${roomId}/send`,messageData)
 }
 export {
-    loginUser, readUserInfo, updateUserInfo, findUser, updateUserPassword, deleteUser, checkPassword,
+    loginUser, readUserInfo, updateUserInfo, findUser, updateUserPassword, deleteUser, checkPassword, readUserLikedItemReview,
     likeUser, readUserLikedByMe, readUserLikedMe, unLikeUser,
     createBoard, readBoards, updateBoard, deleteBoard, uploadImage, readBoard,
     createComment,updateComment, deleteComment,
