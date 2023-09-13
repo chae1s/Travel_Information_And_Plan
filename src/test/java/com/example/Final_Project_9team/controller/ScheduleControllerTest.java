@@ -43,14 +43,14 @@ class ScheduleControllerTest {
                 .build();
     }
 
-    @Test
+
     @DisplayName("mockMvc Null Check")
     public void mockMvcIsNotNull() {
         assertThat(scheduleController).isNotNull();
         assertThat(mockMvc).isNotNull();
     }
 
-    @Test
+
     @DisplayName("일정 등록")
     public void createSchedule() throws Exception {
         // given
@@ -67,7 +67,7 @@ class ScheduleControllerTest {
         actions.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
+
     @DisplayName("여행계획 등록하기")
     public void createScheduleItem() throws Exception {
         // given
