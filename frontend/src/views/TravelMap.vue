@@ -7,12 +7,14 @@
         <ul class="item_list">
             <li class="item" v-for="(item, index) in items" :key="item.id ">
                     <img :src="item.firstImage" alt="" @click="showItemOnMap(item.id)">
-                    <div class="item_text" @click="showItemOnMap(item.id)">
+                    <router-link :to="'/item-detail/read/' + item.id">
+                    <div class="item_text">
                         <div>{{item.id}}</div>
                         <div class="item_title">{{ item.title }}</div>
                         <p class="item_fullAddress">{{ item.fullAddress }}</p>
-                        <p class="item_contentType">{{ getAddressText(item.contentTypeIds) }}</p>
+                        <p class="item_contentType">{{ getAddressText(item.contentTypeId) }}</p>
                     </div>
+                    </router-link>
                 <ul class="item_count">
                     <li @click="toggleBookmark(item.id)">관심등록</li>
                 </ul>
@@ -160,20 +162,6 @@ export default {
                     }));
                     this.itemId = this.items[0].id;
                     console.log("item:",response.data)
-                })
-                .catch(error => {
-                    console.error('API 호출 오류', error);
-                });
-
-            if (this.item.sido === '0') this.zoom = 8
-
-            this.markers = []; // 마커 정보를 담는 배열
-            this.infoWindows = []; // 정보창을 담는 배열
-                script.onload = () => {
-                    this.map = new window.naver.maps.Map("map", {
-                        center: new window.naver.maps.LatLng(locations[sido].lat, locations[sido].lng),
-                        zoom: this.zoom
-                    });
                     for (let i = 0; i < this.itemsLocation.length; i++) {
                         const itemLocation = this.itemsLocation[i];
                         const title = this.itemsLocation[i].title; // Get the title
@@ -188,8 +176,7 @@ export default {
                         this.markers.push(marker)
 
                         const contentString = `
-                                <div style="width:200px;text-align:center;padding:10px;">
-                                    <b><a href="/item-detail/read/${id}" target="_blank" style="text-decoration: none; color: #000;">${title}</a></b><br>
+                                <div style="width:200px;text-align:center;padding:10px;"><b><a href="/item-list/read/${id}" target="_blank" style="text-decoration: none; color: #000;">${title}</a></b><br>
                                     ${fullAddress}
                                 </div>`;
                         var infowindow = new naver.maps.InfoWindow({
@@ -212,8 +199,23 @@ export default {
                             naver.maps.Event.addListener(this.markers[j], 'click', getClickHandler(j)); // 클릭한 마커 핸들러
                         }
 
-                            infowindow.open(this.map, marker);
+                        infowindow.open(this.map, marker);
                     }
+                })
+                .catch(error => {
+                    console.error('API 호출 오류', error);
+                });
+
+            if (this.item.sido === '0') this.zoom = 8
+
+            this.markers = []; // 마커 정보를 담는 배열
+            this.infoWindows = []; // 정보창을 담는 배열
+                script.onload = () => {
+                    this.map = new window.naver.maps.Map("map", {
+                        center: new window.naver.maps.LatLng(locations[sido].lat, locations[sido].lng),
+                        zoom: this.zoom
+                    });
+
 
             }
         },
