@@ -28,8 +28,44 @@
 </template>
 
 <script>
+import Pagination from "@/components/Pagination.vue";
+import {readBoards} from "@/api";
 export default {
-    name: "MyBoardList"
+    name: "MyBoardList",
+    components: {
+        Pagination,
+    },
+    data() {
+        return {
+            boards: [], // 게시판 목록을 담을 배열 추가
+            totalPages: 1, // 초기값 설정 (예시로 10을 사용)
+        };
+    },
+    methods: {
+        async fetchBoards(page) {
+            try {
+                const response = await readBoards(page);
+                const pageDto = response.data;
+                this.totalPages = pageDto.lastPage; // totalPages 업데이트
+                this.boards = pageDto.content; // 게시판 목록 업데이트
+                console.log(pageDto);
+            } catch (error) {
+                console.error("Error fetching boards:", error);
+            }
+        },
+        async handlePageChange(page) {
+            console.log(`페이지 변경: ${page}`);
+            this.currentPage = page;
+            await this.fetchBoards(page); // 페이지가 변경될 때마다 게시글 목록을 가져옴
+        },
+        goToBoardDetails(boardId) {
+            this.$store.dispatch('updateBoardId', boardId);
+            this.$router.push(`/board-details`);
+        }
+    },
+    created() {
+        this.fetchBoards(this.currentPage); // 컴포넌트가 생성될 때 초기 게시글 목록을 가져옴
+    },
 }
 </script>
 

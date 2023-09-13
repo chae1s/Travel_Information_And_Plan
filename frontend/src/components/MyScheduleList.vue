@@ -24,18 +24,27 @@
                         <span>{{ schedule.startDate }}</span> - <span>{{ schedule.endDate }}</span>
                     </td>
                 </tr>
+
             </tbody>
         </table>
+        <Pagination
+            :totalPages="totalPages"
+            @page-changed="handlePageChange"
+        />
     </div>
 </template>
 
 <script>
 import {readAllMySchedules} from "@/api/index";
+import Pagination from "@/components/Pagination.vue";
 import locations from "@/assets/locations";
 import dayjs from "dayjs";
 
 export default {
     name: "MyScheduleList",
+    components: {
+        Pagination
+    },
     data() {
         return {
             showSchedulePost: false,
@@ -47,7 +56,8 @@ export default {
                 startDate: '',
                 endDate: ''
             },
-            scheduleList: [{}]
+            scheduleList: [{}],
+            totalPages: 1
         }
     },
     mounted() {
@@ -74,7 +84,12 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        async handlePageChange(page) {
+            console.log(`페이지 변경: ${page}`);
+            this.currentPage = page;
+            await this.fetchSchedules(page);
+        },
     },
 }
 </script>

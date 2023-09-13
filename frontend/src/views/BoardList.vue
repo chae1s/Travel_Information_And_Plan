@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             boards: [], // 게시판 목록을 담을 배열 추가
-            totalPages: 10, // 초기값 설정 (예시로 10을 사용)
+            totalPages: 1, // 초기값 설정 (예시로 10을 사용)
         };
     },
     methods: {

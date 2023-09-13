@@ -25,11 +25,11 @@ function createBoard(boardData) {
 }
 
 function readBoards(page) {
-    return axiosInstance.get('/boards?page=' + (page || 1));
+    return axiosInstance.get(`/boards?page=${page || 1}`);
 }
 
-function readBoard(boardId) {
-    return axiosInstance.get('/boards/' + boardId);
+function readBoard(boardId, page) {
+    return axiosInstance.get(`/boards/${boardId}?page=${page || 1}`);
 }
 
 function updateBoard(boardId) {
@@ -127,16 +127,16 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
-function readAllMySchedules() {
-    return axiosInstance.get('/users/me/schedules')
+function readAllMySchedules(page) {
+    return axiosInstance.get(`/users/me/schedules?page=${page || 1}`)
 }
 
 function readMySchedule(scheduleId) {
     return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
 }
 
-function readAllSchedules() {
-    return axiosInstance.get('/schedules')
+function readAllSchedules(page) {
+    return axiosInstance.get(`/schedules?page=${page || 1}`)
 }
 
 function readBoardSchedule(scheduleId) {
