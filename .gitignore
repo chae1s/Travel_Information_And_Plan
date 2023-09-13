@@ -103,7 +103,6 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -118,4 +117,7 @@ replay_pid*
 *.lock
 .gradle/*
 
+
+db.sqlite
+testmates/
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,java
