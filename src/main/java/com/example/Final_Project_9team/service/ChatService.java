@@ -102,15 +102,17 @@ public class ChatService {
 //        return payload;
 //    }
 
-//    public void saveChatMessage(ChatMessageDto chatMessageDto) {
-//        String userEmail ="sampleUser2@gmail.com";
-//        User user = userRepository.findByEmail(userEmail).orElseThrow(
-//                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//
-//        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDto.getRoomId()).orElseThrow(
-//                ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
-//        chatMessageRepository.save(chatMessageDto.toEntity(chatRoom,user));
-//    }
+    public void saveChatMessage(ChatMessageDto chatMessageDto) {
+
+        User user = userRepository.findByNickname(chatMessageDto.getSender()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("msg"+chatMessageDto.getMessage());
+        log.info(chatMessageDto.getSender());
+        log.info("LoomId="+chatMessageDto.getRoomId());
+        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDto.getRoomId()).orElseThrow(
+                ()->new CustomException(ErrorCode.CHATROOM_NOT_FOUND));
+        chatMessageRepository.save(chatMessageDto.toEntity(chatRoom,user));
+    }
 
 //    public List<ChatMessageDto> getLast5Messages(Long roomId) {
 //        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new CustomException(ErrorCode.CHATROOM_NOT_FOUND));

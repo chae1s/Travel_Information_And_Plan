@@ -52,8 +52,46 @@ const router = createRouter({
         {
             path: '/schedules/:id/schedule-items',
             name: 'MakeScheduleDetail',
-            component: MakeScheduleDetail
+            component: MakeScheduleDetail,
+            children: [
+                {
+                    path: 'chat', // ChatRoom에 동적 파라미터 제거
+                    name: 'Chat',
+                    component: ChatRoom,
+                    props: true
+                },
+                {
+                    path: 'chat-room-list',
+                    name: 'ChatRoomList',
+                    component: ChatRoomList,
+                    props: true
+                }
+            ]
         },
+        // {
+        //     path: '/chat-room-list',
+        //     name:'ChatRoomList',
+        //     component: ChatRoomList,
+        //     props: true
+        // },
+        // {
+        //     path:'/chat/:id',
+        //     name: 'Chat',
+        //     component: ChatRoom,
+        //     props: true
+        // },
+        // {
+        //     path: '/chat/:id',
+        //     name: 'ChatRoom',
+        //     component:ChatRoom, props:true
+        // },
+        // {
+        //     path: '/chat-room-list',
+        //     name:'ChatRoomList',
+        //     component: ChatRoomList,
+        // },
+
+
         {
             path: '/sign-up',
             name: 'SignUp',
@@ -139,16 +177,7 @@ const router = createRouter({
 
             ]
         },
-        {
-            path: '/chat/:id',
-            name: 'ChatRoom',
-            component:ChatRoom, props:true
-        },
-        {
-            path: '/chat-room-list',
-            name:'ChatRoomList',
-            component: ChatRoomList
-        },
+
 
         {
             path: '/map',

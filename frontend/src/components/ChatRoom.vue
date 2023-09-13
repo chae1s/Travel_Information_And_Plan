@@ -5,15 +5,20 @@
     <div class="chatRoom-top-container">
       <div class="chatRoom-top-data-container">
         <div>
-          <router-link to="/chat-room-list">
-            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px" class="to-room-list" :inline="true" />
-          </router-link>
+          <!--          <router-link :to="'/schedules/' + scheduleId + '/schedule-items/chat-room-list'">-->
+          <!--          <router-link :to="{ name: 'ChatRoomList' }">-->
+
+            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px"
+                   class="to-room-list" :inline="true"
+                   @click="redirectToChatRoomList()"
+            />
+
         </div>
         <div class="chatRoom-data-image"></div>
         <div class="chatRoom-data-text">
           <div class="room-name">{{ roomData.roomName }}</div>
           <div class="room-member-count-container"></div>
-          <v-img src="@/assets/images/icons/member-count.png" width="15px" height="15px" class="room-count" :inline="true" />
+          <v-img src="@/assets/images/icons/member-count.png" width="13px" height="13px" class="room-count" :inline="true" />
           <span class="member-count">{{roomData.count}}</span>
         </div>
       </div>
@@ -49,6 +54,12 @@ import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client'
 
 export default {
+  props: {
+    scheduleId: {
+      type: String, // Long형의 경우 Number로 타입 지정
+      required: true // 필수 prop으로 지정 (옵션)
+    }
+  },
   data(){
     return{
       roomData:{},
@@ -57,16 +68,15 @@ export default {
       newMessage:'', // 입력한 새 메시지
       nickname:'',
       currentDate: '',
+      id : this.scheduleId,
     };
   },
-  props: {
-    id: {
-      type: String, // Long형의 경우 Number로 타입 지정
-      required: true // 필수 prop으로 지정 (옵션)
-    }
-  },
-
   methods:{
+    redirectToChatRoomList() {
+      // ChatRoomList로 이동하는 라우팅을 수행합니다.
+      this.$router.push(`/schedules/${this.id}/schedule-items/chat-room-list`);
+    },
+
     async getRoomData() {
       try{
         const response = await getChatRoomData(this.id);
@@ -151,6 +161,11 @@ export default {
           // sendChatMessage(this.id, this.messages);
 
         });
+      });
+      this.$nextTick(() => {
+        let chatContainer = this.$refs.chatContainer;
+
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
       });
     },
     async loadUserInfo(){
@@ -307,11 +322,12 @@ export default {
 /* 채팅방 맨 아래 부분 */
 .chatRoom-send-container {
   position: absolute; /* 절대 위치 설정 */
-  bottom: 0; /* 아래로부터 0px 떨어져 있도록 설정 */
+  bottom: 0px; /* 아래로부터 0px 떨어져 있도록 설정 */
   left:0;
   width:100%;
   height: 80px;
   background-color: #F1F7FF;
+  border-radius: 0px 0px 10px 10px;
 }
 textarea {
   width: 80%;
@@ -326,7 +342,7 @@ textarea {
 
 button {
   height: 100%; /* 부모의 100% 높이를 차지하도록 설정 */
-  background-color: #99C7FF; /* 원하는 버튼 배경색 설정 */
+  background-color: #F1F7FF; /* 원하는 버튼 배경색 설정 */
   color: white; /* 버튼 텍스트 색상 설정 */
   border: none;
   border-radius: 10px;
