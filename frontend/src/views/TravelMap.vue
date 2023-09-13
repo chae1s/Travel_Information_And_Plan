@@ -140,6 +140,7 @@ export default {
         },
         async toggleBookmark(itemId) {
             const {data} = await bookmarkItem(itemId);
+            alert("즐겨찾기 추가했습니다")
         },
         createMap(sido) {
             const script = document.createElement('script')

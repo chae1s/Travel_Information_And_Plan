@@ -14,13 +14,15 @@ public class ItemReviewResponseDto {
     private Long id;
     private LocalDateTime createdAt;
     private Rating rating;
+    private String title;
     public static ItemReviewResponseDto fromEntity(ItemReview itemReview) {
         ItemReviewResponseDto dto = new ItemReviewResponseDto();
         dto.setContent(itemReview.getContent());
-        dto.setUsername(itemReview.getContent());
+        dto.setUsername(itemReview.getUser().getNickname());
         dto.setId(itemReview.getId());
         dto.setCreatedAt(itemReview.getCreatedAt());
         dto.setRating(itemReview.getRating());
+        dto.setTitle(itemReview.getItem().getName());
         return dto;
     }
 }

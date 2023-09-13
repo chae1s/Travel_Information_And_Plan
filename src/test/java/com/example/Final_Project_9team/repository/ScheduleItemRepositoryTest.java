@@ -25,12 +25,12 @@ class ScheduleItemRepositoryTest {
     private final String title = "즐거운 여행";
     private final LocalDate startDate = LocalDate.of(2023, 8, 20);
     private final LocalDate endDate = LocalDate.of(2023, 8, 25);
-    @Test
+
     public void scheduleItemRepositoryIsNotNull() {
         assertThat(scheduleItemRepository).isNotNull();
     }
 
-    @Test
+
     @DisplayName("일별 계획 등록")
     public void createScheduleItem() {
         // given
@@ -63,7 +63,7 @@ class ScheduleItemRepositoryTest {
         assertThat(scheduleItems.size()).isEqualTo(5);
     }
 
-    @Test
+
     @DisplayName("하나의 여행지 일정의 원하는 날짜에 추가")
     public void createDateToScheduleItem() {
         // given

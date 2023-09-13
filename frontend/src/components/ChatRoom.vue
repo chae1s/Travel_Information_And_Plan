@@ -8,11 +8,10 @@
           <!--          <router-link :to="'/schedules/' + scheduleId + '/schedule-items/chat-room-list'">-->
           <!--          <router-link :to="{ name: 'ChatRoomList' }">-->
 
-            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px"
-                   class="to-room-list" :inline="true"
-                   @click="redirectToChatRoomList()"
-            />
-
+<!--            <v-img src="@/assets/images/icons/to-room-list.png" width="20px" height="20px"-->
+<!--                   class="to-room-list" :inline="true"-->
+<!--                   @click="redirectToChatRoomList()"-->
+<!--            />-->
         </div>
         <div class="chatRoom-data-image"></div>
         <div class="chatRoom-data-text">
@@ -74,7 +73,8 @@ export default {
   methods:{
     redirectToChatRoomList() {
       // ChatRoomList로 이동하는 라우팅을 수행합니다.
-      this.$router.push(`/schedules/${this.id}/schedule-items/chat-room-list`);
+      // this.$router.push(`/schedules/${this.id}/schedule-items/chat-room-list`);
+      this.$router.push({ name: 'ChatRoomList', params: { id: this.scheduleId } });
     },
 
     async getRoomData() {
@@ -135,7 +135,7 @@ export default {
       this.$nextTick(() => {
         let chatContainer = this.$refs.chatContainer;
 
-        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+        setTimeout(this.scrollToBottom, 100);
       });
     },
 
@@ -162,11 +162,7 @@ export default {
 
         });
       });
-      this.$nextTick(() => {
-        let chatContainer = this.$refs.chatContainer;
-
-        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-      });
+      setTimeout(this.scrollToBottom, 100);
     },
     async loadUserInfo(){
       try{
@@ -179,6 +175,7 @@ export default {
 
     updateMessage(event) {
       this.newMessage = event.target.value;
+      setTimeout(this.scrollToBottom, 100);
     },
     formatTime(timeString) {
       const date = new Date(timeString);
@@ -197,23 +194,29 @@ export default {
         this.sendMessage(); // sendMessage 함수 호출
       }
     },
+    // scrollToBottom() {
+    //   this.$nextTick(() => {
+    //     let chatContainer = this.$refs.chatContainer;
+    //     chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'});
+    //   });
+    // }
+    scrollToBottom() {
+      this.$nextTick(() => {
+        let chatContainer = this.$refs.chatContainer;
+        if (chatContainer.scrollTop === chatContainer.scrollHeight) {
+          return; // 이미 맨 아래로 스크롤되었으므로 추가 스크롤 필요 없음
+        }
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+      });
+    }
 
   },
   watch: {
     messages() {
-      // 화면에 추가된 후 동작하도록
-      this.$nextTick(() => {
-        let chatContainer = this.$refs.chatContainer;
-
-        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-      });
+      setTimeout(this.scrollToBottom, 100);
     },
     newMessage(){
-      this.$nextTick(() => {
-        let chatContainer = this.$refs.chatContainer;
-
-        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-      });
+      setTimeout(this.scrollToBottom, 100);
     }
   },
 

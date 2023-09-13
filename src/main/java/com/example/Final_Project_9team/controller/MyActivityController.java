@@ -3,6 +3,7 @@ package com.example.Final_Project_9team.controller;
 
 import com.example.Final_Project_9team.dto.*;
 import com.example.Final_Project_9team.exception.SuccessCode;
+import com.example.Final_Project_9team.service.ItemReviewService;
 import com.example.Final_Project_9team.service.MyActivityService;
 import com.example.Final_Project_9team.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 // 내 활동 페이지에서 조회할 것들
 public class MyActivityController {
     private final MyActivityService myActivityService;
+    private final ItemReviewService itemReviewService;
 
     // 작성한 board 페이지 단위 조회
     @GetMapping("boards")
@@ -94,15 +96,13 @@ public class MyActivityController {
     }
 
     // 좋아요 한 item 페이지 단위 조회
-    @GetMapping("liked-items")
-    public ResponseEntity<PageDto<ItemListResponseDto>> readAllLikedItems(
-            Authentication auth,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+    @GetMapping("liked-item")
+    public ResponseEntity<List<LikesItemDto>> readAllLikedItems(
+            Authentication auth
     ) {
-        return ResponseEntity.ok(
-                myActivityService.readAllLikedItems(auth.getName(), page, size)
-        );
+        List<LikesItemDto> likesItems = myActivityService.readAllLikedItems(auth.getName());
+
+        return ResponseEntity.ok(likesItems);
     }
 
     // 나의 일정 중 날짜 기준으로 목록 조회하기
@@ -126,5 +126,11 @@ public class MyActivityController {
     public ResponseEntity<ScheduleResponseDto> readSchedule(@PathVariable Long scheduleId, Authentication auth) {
 
         return ResponseEntity.ok(myActivityService.readSchedule(scheduleId, auth.getName()));
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity<List<ItemReviewResponseDto>> getItemReviews(Authentication auth) {
+        List<ItemReviewResponseDto> itemReviews = itemReviewService.getItemReviewsByUserId(auth.getName());
+        return ResponseEntity.ok(itemReviews);
     }
 }

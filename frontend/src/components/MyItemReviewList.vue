@@ -13,13 +13,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="i in 10">
-                <td class="review_id" >{{ i }}</td>
+            <tr v-for="(review, index) in reviews" :key="index">
+                <td class="review_id" >{{ review.id }}</td>
                 <td class="review_content">
-                    후기 내용
+                    {{ review.content }}
                 </td>
-                <td class="review_created">2023-00-00</td>
-                <td class="review_item_name">강남 시티투어 (트롤리버스)</td>
+                <td class="review_created">{{review.createdAt}}</td>
+                <td class="review_item_name">{{review.title}}</td>
             </tr>
             </tbody>
         </table>
@@ -27,8 +27,40 @@
 </template>
 
 <script>
+import axios from "axios";
+import {readUserLikedItemReview} from "@/api";
+
 export default {
-    name: "MyItemReviewList"
+    name: "MyItemReviewList",
+    data() {
+        return {
+            userId:'',
+            reviews:[],
+            review: {
+                id:'',
+                content:'',
+                createdAt:'',
+                itemId:'',
+                title:'',
+                isDeleted:'',
+            }
+        };
+    },
+    mounted() {
+        this.readUserLikedItemReview();
+    },
+    methods: {
+        async readUserLikedItemReview() {
+            try {
+                const response = await readUserLikedItemReview();
+                this.reviews = response.data;
+                console.log('리뷰 불러오기 성공');
+            } catch (error) {
+                console.error('리뷰 불러오는 중 오류 발생', error)
+            }
+
+        }
+    }
 }
 </script>
 

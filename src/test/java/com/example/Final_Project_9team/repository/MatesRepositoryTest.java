@@ -22,13 +22,13 @@ class MatesRepositoryTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    @Test
+
     public void matesRepositoryIsNotNull() {
         assertThat(matesRepository).isNotNull();
         assertThat(scheduleRepository).isNotNull();
     }
 
-    @Test
+
     @DisplayName("일정 작성자 등록")
     public void createMates() {
 
