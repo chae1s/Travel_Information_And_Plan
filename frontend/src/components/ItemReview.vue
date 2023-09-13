@@ -40,11 +40,11 @@ export default {
             }
 
 
-            const ratingAsNumber = this.currentRating; // 예: ONE(1)은 1, TWO(2)는 2, ...
+            //const ratingAsNumber = this.currentRating; // 예: ONE(1)은 1, TWO(2)는 2, ...
 
             const reviewData = {
                 content: this.reviewText,
-                rating: ratingAsNumber, // 변환된 숫자를 전달
+                rating: this.currentRating, // 변환된 숫자를 전달
             };
             console.log('Data:', reviewData)
 

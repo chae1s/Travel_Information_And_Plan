@@ -20,11 +20,10 @@
                 </ul>
             </li>
         </ul>
-        <div class="pagination">
-            <button @click="goToPage(page - 1)" :disabled="page === 1">이전</button>
-            <span>{{ page }} / {{ totalPages }}</span>
-            <button @click="goToPage(page + 1)" :disabled="page === totalPages">다음</button>
-        </div>
+        <Pagination
+            :totalPages="totalPages"
+            @page-changed="handlePageChange"
+        />
     </div>
 </template>
 
@@ -33,10 +32,11 @@ import LocationCheckbox from "@/components/LocationCheckbox.vue";
 import axios from "axios";
 import SidoAndSigunguAndCatCheckbox from "@/components/SidoAndSigunguAndCatCheckbox.vue";
 import {bookmarkItem} from '@/api/index';
+import Pagination from "@/components/Pagination.vue";
 export default {
     name: "itemList",
     components: {
-        SidoAndSigunguAndCatCheckbox,
+        SidoAndSigunguAndCatCheckbox, Pagination
     },
     data() {
         return {
@@ -56,8 +56,8 @@ export default {
             itemSido:'',
             itemSigungu:'',
             itemContentType:'',
-            totalPages:0,
-            page:1,
+            totalPages: 1,
+
             size:4,
         }
     },
@@ -101,16 +101,14 @@ export default {
             this.page = 1
             this.fetchItems(checked, this.page); // 페이지를 1로 설정하여 새로운 지역 선택 시 1페이지로 리셋
         },
-        goToPage(newPage) {
-            // 페이지 번호를 변경하면 해당 페이지의 아이템을 가져오도록 메서드 설정
-            if (newPage >= 1 && newPage <= this.totalPages) {
-                //this.item = {};
-                this.page = newPage;
-                this.fetchItems(this.childChecked, this.page);
-            }
+        async handlePageChange(page) {
+            console.log(`페이지 변경: ${page}`);
+            this.currentPage = page;
+            await this.fetchItems(this.childChecked, page); // 페이지가 변경될 때마다 게시글 목록을 가져옴
         },
         async toggleBookmark(itemId) {
             const {data} = await bookmarkItem(itemId);
+            alert("즐겨찾기 추가했습니다")
         },
         getAddressText(itemTypeId) {
             switch (itemTypeId) {

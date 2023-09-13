@@ -3,9 +3,12 @@
         <div class="form_checkbox_btn" v-for="code in sidoCode" :key="code">
             <input :id="locations[code].name" type="checkbox" v-model="checkedSido" @change="clickFunc" name="sido" :value="code">
             <label :for="locations[code].name">{{ locations[code].name }}</label>
-            <div class="form_checkbox_btn" v-for="sigungu in locations[code].sigunguCode" :key="sigungu.sigungu">
-                <input :id="sigungu.name" type="checkbox" v-model="checkedSigungu" @change="clickSigunguFunc(checkedSido)" name="sigungu" :value="sigungu.sigungu">
-                <label :for="sigungu.name">{{ sigungu.name }}</label>
+            <!-- v-if로 해당 시/도의 시/군/구를 출력 -->
+            <div class="form_checkbox_btn" v-if="checkedSido.includes(code)">
+                <div v-for="sigungu in locations[code].sigunguCode" :key="sigungu.sigungu">
+                    <input :id="sigungu.name" type="checkbox" v-model="checkedSigungu" @change="clickSigunguFunc" name="sigungu" :value="sigungu.sigungu">
+                    <label :for="sigungu.name">{{ sigungu.name }}</label>
+                </div>
             </div>
         </div>
         <!-- 콘텐츠 ID 선택 체크박스 -->
