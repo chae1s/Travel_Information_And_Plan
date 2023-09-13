@@ -20,6 +20,16 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     // display true인 schedule 페이지 단위 조회
     Page<Schedule> findAllByDisplayTrueAndIsDeletedFalseOrderByIdDesc(Pageable pageable);
+//    @Query(
+//            "SELECT s FROM Schedule s " +
+//                    "INNER JOIN s.mates m " +
+//                    "INNER JOIN m.user u " +
+//                    "WHERE " +
+//                    "u.email =:email " +
+//                    "AND s.isDeleted = false " +
+//                    "ORDER BY m.createdAt DESC "
+//    )
+//    Page<Schedule> findAllSchedulesContainsMe(@Param("email") String email, Pageable pageable);
     @Query(
             "SELECT s FROM Schedule s " +
                     "INNER JOIN s.mates m " +
@@ -27,6 +37,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                     "WHERE " +
                     "u.email =:email " +
                     "AND s.isDeleted = false " +
+                    "AND m.isAccepted = true " +
                     "ORDER BY m.createdAt DESC "
     )
     Page<Schedule> findAllSchedulesContainsMe(@Param("email") String email, Pageable pageable);
