@@ -38,7 +38,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final FileHandler fileHandler;
-    //    private final ProfileService profileService;
     private final CustomUserDetailsManager manager;
     private final JwtTokenUtils jwtTokenUtils;
     private final PasswordEncoder passwordEncoder;
@@ -51,7 +50,7 @@ public class UserService {
     public void registerUser(UserSignupDto dto) {
         log.info("회원가입: 비밀번호 입력 확인");
         if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            throw new CustomException(ErrorCode.UNMATCHED_PASSWORD);
         }
         log.info("회원가입: email 중복 확인 {}", dto.getEmail());
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -111,7 +110,7 @@ public class UserService {
     public List<UserResponseDto> findUser(String keyword, String userEmail) {
         log.info("user 검색: 검색어 \"{}\"", keyword);
         // 검색어가 없을 경우 예외 (모든 회원이 조회되는 것 방지)
-        if (keyword == ""){
+        if (keyword == "") {
             throw new CustomException(ErrorCode.ERROR_NO_KEYWORD);
         }
         List<User> findByEmail = userRepository.findAllByEmailContainingAndIsDeletedIsFalseAndEmailNot(keyword, userEmail);
@@ -205,12 +204,22 @@ public class UserService {
     @Transactional
     public void updateUserPassword(UserUpdatePwDto dto, String email) {
         User user = userUtils.getUser(email);
-        log.info("비밀번호 수정: 비밀번호 입력 확인");
-        if (!dto.getNewPassword().equals(dto.getPasswordCheck())) {
+        log.info("비밀번호 수정");
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            log.info("비밀번호 불일치");
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
-        user.updatePassword(passwordEncoder.encode(dto.getNewPassword()));
+        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
+            log.info("비밀번호 확인과 입력 틀림");
+            throw new CustomException(ErrorCode.UNMATCHED_PASSWORD);
+        }
+        if (passwordEncoder.matches(dto.getCurrentPassword(), dto.getPassword())) {
+            log.info("기존과 동일한 비밀번호");
+            throw new CustomException(ErrorCode.ALREADY_USED_PASSWORD);
+        }
+        user.updatePassword(passwordEncoder.encode(dto.getPassword()));
         userRepository.save(user);
+        log.info("비밀번호 수정 완료");
     }
 
     // 회원탈퇴
@@ -258,5 +267,16 @@ public class UserService {
         log.info("{} 중복검사 existsBynickname: {}", nickname, userRepository.existsByNickname(nickname));
         return userRepository.existsByNickname(nickname);
     }
-}
 
+    public boolean verifyPassword(UserVerifyPwDto dto, String email) {
+        log.info("비밀번호 인증");
+        User user = userUtils.getUser(email);
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            log.info("login: 비밀번호 불일치");
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        } else {
+            log.info("비밀번호 일치");
+            return true;
+        }
+    }
+}

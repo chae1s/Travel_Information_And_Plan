@@ -23,7 +23,7 @@ public class ChatMessageDto {
                 messageEntity.getChatRoom().getId(),
                 messageEntity.getUser().getNickname(), //sender->유저 닉네임으로 변경
                 messageEntity.getMessage(),
-                messageEntity.getTime()
+                messageEntity.getCreatedAt().toString()
         );
     }
 

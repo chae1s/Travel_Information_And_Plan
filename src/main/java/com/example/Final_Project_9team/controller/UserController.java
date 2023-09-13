@@ -91,8 +91,8 @@ public class UserController {
 //    }
 
     // 비밀번호 수정
-    // PUT /users/me/pass-word
-    @PutMapping("/me/pass-word")
+    // PUT /users/me/password
+    @PutMapping("/me/password")
     public ResponseEntity<ResponseDto> updateUserPassword(@Valid @RequestBody UserUpdatePwDto dto, Authentication auth) {
         userService.updateUserPassword(dto, auth.getName());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto().getMessage("비밀번호가 수정되었습니다."));
@@ -120,12 +120,12 @@ public class UserController {
     }
 
 
-    // 비밀번호 인증 (현재 사용하지 않음)
+    // 비밀번호 인증
     // 현재 로그인한 유저의 비밀번호와 입력한 비밀번호가 맞는지 검증 후 boolean으로 반환
-    // POST /users/me/verify-password
-//    @PostMapping("/check/verify-password")
-//    private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth) {
-//        return ResponseEntity.status(HttpStatus.OK).body(userService.verifyPassword(dto, auth.getName()));
-//    }
+//     POST /users/check/verify-password
+    @PostMapping("/check/verify-password")
+    private ResponseEntity<Boolean> verifyPassword(@RequestBody UserVerifyPwDto dto, Authentication auth) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.verifyPassword(dto, auth.getName()));
+    }
 
 }
