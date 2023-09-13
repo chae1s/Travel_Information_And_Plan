@@ -54,7 +54,7 @@
                                             :class="show ? 'mdi mdi-eye' : 'mdi mdi-eye-off'"
                                             @click="show = !show"
                                     ></v-icon>
-                                    <span class="ml-1">비밀번호 보기</span>
+                                    <span class="ml-1" @click="show = !show">비밀번호 보기</span>
                                 </div>
                                 <div class="ml-auto mr-1">
                                     <v-btn flat
@@ -131,11 +131,9 @@ export default {
     },
 
     methods: {
-        goToMain() {
-            console.log("goToMain: login 페이지 이동")
-            this.$router.push({
-                name: "Login"
-            })
+        goToLogin() {
+            console.log("goToLogin: login 페이지 이동")
+            this.$router.push({name: "Login"})
         }
         ,
         register(RegisterObj) {
@@ -157,7 +155,7 @@ export default {
                 this.axios.post("/users/register", RegisterObj)
                     .then(() => {
                         alert("회원가입이 완료되었습니다.")
-                        this.goToMain()
+                        this.goToLogin()
                     })
                     .catch((err) => {
                         if (err.response) {

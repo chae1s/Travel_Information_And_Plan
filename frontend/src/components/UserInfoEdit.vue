@@ -117,7 +117,7 @@ export default {
     methods: {
         goToMain() {
             // this.$router.go(0);
-            this.$router.push('Home')
+            this.$router.push('/')
         }
         ,
         async submitForm() {
