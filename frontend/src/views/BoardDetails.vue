@@ -7,8 +7,8 @@
             </v-card-title>
             <v-card-subtitle>
                 <v-row>
-                    <v-col cols="6">Username: {{ board.username }}</v-col>
-                    <v-col cols="6" class="text-right">Created At: {{ board.createdAt }}</v-col>
+                    <v-col cols="6">작성자: {{ board.username }}</v-col>
+                    <v-col cols="6" class="text-right">작성시간: {{ board.createdAt }}</v-col>
                 </v-row>
             </v-card-subtitle>
             <v-card-text v-html="board.content"></v-card-text>
@@ -17,22 +17,25 @@
         <!-- Comment 정보 표시 -->
         <v-card v-if="board.comments && board.comments.content.length > 0">
             <v-card-title>
-                <h5>Comments</h5>
+                <h5>댓글</h5>
             </v-card-title>
             <v-card-text>
                 <v-list>
                     <v-list-item-group>
                         <v-list-item v-for="comment in board.comments.content" :key="comment.id">
                             <v-list-item-content>
-                                <v-list-item-title class="headline">
-                                    <v-icon v-if="comment.parentId !== null">mdi-reply</v-icon> <!-- 대댓글 아이콘 -->
+                                <v-list-item-title class="headline text-sm-left">
+                                    <v-icon v-if="comment.parentId !== null">mdi-subdirectory-arrow-right</v-icon> <!-- 대댓글 아이콘 -->
                                     {{ comment.content }}
                                 </v-list-item-title>
-                                <v-list-item-subtitle>Username: {{ comment.username }} | Created At: {{ comment.createdAt }}</v-list-item-subtitle>
-                                <v-btn @click="toggleReplyForm(comment.id)">Reply</v-btn>
+                                <v-list-item-subtitle class="text-sm-left">작성자: {{ comment.username }} | 작성시간: {{ comment.createdAt }}</v-list-item-subtitle>
+                                <v-btn class="text-sm-left" @click="toggleReplyForm(comment.parentId === null ? comment.id : comment.parentId)">답글</v-btn>
+                                <v-icon class="text-sm-right">mdi-comment-edit-outline</v-icon>
+                                <v-icon class="text-sm-right">mdi-trash-can-outline</v-icon>
+
                                 <v-card v-if="showReplyForm === comment.id">
                                     <v-card-title>
-                                        <h5>Write a Reply</h5>
+                                        <h5>댓글 쓰기</h5>
                                     </v-card-title>
                                     <v-card-text>
                                         <v-textarea
@@ -43,23 +46,27 @@
                                         ></v-textarea>
                                     </v-card-text>
                                     <v-card-actions>
-                                        <v-btn @click="submitReply(comment.id)">Submit</v-btn>
+                                        <v-btn @click="submitReply(comment.id)">댓글 쓰기</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-item-group>
                 </v-list>
+                <Pagination
+                    :totalPages="totalPages"
+                    @page-changed="handlePageChange"
+                />
             </v-card-text>
         </v-card>
         <v-card v-else>
             <v-card-title>
-                <h5>No comments available</h5>
+                <h5>작성된 댓글이 없습니다.</h5>
             </v-card-title>
         </v-card>
         <v-card>
             <v-card-title>
-                <h5>Write a Comment</h5>
+                <h5>댓글 쓰기</h5>
             </v-card-title>
             <v-card-text>
                 <v-textarea
@@ -68,19 +75,20 @@
                     outlined
                     rows="3"
                 ></v-textarea>
+                <v-btn @click="submitComment">작성</v-btn>
             </v-card-text>
-            <v-card-actions>
-                <v-btn @click="submitComment">Submit</v-btn>
-            </v-card-actions>
         </v-card>
     </v-container>
 </template>
 
 <script>
 import { readBoard, deleteBoard, createComment, updateBoard, deleteComment } from "@/api";
-
+import Pagination from "@/components/Pagination.vue";
 export default {
     name: 'BoardDetails',
+    components: {
+        Pagination
+    },
     data() {
         return {
             board: {},
@@ -92,17 +100,23 @@ export default {
                 content: "",
                 parentId: null,
             },
+            totalPages: 1,
         }
     },
     methods: {
-        async fetchBoard() {
+        async fetchBoard(page) {
             try {
-                const response = await readBoard(this.$store.state.boardId);
+                const response = await readBoard(this.$store.state.boardId, page);
                 this.board = response.data;
-                console.log(response.data);
+                this.totalPages = response.data.comments.lastPage;
             } catch (error) {
                 console.error("Error fetching board:", error);
             }
+        },
+        async handlePageChange(page) {
+            console.log(`페이지 변경: ${page}`);
+            this.currentPage = page;
+            await this.fetchBoard(page); // 페이지가 변경될 때마다 게시글 목록을 가져옴
         },
         async submitComment() {
             try {
@@ -140,8 +154,27 @@ export default {
 
                 const newComment = response.data;
 
-                // 받아온 댓글을 board 데이터에 추가
-                this.board.comments.content.push(newComment);
+                if (this.newReply.parentId !== null) {
+                    const targetComment = this.board.comments.content.find(comment => comment.id === this.newReply.parentId);
+                    if (targetComment) {
+                        if (!targetComment.comments) {
+                            targetComment.comments = { content: [] };
+                        }
+
+                        // Find the index of the target comment
+                        const targetIndex = this.board.comments.content.indexOf(targetComment);
+
+                        // Find the index of the first comment after the target comment with parentId=null
+                        const nextNullIndex = this.board.comments.content.findIndex((comment, index) => {
+                            return index > targetIndex && comment.parentId === null;
+                        });
+
+                        // Insert the new comment before the comment with parentId=null
+                        this.board.comments.content.splice(nextNullIndex, 0, newComment);
+                    }
+                } else {
+                    this.board.comments.content.push(newComment);
+                }
 
                 this.newReply.content = "";
                 this.showReplyForm = null;

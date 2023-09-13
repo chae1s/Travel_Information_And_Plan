@@ -29,11 +29,11 @@ function createBoard(boardData) {
 }
 
 function readBoards(page) {
-    return axiosInstance.get('/boards?page=' + (page || 1));
+    return axiosInstance.get(`/boards?page=${page || 1}`);
 }
 
-function readBoard(boardId) {
-    return axiosInstance.get('/boards/' + boardId);
+function readBoard(boardId, page) {
+    return axiosInstance.get(`/boards/${boardId}?page=${page || 1}`);
 }
 
 function updateBoard(boardId) {
@@ -131,16 +131,24 @@ function inviteUserToSchedule(scheduleId,invitedUsername) {
 function bookmarkItem(itemId) {
     return axiosInstance.post(`item-list/add/${itemId}`)
 }
-function readAllMySchedules() {
-    return axiosInstance.get('/users/me/schedules')
+function readAllMySchedules(page) {
+    return axiosInstance.get(`/users/me/schedules?page=${page || 1}`)
+}
+
+function readAllMyBoards(page) {
+    return axiosInstance.get(`/users/me/boards?page=${page || 1}`)
+}
+
+function readAllMyCommentedBoards(page) {
+    return axiosInstance.get(`/users/me/comments?page=${page || 1}`)
 }
 
 function readMySchedule(scheduleId) {
     return axiosInstance.get(`/users/me/schedules/${scheduleId}`)
 }
 
-function readAllSchedules() {
-    return axiosInstance.get('/schedules')
+function readAllSchedules(page) {
+    return axiosInstance.get(`/schedules?page=${page || 1}`)
 }
 
 function readBoardSchedule(scheduleId) {
@@ -193,6 +201,7 @@ export {
     createComment,updateComment, deleteComment,
     createSchedule, createScheduleItems, readSchedule,
     createRouteList, readMySchedule, readAllSchedules, readAllMySchedules, readBoardSchedule,
+    readAllMyBoards, readAllMyCommentedBoards,
     updateScheduleDisplay, updateSchedule, updateScheduleItems,
     readInvitations, acceptInvitation, rejectInvitation, findInvitationList, inviteUserToSchedule,
     bookmarkItem, itemReview, updateReview, deleteReview, readLikedItemBySido,

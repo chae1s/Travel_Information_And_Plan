@@ -13,23 +13,63 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="i in 10">
-                <td class="board_id" >{{ i }}</td>
-                <td class="board_title" @click="">
-                    <span>커뮤니티 게시글 제목</span>
+            <tr v-for="(board, index) in boards" :key="board.title" @click="goToBoardDetails(board.boardId)">
+                <td class="board_id" >{{ board.boardId }}</td>
+                <td class="board_title">
+                    {{ board.title }}
                 </td>
-                <td class="board_created">2023-00-00</td>
-                <td class="board_liked">0</td>
-                <td class="board_view_count">0</td>
+                <td class="board_created">{{ board.createdAt }}</td>
+                <td class="board_liked">{{ board.likesCnt }}</td>
+                <td class="board_view_count">{{ board.viewCnt }}</td>
             </tr>
             </tbody>
         </table>
+        <Pagination
+            :totalPages="totalPages"
+            @page-changed="handlePageChange"
+        />
     </div>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination.vue";
+import {readAllMyBoards} from "@/api";
 export default {
-    name: "MyBoardList"
+    name: "MyBoardList",
+    components: {
+        Pagination,
+    },
+    data() {
+        return {
+            boards: [], // 게시판 목록을 담을 배열 추가
+            totalPages: 1, // 초기값 설정 (예시로 10을 사용)
+        };
+    },
+    methods: {
+        async fetchBoards(page) {
+            try {
+                const response = await readAllMyBoards(page);
+                const pageDto = response.data;
+                this.totalPages = pageDto.lastPage; // totalPages 업데이트
+                this.boards = pageDto.content; // 게시판 목록 업데이트
+                console.log(pageDto);
+            } catch (error) {
+                console.error("Error fetching boards:", error);
+            }
+        },
+        async handlePageChange(page) {
+            console.log(`페이지 변경: ${page}`);
+            this.currentPage = page;
+            await this.fetchBoards(page); // 페이지가 변경될 때마다 게시글 목록을 가져옴
+        },
+        goToBoardDetails(boardId) {
+            this.$store.dispatch('updateBoardId', boardId);
+            this.$router.push(`/board-details`);
+        }
+    },
+    created() {
+        this.fetchBoards(this.currentPage); // 컴포넌트가 생성될 때 초기 게시글 목록을 가져옴
+    },
 }
 </script>
 
