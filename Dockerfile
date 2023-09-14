@@ -1,4 +1,5 @@
-FROM openjdk:17-jdk-slim
-WORKDIR /Final_Project_9team
-COPY /build/libs/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM openjdk:17-jdk-alpine
+EXPOSE 8080
+ARG JAR_FILE=build/libs/*-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
