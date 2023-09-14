@@ -92,5 +92,6 @@ jobs:
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
           sudo docker-compose up -d
+          name: 지우기
           sudo docker image prune -f
         
