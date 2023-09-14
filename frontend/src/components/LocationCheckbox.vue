@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             checked : [],
-            sidoCode: [0, 1, 2, 3, 4, 5, 6, 7, 8, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+            sidoCode: [1, 2, 3, 4, 5, 6, 7, 8, 31, 32, 33, 34, 35, 36, 37, 38, 39]
         }
     },
     components: {
@@ -38,6 +38,7 @@ export default {
         },
         initValue() {
             if (this.homeChecked) {
+              this.checked.push(4);
                 //this.checked = ["1"]
             }
         },
