@@ -1,5 +1,4 @@
-FROM rabbitmq:3-management
-
-RUN rabbitmq-plugins enable --offline rabbitmq_stomp
-
-EXPOSE 15671 15672 61613
+FROM openjdk:17-jdk-slim
+ARG JAR_FILE=build/libs/*-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
