@@ -78,6 +78,17 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_KEY }}
         script: |
+          # 레디스, 레빗엠큐 컨테이너 정지 후 삭제
+          sudo docker stop my-redis || true
+          sudo docker stop my-rabbitmq || true
+          sudo docker rm my-redis || true
+          sudo docker rm my-rabbitmq || true
+          
+          # 레디스 컨테이너 실행
+          sudo docker run --name my-redis -d -p 6379:6379 redis:latest
+          # 레빗엠큐 컨테이너 실행
+          sudo docker run -d -p 15671:15671 -p 15672:15672 -p 61613:61613 --name my-rabbitmq rabbitmq:3-management
+        
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
@@ -90,18 +101,5 @@ jobs:
             -e NAMER_MAP_CLIENT_SECRET="${{ secrets.NAMER_MAP_SECRET }}" \
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
           sudo docker image prune -f
-          
-          # 레디스, 레빗엠큐 컨테이너 정지 후 삭제
-          sudo docker stop my-redis || true
-          sudo docker stop my-rabbitmq || true
-          sudo docker rm my-redis || true
-          sudo docker rm my-rabbitmq || true
-          
-          # 레디스 컨테이너 실행
-          sudo docker run --name my-redis -d -p 6379:6379 redis:latest
-          # 레빗엠큐 컨테이너 실행
-          sudo docker run -d -p 15671:15671 -p 15672:15672 -p 61613:61613 --name my-rabbitmq rabbitmq:3-management
-        
-        
           
         
