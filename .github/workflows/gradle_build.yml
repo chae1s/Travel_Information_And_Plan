@@ -89,7 +89,8 @@ jobs:
           # 레빗엠큐 컨테이너 실행
           sudo docker run -d -p 15671:15671 -p 15672:15672 -p 61613:61613 --name my-rabbitmq rabbitmq:3-management
         
-          sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
+          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
           sudo docker-compose up -d
           sudo docker image prune -f
