@@ -81,10 +81,14 @@ jobs:
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
-          sudo docker run -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }} \
-            -e MYSQL_URL=${{ secrets.MYSQL_URL }} -e MYSQL_SECRET=${{ secrets.MYSQL_SECRET }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }} \
-            -e NAVER_MAP_ID=${{ secrets.NAVER_MAP_ID }} -e NAMER_MAP_CLIENT_SECRET=${{ secrets.NAMER_MAP_SECRET }} 
+          sudo docker run -p 8080:8080 \
+            -e MYSQL_URL="${{ secrets.MYSQL_URL }}" \
+            -e MYSQL_SECRET="${{ secrets.MYSQL_SECRET }}" \
+            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            -e JWT_EXPIRATION="${{ secrets.JWT_EXPIRATION }}" \
+            -e NAVER_MAP_ID="${{ secrets.NAVER_MAP_ID }}" \
+            -e NAMER_MAP_CLIENT_SECRET="${{ secrets.NAMER_MAP_SECRET }}" \
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
           sudo docker image prune -f
           
           # 레디스, 레빗엠큐 컨테이너 정지 후 삭제
