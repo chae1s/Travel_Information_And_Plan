@@ -78,6 +78,10 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_KEY }}
         script: |
+          # 레디스, 레빗엠큐 컨테이너 있으면 지우고 시작
+          sudo docker stop my-redis || true
+          sudo docker stop my-rabbitmq || true
+          
           # 레디스 컨테이너 실행
           sudo docker run --name my-redis -d -p 6379:6379 redis:latest
           # 레빗엠큐 컨테이너 실행
