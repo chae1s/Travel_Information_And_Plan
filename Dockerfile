@@ -1,4 +1,4 @@
 FROM openjdk:17-jdk-slim
-WORKDIR /app
+WORKDIR /Final_Project_9team
 COPY build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
