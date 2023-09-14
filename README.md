@@ -176,4 +176,4 @@
     - 댓글 페이지 단위 조회 기능
     - 댓글/대댓글 기능
 - 게시글 공개 기능
-![Footer](https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=footer)
+![Footer](https://capsule-render.vercel.app/api?type=waving&color=auto&height=300&section=footer)
