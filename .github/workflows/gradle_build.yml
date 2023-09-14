@@ -79,9 +79,9 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           # 레디스 컨테이너 실행
-          docker run -d -p 6379:6379 --name my-redis redis:latest
+          sudo docker run -d -p 6379:6379 --name my-redis redis:latest
           # 레빗엠큐 컨테이너 실행
-          docker run -d -p 15671:15671 -p 15672:15672 -p 61613:61613 --name my-rabbitmq rabbitmq:3-management
+          sudo docker run -d -p 15671:15671 -p 15672:15672 -p 61613:61613 --name my-rabbitmq rabbitmq:3-management
         
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
