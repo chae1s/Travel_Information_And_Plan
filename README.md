@@ -37,16 +37,16 @@
 
 ### 프로젝트 구조도
 <p allign="center">
-<img src="./어디갈래%20-%20프로젝트%20구조도.png">
+<img src="README/어디갈래%20-%20프로젝트%20구조도.png">
 
 ### 배포 구조도
 <p allign="center">
-<img src="./어디갈래%20-%20배포%20구조도.png">
+<img src="README/어디갈래%20-%20배포%20구조도.png">
 </p>
 
 ### ERD
 <p allign="center">
-<img src="./어디갈래%20-%20erd.png">
+<img src="README/어디갈래%20-%20erd.png">
 </p>
 
 ## 3. 개발환경 및 사용기술
