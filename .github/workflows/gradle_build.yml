@@ -98,7 +98,7 @@ jobs:
             -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
             -e JWT_EXPIRATION="${{ secrets.JWT_EXPIRATION }}" \
             -e NAVER_MAP_ID="${{ secrets.NAVER_MAP_ID }}" \
-            -e NAMER_MAP_CLIENT_SECRET="${{ secrets.NAMER_MAP_SECRET }}" \
+            -e NAMER_MAP_SECRET="${{ secrets.NAMER_MAP_SECRET }}" \
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
           sudo docker image prune -f
           
