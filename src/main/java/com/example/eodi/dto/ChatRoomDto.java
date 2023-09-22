@@ -1,0 +1,44 @@
+package com.example.eodi.dto;
+
+import com.example.eodi.entity.Schedule;
+import com.example.eodi.entity.ChatRoom;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChatRoomDto {
+    private Long id;
+    private String roomName;
+    private String latestMessage;
+    private Long count;
+
+    public static ChatRoomDto fromEntity(ChatRoom entity) {
+
+        return new ChatRoomDto(
+                entity.getId(),
+                entity.getRoomName(),
+                null,
+                entity.getMemberCount()
+        );
+    }
+
+    public static ChatRoomDto fromEntity(ChatRoom entity, String latestMessage) {
+        return new ChatRoomDto(
+                entity.getId(),
+                entity.getRoomName(),
+                latestMessage,
+                null
+        );
+    }
+
+    public static ChatRoom toEntity(Schedule schedule) {
+        ChatRoom chatRoom = ChatRoom.builder()
+                .roomName(schedule.getTitle())
+                .schedule(schedule)
+                .build();
+        return chatRoom;
+    }
+}

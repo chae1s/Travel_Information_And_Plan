@@ -37,10 +37,6 @@ spring:
   #    port: 5672 # default port
   #    username: guest # default username
   #    password: guest # default password
-  data:
-    redis:
-      port: 6379
-      host: host.docker.internal
 
 
 jwt:
