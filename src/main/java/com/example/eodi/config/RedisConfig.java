@@ -19,7 +19,7 @@ public class RedisConfig {
 
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
 
-        redisConfig.setHostName("3.35.51.90");
+        redisConfig.setHostName("3.39.229.161");
         redisConfig.setPort(6379);
 
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisConfig);

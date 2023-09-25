@@ -10,7 +10,7 @@
                 <span v-for="user in scheduleData.users" :key="user">{{ user.nickname }}</span>
             </div>
             <div class="schedule_edit">
-                <div v-if="checkedDate" @click="moveUpdateSchedule(scheduleId)">수정하기</div>
+                <div v-if="nowDate < scheduleData.endDate" @click="moveUpdateSchedule(scheduleId)">수정하기</div>
                 <div class="show_schedule" v-if="!scheduleData.isDisplay" @click="updateDisplay(scheduleId)">공유하기</div>
             </div>
         </div>
