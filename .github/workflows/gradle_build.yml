@@ -32,7 +32,7 @@ jobs:
       # vue 먼저 빌드
     - name: Install dependencies And Build
       run: |
-        cd frontend
+        cd ./frontend
         npm install
         npm run build
 

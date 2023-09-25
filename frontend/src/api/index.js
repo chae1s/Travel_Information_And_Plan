@@ -45,7 +45,7 @@ function deleteBoard(boardId) {
 }
 
 function createComment(boardId, dto) {
-    return axiosInstance.post(`boards/${ boardId }/comments`, dto);
+    return axiosInstance.post(`/boards/${ boardId }/comments`, dto);
 }
 
 function updateComment(boardId, dto) {
