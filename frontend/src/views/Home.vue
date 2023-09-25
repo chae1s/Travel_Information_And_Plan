@@ -6,7 +6,7 @@
       </div>
       <div class="item_popular_section">
         <div class="content_header">
-          <div>핫 플레이스</div>
+          <div>핫 플레이스 히히</div>
           <router-link to="/items-list">더보기</router-link>
         </div>
         <LocationCheckbox @checkedClick="fetchItems" :homeChecked="homeChecked"></LocationCheckbox>
