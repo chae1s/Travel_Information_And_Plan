@@ -39,11 +39,6 @@
 <p allign="center">
 <img src="README/어디갈래%20-%20프로젝트%20구조도.png">
 
-### 배포 구조도
-<p allign="center">
-<img src="README/어디갈래%20-%20배포%20구조도.png">
-</p>
-
 ### ERD
 <p allign="center">
 <img src="README/어디갈래%20-%20erd.png">
