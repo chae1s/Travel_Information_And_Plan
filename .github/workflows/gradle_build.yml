@@ -36,11 +36,6 @@ jobs:
         npm install
         npm run build
 
-    - name: Copy Vue.js build artifacts to Spring Boot static resources
-      run: |
-        cp -r ./frontend/dist/* ../src/main/resources/static/
-
-
       # permission denied 방지를 위한 코드
     - name: Grant permissions to Docker
       run: |
